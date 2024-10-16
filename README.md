@@ -14,11 +14,11 @@
 - Dev Runtime: Node.js
 - Bundler: Vite
 - Language: TypeScript
-- Routing:
-- State Management:
+- Routing: React Router
+- State Management: Redux
 - Styling: tailwindcss, shadcn
-- HTTP Client:
-- Unit Test:
+- HTTP Client: Axios
+- Unit Test: (추후 작성)
 
 ## 메뉴 구조
 
