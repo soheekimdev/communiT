@@ -28,10 +28,13 @@
 
 ## 배포
 
-- 배포 환경:
-- 배포 방법:
-- CI/CD:
+- 배포 환경 : Vercel
+- 배포 방법 : Vercel CI/CD를 통한 자동 배포
+- CI/CD : GitHub Actions를 통해 Vercel로 자동 배포 설정
 - 배포 주소:
+  - [권여진](https://advanced-class-project-yeojin.vercel.app/)
+  - [주민재](https://advanced-class-project.vercel.app/)
+  - [김소희](https://advanced-class-project-team-b-seven.vercel.app/)
 
 ## 개발 방법
 
