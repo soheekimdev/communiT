@@ -12,7 +12,7 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { useState } from 'react';
 
 const MyProfile = () => {
-  const [profileImage, setProfileImage] = useState('');
+  const [profileImage, _] = useState('');
   const defaultImage = 'https://example.com/my-default-image.png';
 
   return (
