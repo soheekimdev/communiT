@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
 
-export function FindPassword() {
+const FindPassword = () => {
   return (
     <Card>
       <CardHeader className="space-y-1 text-center">
@@ -35,3 +35,5 @@ export function FindPassword() {
     </Card>
   );
 }
+
+export default FindPassword;

@@ -10,7 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export function ChangePassword() {
+const ChangePassword = () => {
   return (
     <Card>
       <CardHeader className="space-y-1 text-center">
@@ -37,3 +37,5 @@ export function ChangePassword() {
     </Card>
   );
 }
+
+export default ChangePassword;
