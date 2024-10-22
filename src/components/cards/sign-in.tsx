@@ -9,7 +9,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export function Signin() {
+const Signin = () => {
   return (
     <Card>
       <CardHeader className="space-y-1">
@@ -102,3 +102,5 @@ export function Signin() {
     </Card>
   );
 }
+
+export default Signin;

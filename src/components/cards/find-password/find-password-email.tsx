@@ -8,7 +8,7 @@ import {
 
 
 
-export function FindPasswordEmail() {
+const FindPasswordEmail = () => {
   return (
     <Card>
       <CardContent className="text-center mt-16">
@@ -24,3 +24,5 @@ export function FindPasswordEmail() {
     </Card>
   );
 }
+
+export default FindPasswordEmail;
