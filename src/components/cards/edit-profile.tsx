@@ -10,6 +10,16 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { useState, useRef } from 'react';
+import {
+  User,
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  Camera,
+  CheckCircle,
+  XCircle,
+} from 'lucide-react';
 
 const EditProfile = () => {
   const [profileImage, setProfileImage] = useState<string>('');
@@ -18,6 +28,9 @@ const EditProfile = () => {
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState<boolean>(false);
 
   const imageFileRef = useRef<HTMLInputElement>(null);
 
@@ -84,92 +97,181 @@ const EditProfile = () => {
       </CardHeader>
 
       <CardContent>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <div className="m-auto">
-            <Avatar className="h-24 w-24">
-              <AvatarImage
-                className="h-full w-full"
-                src={profileImage || defaultImage}
-                alt="Profile Picture"
-              />
-              <AvatarFallback>사용자</AvatarFallback>
-            </Avatar>
-          </div>
-
-          <div className="grid gap-2">
-            <Label htmlFor="profile-image">Change Profile Image</Label>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="flex flex-col items-center space-y-4">
+            <div className="relative">
+              <Avatar className="h-32 w-32 border-4 border-gray shadow-lg">
+                <AvatarImage
+                  className="h-full w-full object-cover"
+                  src={profileImage || defaultImage}
+                  alt="Profile Picture"
+                />
+                <AvatarFallback>사용자</AvatarFallback>
+              </Avatar>
+              <Button
+                type="button"
+                variant="outline"
+                size="icon"
+                className="absolute bottom-0 right-0 rounded-full bg-white"
+                onClick={() => imageFileRef.current?.click()}
+              >
+                <Camera className="h-4 w-4" />
+              </Button>
+            </div>
             <Input
               id="profile-image"
               type="file"
               accept="image/*"
-              className="w-auto"
+              className="hidden"
               onChange={handleImageChange}
               ref={imageFileRef}
             />
           </div>
 
-          <div className="grid gap-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="userEmail@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className={errors.email ? 'border-red-500' : ''}
-            />
-            {errors.email && (
-              <p className="text-red-500 text-sm">{errors.email}</p>
-            )}
+          <div className="space-y-4">
+            <div className="relative">
+              <Label htmlFor="email" className="text-sm font-medium">
+                Email
+              </Label>
+              <div className="relative mt-1">
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="userEmail@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className={`pl-10 pr-10 ${
+                    errors.email ? 'border-red-500' : ''
+                  }`}
+                />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                {email &&
+                  (errors.email ? (
+                    <XCircle className="absolute right-3 top-1/2 -translate-y-1/2 text-red-500 h-5 w-5" />
+                  ) : (
+                    <CheckCircle className="absolute right-3 top-1/2 -translate-y-1/2 text-green-500 h-5 w-5" />
+                  ))}
+              </div>
+              {errors.email && (
+                <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+              )}
+            </div>
+
+            <div className="relative">
+              <Label htmlFor="name" className="text-sm font-medium">
+                Name
+              </Label>
+              <div className="relative mt-1">
+                <Input
+                  id="name"
+                  type="text"
+                  placeholder="userName"
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
+                  className={`pl-10 pr-10 ${
+                    errors.userName ? 'border-red-500' : ''
+                  }`}
+                />
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                {userName &&
+                  (errors.userName ? (
+                    <XCircle className="absolute right-3 top-1/2 -translate-y-1/2 text-red-500 h-5 w-5" />
+                  ) : (
+                    <CheckCircle className="absolute right-3 top-1/2 -translate-y-1/2 text-green-500 h-5 w-5" />
+                  ))}
+              </div>
+              {errors.userName && (
+                <p className="text-red-500 text-xs mt-1">{errors.userName}</p>
+              )}
+            </div>
+
+            <div className="relative">
+              <Label htmlFor="password" className="text-sm font-medium">
+                Password
+              </Label>
+              <div className="relative mt-1">
+                <Input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className={`pl-10 pr-10 ${
+                    errors.password ? 'border-red-500' : ''
+                  }`}
+                />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="absolute right-1 top-1/2 -translate-y-1/2"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5 text-gray-400" />
+                  ) : (
+                    <Eye className="h-5 w-5 text-gray-400" />
+                  )}
+                </Button>
+              </div>
+              {errors.password && (
+                <p className="text-red-500 text-xs mt-1">{errors.password}</p>
+              )}
+            </div>
+
+            <div className="relative">
+              <Label htmlFor="confirm-password" className="text-sm font-medium">
+                Confirm Password
+              </Label>
+              <div className="relative mt-1">
+                <Input
+                  id="confirm-password"
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className={`pl-10 pr-10 ${
+                    errors.confirmPassword ? 'border-red-500' : ''
+                  }`}
+                />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="absolute right-1 top-1/2 -translate-y-1/2"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  {showConfirmPassword ? (
+                    <EyeOff className="h-5 w-5 text-gray-400" />
+                  ) : (
+                    <Eye className="h-5 w-5 text-gray-400" />
+                  )}
+                </Button>
+              </div>
+              {errors.confirmPassword && (
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.confirmPassword}
+                </p>
+              )}
+            </div>
           </div>
-          <div className="grid gap-2">
-            <Label htmlFor="name">Name</Label>
-            <Input
-              id="name"
-              type="text"
-              placeholder="userName"
-              value={userName}
-              onChange={(e) => setUserName(e.target.value)}
-              className={errors.userName ? 'border-red-500' : ''}
-            />
-            {errors.userName && (
-              <p className="text-red-500 text-sm">{errors.userName}</p>
-            )}
+
+          <div className="pt-4">
+            <Button
+              type="submit"
+              className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transition-all duration-300"
+            >
+              Save Changes
+            </Button>
           </div>
-          <div className="grid gap-2">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className={errors.password ? 'border-red-500' : ''}
-            />
-            {errors.password && (
-              <p className="text-red-500 text-sm">{errors.password}</p>
-            )}
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="confirm-password">Confirm Password</Label>
-            <Input
-              id="confirm-password"
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className={errors.confirmPassword ? 'border-red-500' : ''}
-            />
-            {errors.confirmPassword && (
-              <p className="text-red-500 text-sm">{errors.confirmPassword}</p>
-            )}
-          </div>
-          <Button type="submit" className="w-full">
-            Edit
-          </Button>
         </form>
       </CardContent>
 
-      <CardFooter className="gap-4">
-        <Button className="w-full" variant="destructive" onClick={handleCancel}>
+      <CardFooter>
+        <Button
+          className="w-full bg-gray-200 text-gray-800 hover:bg-gray-300 transition-all duration-300"
+          onClick={handleCancel}
+        >
           Cancel
         </Button>
       </CardFooter>
