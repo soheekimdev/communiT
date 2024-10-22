@@ -257,10 +257,7 @@ const EditProfile = () => {
           </div>
 
           <div className="pt-4">
-            <Button
-              type="submit"
-              className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transition-all duration-300"
-            >
+            <Button type="submit" variant="profile">
               Save Changes
             </Button>
           </div>
