@@ -17,7 +17,7 @@ const ChangePassword = () => {
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [showNewPassword, setShowNewPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [errors, _] = useState<{ [key: string]: string }>({});
 
   const newPasswordId = useId();
   const newConfirmPasswordId = useId();

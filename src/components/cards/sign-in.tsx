@@ -10,9 +10,9 @@ const Signin = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [errors, _] = useState<{ [key: string]: string }>({});
 
-  const id = useId();
+  // const id = useId();
   const emailId = useId();
   const passwordId = useId();
   const checkId = useId();

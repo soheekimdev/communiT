@@ -14,7 +14,7 @@ import { useId, useState } from 'react';
 
 const FindPassword = () => {
   const [email, setEmail] = useState<string>('');
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [errors, _] = useState<{ [key: string]: string }>({});
 
   const emailId = useId();
 
