@@ -1,25 +1,10 @@
 import { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import {
-  User,
-  Mail,
-  Lock,
-  Eye,
-  EyeOff,
-  Camera,
-  CheckCircle,
-  XCircle,
-} from 'lucide-react';
+import { User, Mail, Lock, Eye, EyeOff, Camera, CheckCircle, XCircle } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
@@ -38,7 +23,7 @@ const formSchema = z
       .regex(/^(?!.*(.)\1\1).*$/, '같은 문자를 3번 이상 반복할 수 없습니다.'),
     confirmPassword: z.string(),
   })
-  .refine((data) => data.newPassword === data.confirmPassword, {
+  .refine(data => data.newPassword === data.confirmPassword, {
     message: '비밀번호가 일치하지 않습니다.',
     path: ['confirmPassword'],
   });
@@ -47,11 +32,9 @@ type FormData = z.infer<typeof formSchema>;
 
 const EditProfile = () => {
   const [profileImage, setProfileImage] = useState<string>('');
-  const [showCurrentPassword, setShowCurrentPassword] =
-    useState<boolean>(false);
+  const [showCurrentPassword, setShowCurrentPassword] = useState<boolean>(false);
   const [showNewPassword, setShowNewPassword] = useState<boolean>(false);
-  const [showConfirmPassword, setShowConfirmPassword] =
-    useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
 
   const imageFileRef = useRef<HTMLInputElement>(null);
 
@@ -139,7 +122,7 @@ const EditProfile = () => {
           <div className="space-y-4">
             <div className="relative">
               <Label htmlFor="email" className="text-sm font-medium">
-                Email
+                계정
               </Label>
               <div className="relative mt-1">
                 <Input
@@ -155,7 +138,7 @@ const EditProfile = () => {
 
             <div className="relative">
               <Label htmlFor="name" className="text-sm font-medium">
-                Name
+                이름(or 닉네임 - 생각중..)
               </Label>
               <div className="relative mt-1">
                 <Input
@@ -163,9 +146,7 @@ const EditProfile = () => {
                   type="text"
                   placeholder="userName"
                   {...register('userName')}
-                  className={`pl-10 pr-10 ${
-                    errors.userName ? 'border-red-500' : ''
-                  }`}
+                  className={`pl-10 pr-10 ${errors.userName ? 'border-red-500' : ''}`}
                 />
                 <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
                 {errors.userName ? (
@@ -177,16 +158,14 @@ const EditProfile = () => {
                 )}
               </div>
               {errors.userName && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.userName.message}
-                </p>
+                <p className="text-red-500 text-xs mt-1">{errors.userName.message}</p>
               )}
             </div>
 
             {/* 회원가입 기능 구현 완료 후 현재 비밀번호와 일치하는지 비교하는 기능 구현 예정 */}
             <div className="relative">
               <Label htmlFor="currentPassword" className="text-sm font-medium">
-                Current Password
+                현재 비밀번호
               </Label>
               <div className="relative mt-1">
                 <Input
@@ -200,42 +179,38 @@ const EditProfile = () => {
                   type="button"
                   variant="ghost"
                   size="icon"
-                  className="absolute right-1 top-1/2 -translate-y-1/2"
+                  className="absolute right-1 top-1/2 -translate-y-1/2 hover:bg-transparent hover:text-inherit"
                   onClick={() => setShowCurrentPassword(!showCurrentPassword)}
                 >
                   {showCurrentPassword ? (
                     <EyeOff className="h-5 w-5 text-gray-400" />
                   ) : (
-                    <Eye className="h-5 w-5 text-gray-400" />
+                    <Eye className="h-5 w-5 text-gray-400 " />
                   )}
                 </Button>
               </div>
               {errors.newPassword && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.newPassword.message}
-                </p>
+                <p className="text-red-500 text-xs mt-1">{errors.newPassword.message}</p>
               )}
             </div>
 
             <div className="relative">
               <Label htmlFor="newPassword" className="text-sm font-medium">
-                New Password
+                새 비밀번호
               </Label>
               <div className="relative mt-1">
                 <Input
-                  id="newPpassword"
+                  id="newPassword"
                   type={showNewPassword ? 'text' : 'password'}
                   {...register('newPassword')}
-                  className={`pl-10 pr-10 ${
-                    errors.newPassword ? 'border-red-500' : ''
-                  }`}
+                  className={`pl-10 pr-10 ${errors.newPassword ? 'border-red-500' : ''}`}
                 />
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
                 <Button
                   type="button"
                   variant="ghost"
                   size="icon"
-                  className="absolute right-1 top-1/2 -translate-y-1/2"
+                  className="absolute right-1 top-1/2 -translate-y-1/2 hover:bg-transparent hover:text-inherit"
                   onClick={() => setShowNewPassword(!showNewPassword)}
                 >
                   {showNewPassword ? (
@@ -246,31 +221,27 @@ const EditProfile = () => {
                 </Button>
               </div>
               {errors.newPassword && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.newPassword.message}
-                </p>
+                <p className="text-red-500 text-xs mt-1">{errors.newPassword.message}</p>
               )}
             </div>
 
             <div className="relative">
               <Label htmlFor="confirm-password" className="text-sm font-medium">
-                Confirm Password
+                비밀번호 확인
               </Label>
               <div className="relative mt-1">
                 <Input
                   id="confirm-password"
                   type={showConfirmPassword ? 'text' : 'password'}
                   {...register('confirmPassword')}
-                  className={`pl-10 pr-10 ${
-                    errors.confirmPassword ? 'border-red-500' : ''
-                  }`}
+                  className={`pl-10 pr-10 ${errors.confirmPassword ? 'border-red-500' : ''}`}
                 />
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
                 <Button
                   type="button"
                   variant="ghost"
                   size="icon"
-                  className="absolute right-1 top-1/2 -translate-y-1/2"
+                  className="absolute right-1 top-1/2 -translate-y-1/2 hover:bg-transparent hover:text-inherit"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 >
                   {showConfirmPassword ? (
@@ -281,16 +252,14 @@ const EditProfile = () => {
                 </Button>
               </div>
               {errors.confirmPassword && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.confirmPassword.message}
-                </p>
+                <p className="text-red-500 text-xs mt-1">{errors.confirmPassword.message}</p>
               )}
             </div>
           </div>
 
           <div className="pt-4">
             <Button type="submit" variant="profile">
-              Save Changes
+              저장
             </Button>
           </div>
         </form>
@@ -301,7 +270,7 @@ const EditProfile = () => {
           className="w-full bg-gray-200 text-gray-800 hover:bg-gray-300 transition-all duration-300"
           onClick={handleCancel}
         >
-          Cancel
+          취소
         </Button>
       </CardFooter>
     </Card>
