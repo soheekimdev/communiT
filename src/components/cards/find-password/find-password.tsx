@@ -1,12 +1,5 @@
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Mail } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -20,12 +13,12 @@ const FindPassword = () => {
 
   return (
     <Card>
-      <CardHeader className="space-y-1 text-center">
+      <CardHeader className="space-y-1">
         <CardTitle className="text-2xl mb-2">비밀번호 찾기</CardTitle>
         <CardDescription>
           가입할 때 사용하신 이메일을 입력해주세요.
           <br />
-          비밀번호 재설정 메일을 보내드립니다.
+          비밀번호 재설정 링크를 보내드립니다.
         </CardDescription>
       </CardHeader>
       <CardContent className="grid gap-4">
@@ -36,7 +29,7 @@ const FindPassword = () => {
         </div>
 
         <form>
-          <div className="relative mb-2">
+          <div className="relative mb-4">
             <Label htmlFor={emailId} className="text-sm font-medium">
               Email
             </Label>
@@ -53,11 +46,18 @@ const FindPassword = () => {
             </div>
             {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
           </div>
+          <div className="text-center w-full text-sm font-thin">
+            <a href="/find-email" className="text-primary hover:underline ">
+              이메일이 기억 안나시나요?
+            </a>
+          </div>
+          <div className="pt-4 mt-8">
+            <Button type="submit" className="w-full ">
+              비밀번호 재설정
+            </Button>
+          </div>
         </form>
       </CardContent>
-      <CardFooter>
-        <Button className="w-full">비밀번호 재설정</Button>
-      </CardFooter>
     </Card>
   );
 };

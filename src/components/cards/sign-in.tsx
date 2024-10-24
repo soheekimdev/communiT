@@ -10,12 +10,10 @@ const Signin = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [errors, _] = useState<{ [key: string]: string }>({});
+  const [checked, setChecked] = useState<boolean>(false);
+  const [errors, _] = useState<{ email?: string; password?: string }>({});
 
-  // const id = useId();
-  const emailId = useId();
-  const passwordId = useId();
-  const checkId = useId();
+  const Id = useId();
 
   return (
     <Card>
@@ -23,6 +21,7 @@ const Signin = () => {
         <CardTitle className="text-2xl">운동 커뮤니T</CardTitle>
         <CardDescription>운동을 좋아하시나요? 여깁니다 여기</CardDescription>
       </CardHeader>
+
       <CardContent className="grid gap-4">
         <div className="relative mb-2">
           <div className="absolute inset-0 flex items-center">
@@ -32,12 +31,12 @@ const Signin = () => {
 
         <form>
           <div className="relative mb-4">
-            <Label htmlFor={emailId} className="text-sm font-medium">
+            <Label htmlFor={`${Id}-email`} className="text-sm font-medium">
               Email
             </Label>
             <div className="relative mt-1">
               <Input
-                id={emailId}
+                id={`${Id}-email`}
                 type="email"
                 placeholder="userEmail@example.com"
                 value={email}
@@ -50,10 +49,10 @@ const Signin = () => {
           </div>
 
           <div className="relative mb-4">
-            <Label htmlFor={passwordId}>Password</Label>
+            <Label htmlFor={`${Id}-password`}>Password</Label>
             <div className="relative mt-1">
               <Input
-                id={passwordId}
+                id={`${Id}-password`}
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={e => setPassword(e.target.value)}
@@ -74,22 +73,31 @@ const Signin = () => {
                 )}
               </Button>
             </div>
+            {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
           </div>
 
-          <div className="flex items-center space-x-2 ml-8  mb-4">
-            <Checkbox id={checkId} />
+          <div className="flex items-center space-x-2 ml-4 mb-4 text-gray-500">
+            <Checkbox id={`${Id}-check`} name="autoLogin" onChange={() => setChecked(!checked)} />
             <label
-              htmlFor={checkId}
+              htmlFor={`${Id}-check`}
               className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
               자동 로그인
             </label>
           </div>
 
-          <Button className="w-full mt-4 mb-4">로그인</Button>
-          <div className="text-center w-full text-sm font-thin">
-            <a href="/find-password" className="text-primary hover:underline">
-              아이디 / 비밀번호 찾기
+          <div className="pt-4 mt-8 mb-4">
+            <Button type="submit" className="w-full">
+              로그인
+            </Button>
+          </div>
+
+          <div className="text-center w-full text-sm font-thin mb-4">
+            <a href="/find-email" className="text-primary hover:underline">
+              이메일 찾기
+            </a>
+            <a href="/find-password" className="text-primary hover:underline ml-8">
+              비밀번호 찾기
             </a>
             <a href="/sign-up" className="text-primary hover:underline ml-8">
               회원가입
@@ -97,51 +105,38 @@ const Signin = () => {
           </div>
         </form>
 
-        <div className="relative">
+        <div className="relative mt-2 mb-2">
           <div className="absolute inset-0 flex items-center">
             <span className="w-full border-t" />
           </div>
-          <div className="relative flex justify-center text-xs uppercase mt-4 mb-2 ">
+          <div className="relative flex justify-center text-xs uppercase">
             <span className="bg-background px-2 text-muted-foreground">SNS LOGIN</span>
           </div>
         </div>
 
-        <div className="flex gap-6">
-          <Button variant="outline" className="flex-grow">
-            <svg
-              role="img"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 mr-2 dark:invert"
-            >
-              <title>Naver</title>
-              <path d="M19 19V5h-3.5v10.5L8 5H5v14h3.5V8.5L16 19h3z" />
-            </svg>
-            Naver
+        <div className="flex flex-wrap justify-center gap-10 mb-4 mt-4">
+          <Button
+            type="button"
+            variant="ghost"
+            className="hover:bg-transparent hover:text-inherit w-12 h-12 rounded-full p-0"
+          >
+            <img src="/images/Naver.png" alt="Naver" className=" rounded-full border-2" />
           </Button>
-          <Button variant="outline" className="flex-grow">
-            <svg
-              role="img"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 mr-2 dark:invert"
-            >
-              <title>Kakao</title>
-              <path d="M12 3C5.9 3 1 7.1 1 12.2C1 15.7 3.1 18.7 6.2 20.4V24L10.6 21.2C11 21.3 11.5 21.3 12 21.3C18.1 21.3 23 17.2 23 12.2C23 7.1 18.1 3 12 3Z" />
-            </svg>
-            Kakao
+
+          <Button
+            type="button"
+            variant="ghost"
+            className="hover:bg-transparent hover:text-inherit w-12 h-12 rounded-full p-0"
+          >
+            <img src="/images/Kakao.png" alt="Kakao" className=" rounded-full border-2" />
           </Button>
-          <Button variant="outline" className="flex-grow">
-            <svg
-              role="img"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 mr-2 dark:invert"
-            >
-              <title>Google</title>
-              <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z" />
-            </svg>
-            Google
+
+          <Button
+            type="button"
+            variant="ghost"
+            className=" hover:bg-transparent hover:text-inherit w-12 h-12 rounded-full p-0"
+          >
+            <img src="/images/Google.png" alt="Google" className="rounded-full border-2 " />
           </Button>
         </div>
       </CardContent>

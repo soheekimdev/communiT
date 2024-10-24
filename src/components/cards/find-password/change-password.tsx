@@ -1,12 +1,5 @@
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Lock, Eye, EyeOff } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -19,8 +12,7 @@ const ChangePassword = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
   const [errors, _] = useState<{ [key: string]: string }>({});
 
-  const newPasswordId = useId();
-  const newConfirmPasswordId = useId();
+  const Id = useId();
 
   return (
     <Card>
@@ -37,14 +29,14 @@ const ChangePassword = () => {
 
         <form>
           <div className="relative mb-4">
-            <Label htmlFor={newPasswordId}>새 비밀번호</Label>
+            <Label htmlFor={`${Id}-newPassword`}>새 비밀번호</Label>
             <div className="relative mt-1">
               <Input
-                id={newPasswordId}
+                id={`${Id}-newPassword`}
                 type={showNewPassword ? 'text' : 'password'}
                 value={newPassword}
                 onChange={e => setNewPassword(e.target.value)}
-                className={`pl-10 pr-10 ${errors.newpassword ? 'border-red-500' : ''}`}
+                className={`pl-10 pr-10 ${errors.newPassword ? 'border-red-500' : ''}`}
               />
               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
               <Button
@@ -61,13 +53,16 @@ const ChangePassword = () => {
                 )}
               </Button>
             </div>
+            {errors.newPassword && (
+              <p className="text-red-500 text-xs mt-1">{errors.newPassword}</p>
+            )}
           </div>
 
-          <div className="relative mb-2">
-            <Label htmlFor={newConfirmPasswordId}>새 비밀번호 확인</Label>
+          <div className="relative mb-4">
+            <Label htmlFor={`${Id}-newConfirmPassword`}>새 비밀번호 확인</Label>
             <div className="relative mt-1">
               <Input
-                id={newConfirmPasswordId}
+                id={`${Id}-newConfirmPassword`}
                 type={showConfirmPassword ? 'text' : 'password'}
                 value={confirmPassword}
                 onChange={e => setConfirmPassword(e.target.value)}
@@ -88,13 +83,18 @@ const ChangePassword = () => {
                 )}
               </Button>
             </div>
+            {errors.confirmPassword && (
+              <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>
+            )}
+          </div>
+
+          <div className="pt-4 mt-8">
+            <Button className="w-full" type="submit">
+              비밀번호 변경
+            </Button>
           </div>
         </form>
       </CardContent>
-      <br />
-      <CardFooter>
-        <Button className="w-full">로그인</Button>
-      </CardFooter>
     </Card>
   );
 };
