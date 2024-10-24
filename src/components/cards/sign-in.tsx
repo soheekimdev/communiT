@@ -5,15 +5,38 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useId, useState } from 'react';
 import { Checkbox } from '../ui/checkbox';
+import { z } from 'zod';
+
+const signInSchema = z.object({
+  email: z.string().email('유효한 이메일 주소를 입력하세요'),
+  password: z.string().min(8, '비밀번호는 최소 8자 이상이어야 합니다.'),
+});
 
 const Signin = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [checked, setChecked] = useState<boolean>(false);
-  const [errors, _] = useState<{ email?: string; password?: string }>({});
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
 
   const Id = useId();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const result = signInSchema.safeParse({ email, password });
+
+    if (!result.success) {
+      const formattedErrors = result.error.format();
+      setErrors({
+        email: formattedErrors.email?._errors ? formattedErrors.email._errors[0] : '',
+        password: formattedErrors.password?._errors ? formattedErrors.password._errors[0] : '',
+      });
+    } else {
+      setErrors({});
+      console.log('로그인 성공', result.data);
+    }
+  };
 
   return (
     <Card>
@@ -29,7 +52,7 @@ const Signin = () => {
           </div>
         </div>
 
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="relative mb-4">
             <Label htmlFor={`${Id}-email`} className="text-sm font-medium">
               Email
@@ -114,7 +137,7 @@ const Signin = () => {
           </div>
         </div>
 
-        <div className="flex flex-wrap justify-center gap-10 mb-4 mt-4">
+        <div className="flex flex-wrap justify-center gap-12 mb-4 mt-4">
           <Button
             type="button"
             variant="ghost"

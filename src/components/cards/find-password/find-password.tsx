@@ -4,12 +4,33 @@ import { Mail } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useId, useState } from 'react';
+import { z } from 'zod';
+
+const findPasswordSchema = z.object({
+  email: z.string().email('유효한 이메일 주소를 입력하세요'),
+});
 
 const FindPassword = () => {
   const [email, setEmail] = useState<string>('');
-  const [errors, _] = useState<{ [key: string]: string }>({});
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const emailId = useId();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const result = findPasswordSchema.safeParse({ email });
+
+    if (!result.success) {
+      const formattedErrors = result.error.format();
+      setErrors({
+        email: formattedErrors.email?._errors ? formattedErrors.email._errors[0] : '',
+      });
+    } else {
+      setErrors({});
+      console.log('이메일 전송 성공', result.data);
+    }
+  };
 
   return (
     <Card>
@@ -28,7 +49,7 @@ const FindPassword = () => {
           </div>
         </div>
 
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="relative mb-4">
             <Label htmlFor={emailId} className="text-sm font-medium">
               Email

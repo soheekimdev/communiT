@@ -4,15 +4,51 @@ import { Lock, Eye, EyeOff } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useId, useState } from 'react';
+import { z } from 'zod';
+
+// 유효성 검사 스키마
+const changePasswordSchema = z
+  .object({
+    newPassword: z
+      .string()
+      .min(8, '비밀번호는 최소 8자 이상이어야 합니다.')
+      .regex(/^(?!.*(.)\1\1).*$/, '같은 문자를 3번 이상 반복할 수 없습니다.'),
+    confirmPassword: z.string(),
+  })
+  .refine(data => data.newPassword === data.confirmPassword, {
+    message: '비밀번호가 일치하지 않습니다.',
+    path: ['confirmPassword'],
+  });
 
 const ChangePassword = () => {
   const [newPassword, setNewPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [showNewPassword, setShowNewPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
-  const [errors, _] = useState<{ [key: string]: string }>({});
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const Id = useId();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const result = changePasswordSchema.safeParse({ newPassword, confirmPassword });
+
+    if (!result.success) {
+      const formattedErrors = result.error.format();
+      setErrors({
+        newPassword: formattedErrors.newPassword?._errors
+          ? formattedErrors.newPassword?._errors[0]
+          : '',
+        confirmPassword: formattedErrors.confirmPassword?._errors
+          ? formattedErrors.confirmPassword?._errors[0]
+          : '',
+      });
+    } else {
+      setErrors({});
+      console.log('비밀번호 변경 성공', result.data);
+    }
+  };
 
   return (
     <Card>
@@ -27,7 +63,7 @@ const ChangePassword = () => {
           </div>
         </div>
 
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="relative mb-4">
             <Label htmlFor={`${Id}-newPassword`}>새 비밀번호</Label>
             <div className="relative mt-1">
