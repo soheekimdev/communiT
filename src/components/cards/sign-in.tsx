@@ -118,7 +118,7 @@ const Signin = () => {
           <Button
             type="button"
             variant="ghost"
-            className="hover:bg-transparent hover:text-inherit w-12 h-12 rounded-full p-0"
+            className="hover:bg-transparent hover:text-inherit w-16 h-16 rounded-full p-0"
           >
             <img src="/images/Naver.png" alt="Naver" className=" rounded-full border-2" />
           </Button>
@@ -126,7 +126,7 @@ const Signin = () => {
           <Button
             type="button"
             variant="ghost"
-            className="hover:bg-transparent hover:text-inherit w-12 h-12 rounded-full p-0"
+            className="hover:bg-transparent hover:text-inherit w-16 h-16 rounded-full p-0"
           >
             <img src="/images/Kakao.png" alt="Kakao" className=" rounded-full border-2" />
           </Button>
@@ -134,7 +134,7 @@ const Signin = () => {
           <Button
             type="button"
             variant="ghost"
-            className=" hover:bg-transparent hover:text-inherit w-12 h-12 rounded-full p-0"
+            className=" hover:bg-transparent hover:text-inherit w-16 h-16 rounded-full p-0"
           >
             <img src="/images/Google.png" alt="Google" className="rounded-full border-2 " />
           </Button>
