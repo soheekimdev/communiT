@@ -1,6 +1,5 @@
 import { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
@@ -9,13 +8,19 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
 
+// /^[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ]*$/
+// 특수문자 불가능, 한글 자음 모음 가능 -> ㅂ 가능 ㅏ 가능 바 가능
+
+// /^[a-zA-Z0-9가-힣]*$/
+// 특수문자 자음 모음 불가능, 한글 가능 -> ㅂ 불가능 바 가능
+
 const formSchema = z
   .object({
     userName: z
       .string()
       .trim()
       .nonempty('이름을 입력해 주세요.')
-      .regex(/^[a-zA-Z0-9]*$/, '특수문자는 사용할 수 없습니다.')
+      .regex(/^[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ]*$/, '특수문자는 사용할 수 없습니다.')
       .min(2, '이름은 최소 2자 이상이어야 합니다.'),
     newPassword: z
       .string()
@@ -82,12 +87,10 @@ const EditProfile = () => {
   };
 
   return (
-    <Card>
-      <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl">Edit Profile</CardTitle>
-      </CardHeader>
+    <div className="bg-[#fafafa] overflow-hidden h-full mx-auto">
+      <div className="relative p-8 space-y-2">
+        <h1 className="text-3xl font-bold text-gray-800">정보 수정</h1>
 
-      <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="flex flex-col items-center space-y-4">
             <div className="relative">
@@ -119,8 +122,8 @@ const EditProfile = () => {
             />
           </div>
 
-          <div className="space-y-4">
-            <div className="relative">
+          <div className="flex flex-col justify-center items-center space-y-4">
+            <div className="relative w-[30rem] ">
               <Label htmlFor="email" className="text-sm font-medium">
                 계정
               </Label>
@@ -136,7 +139,7 @@ const EditProfile = () => {
               </div>
             </div>
 
-            <div className="relative">
+            <div className="relative w-[30rem] ">
               <Label htmlFor="name" className="text-sm font-medium">
                 이름(or 닉네임 - 생각중..)
               </Label>
@@ -167,7 +170,7 @@ const EditProfile = () => {
               <Label htmlFor="currentPassword" className="text-sm font-medium">
                 현재 비밀번호
               </Label>
-              <div className="relative mt-1">
+              <div className="relative w-[30rem] ">
                 <Input
                   id="currentPassword"
                   value="회원가입 후 현재 비밀번호와 일치하는지 비교 예정(현재 disabled)"
@@ -194,7 +197,7 @@ const EditProfile = () => {
               )}
             </div>
 
-            <div className="relative">
+            <div className="relative w-[30rem] ">
               <Label htmlFor="newPassword" className="text-sm font-medium">
                 새 비밀번호
               </Label>
@@ -225,7 +228,7 @@ const EditProfile = () => {
               )}
             </div>
 
-            <div className="relative">
+            <div className="relative w-[30rem] ">
               <Label htmlFor="confirm-password" className="text-sm font-medium">
                 비밀번호 확인
               </Label>
@@ -257,23 +260,17 @@ const EditProfile = () => {
             </div>
           </div>
 
-          <div className="pt-4">
-            <Button type="submit" variant="profile">
+          <div className="flex justify-center gap-10 pt-2">
+            <Button className="w-[15rem]" type="submit" variant="profile">
               저장
+            </Button>
+            <Button className="w-[15rem]" type="reset" variant="outline" onClick={handleCancel}>
+              취소
             </Button>
           </div>
         </form>
-      </CardContent>
-
-      <CardFooter>
-        <Button
-          className="w-full bg-gray-200 text-gray-800 hover:bg-gray-300 transition-all duration-300"
-          onClick={handleCancel}
-        >
-          취소
-        </Button>
-      </CardFooter>
-    </Card>
+      </div>
+    </div>
   );
 };
 
