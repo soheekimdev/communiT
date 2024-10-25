@@ -9,6 +9,7 @@ import Notifications from './pages/notifications';
 import MessageChannels from './pages/message-channels';
 import Header from './components/layout/header';
 import MyProfile from './components/cards/my-profile';
+import EditProfile from './components/cards/edit-profile';
 
 const userName = '김홍삼';
 
@@ -27,6 +28,7 @@ export default function App() {
               <Route path="/notifications" element={<Notifications />} />
               <Route path="/message-channels" element={<MessageChannels />} />
               <Route path="/my-profile" element={<MyProfile />} />
+              <Route path="/edit-profile" element={<EditProfile />} />
             </Routes>
           </main>
         </SidebarProvider>
