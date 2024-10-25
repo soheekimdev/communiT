@@ -9,6 +9,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from '@/components/ui/sidebar';
 import {
   DropdownMenu,
@@ -24,6 +25,12 @@ const mainMenuItems = [
 ];
 
 const AppSidebar = () => {
+  const { setOpenMobile } = useSidebar(); // useSidebar hook 사용
+
+  const handleClick = () => {
+    setOpenMobile(false); // 메뉴 클릭 시 사이드바 닫기
+  };
+
   return (
     <Sidebar>
       <SidebarHeader>운동커뮤니T</SidebarHeader>
@@ -34,7 +41,11 @@ const AppSidebar = () => {
               {mainMenuItems.map(item => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <Link to={item.url} className="flex items-center w-full gap-4 px-2 py-2">
+                    <Link
+                      to={item.url}
+                      className="flex items-center w-full gap-4 px-2 py-2"
+                      onClick={handleClick}
+                    >
                       <item.icon className="w-5 h-5" />
                       <span>{item.title}</span>
                     </Link>
