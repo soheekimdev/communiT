@@ -1,26 +1,26 @@
 import { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import z from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { User, Mail, Lock, Eye, EyeOff, Camera, CheckCircle, XCircle } from 'lucide-react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import z from 'zod';
-
-// /^[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ]*$/
-// 특수문자 불가능, 한글 자음 모음 가능 -> ㅂ 가능 ㅏ 가능 바 가능
-
-// /^[a-zA-Z0-9가-힣]*$/
-// 특수문자 자음 모음 불가능, 한글 가능 -> ㅂ 불가능 바 가능
+import { Checkbox } from '@/components/ui/checkbox';
+import { Badge } from '@/components/ui/badge';
+import { User, Lock, Eye, EyeOff, Camera, CheckCircle, XCircle } from 'lucide-react';
 
 const formSchema = z
   .object({
-    userName: z
+    userNickname: z
       .string()
       .trim()
       .nonempty('이름을 입력해 주세요.')
-      .regex(/^[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ]*$/, '특수문자는 사용할 수 없습니다.')
+      .regex(
+        /^[a-zA-Z0-9가-힣]*$/,
+        '공백, 특수 문자, 그리고 자음이나 모음만으로 이루어진 한글은 사용할 수 없습니다.',
+      )
       .min(2, '이름은 최소 2자 이상이어야 합니다.'),
     newPassword: z
       .string()
@@ -35,15 +35,19 @@ const formSchema = z
 
 type FormData = z.infer<typeof formSchema>;
 
+const categoryOptions = ['축구', '농구', '야구', '테니스', '스쿠버다이빙', '수상스키', '런닝'];
+
 const EditProfile = () => {
   const [profileImage, setProfileImage] = useState<string>('');
   const [showCurrentPassword, setShowCurrentPassword] = useState<boolean>(false);
   const [showNewPassword, setShowNewPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+  const [categories, setCategories] = useState<string[]>([]);
 
   const imageFileRef = useRef<HTMLInputElement>(null);
-
   const defaultImage = 'https://example.com/my-default-image.png';
+
+  const navigate = useNavigate();
 
   const {
     register,
@@ -55,7 +59,7 @@ const EditProfile = () => {
     resolver: zodResolver(formSchema),
   });
 
-  const userNameValue = watch('userName', '');
+  const userNicknameValue = watch('userNickname', '');
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -68,18 +72,29 @@ const EditProfile = () => {
     }
   };
 
+  const toggleCategory = (category: string) => {
+    setCategories(prevCategories =>
+      prevCategories.includes(category)
+        ? prevCategories.filter(c => c !== category)
+        : [...prevCategories, category],
+    );
+  };
+
   const onSubmit = (data: FormData) => {
     // 프로필 수정 로직
+    // 선택한 카테고리들을 제출하는 로직 추가
 
     console.log('프로필 수정 성공 : ', {
       profileImage,
       ...data,
     });
+    console.log('선택된 카테고리:', categories);
   };
 
   const handleCancel = () => {
     setProfileImage('');
     reset();
+    navigate('/my-profile');
 
     if (imageFileRef.current) {
       imageFileRef.current.value = '';
@@ -123,45 +138,29 @@ const EditProfile = () => {
           </div>
 
           <div className="flex flex-col justify-center items-center space-y-4">
-            <div className="relative w-[30rem] ">
-              <Label htmlFor="email" className="text-sm font-medium">
-                계정
-              </Label>
-              <div className="relative mt-1">
-                <Input
-                  id="email"
-                  type="email"
-                  value="Example@google.com"
-                  disabled
-                  className="pl-10 pr-10 bg-slate-300 text-green-700"
-                />
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
-              </div>
-            </div>
-
-            <div className="relative w-[30rem] ">
+            <div className="relative w-[20rem] ">
               <Label htmlFor="name" className="text-sm font-medium">
-                이름(or 닉네임 - 생각중..)
+                닉네임
               </Label>
               <div className="relative mt-1">
                 <Input
                   id="name"
                   type="text"
-                  placeholder="userName"
-                  {...register('userName')}
-                  className={`pl-10 pr-10 ${errors.userName ? 'border-red-500' : ''}`}
+                  placeholder="길동무가없는홍길동"
+                  {...register('userNickname')}
+                  className={`pl-10 pr-10 ${errors.userNickname ? 'border-red-500' : ''}`}
                 />
                 <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
-                {errors.userName ? (
+                {errors.userNickname ? (
                   <XCircle className="absolute right-3 top-1/2 -translate-y-1/2 text-red-500 h-5 w-5" />
                 ) : (
-                  userNameValue.trim().length >= 2 && (
+                  userNicknameValue.trim().length >= 2 && (
                     <CheckCircle className="absolute right-3 top-1/2 -translate-y-1/2 text-green-500 h-5 w-5" />
                   )
                 )}
               </div>
-              {errors.userName && (
-                <p className="text-red-500 text-xs mt-1">{errors.userName.message}</p>
+              {errors.userNickname && (
+                <p className="text-red-500 text-xs mt-1">{errors.userNickname.message}</p>
               )}
             </div>
 
@@ -170,10 +169,10 @@ const EditProfile = () => {
               <Label htmlFor="currentPassword" className="text-sm font-medium">
                 현재 비밀번호
               </Label>
-              <div className="relative w-[30rem] ">
+              <div className="relative w-[20rem] ">
                 <Input
                   id="currentPassword"
-                  value="회원가입 후 현재 비밀번호와 일치하는지 비교 예정(현재 disabled)"
+                  value="현재 disabled 상태"
                   className="pl-10 pr-10 text-violet-900"
                   disabled
                 />
@@ -197,7 +196,7 @@ const EditProfile = () => {
               )}
             </div>
 
-            <div className="relative w-[30rem] ">
+            <div className="relative w-[20rem] ">
               <Label htmlFor="newPassword" className="text-sm font-medium">
                 새 비밀번호
               </Label>
@@ -228,7 +227,7 @@ const EditProfile = () => {
               )}
             </div>
 
-            <div className="relative w-[30rem] ">
+            <div className="relative w-[20rem] ">
               <Label htmlFor="confirm-password" className="text-sm font-medium">
                 비밀번호 확인
               </Label>
@@ -260,11 +259,25 @@ const EditProfile = () => {
             </div>
           </div>
 
-          <div className="flex justify-center gap-10 pt-2">
-            <Button className="w-[15rem]" type="submit" variant="profile">
+          <div className="w-[24rem] m-auto grid grid-cols-3 gap-2">
+            {categoryOptions.map((category, index) => (
+              <Badge key={index} variant="options" className="">
+                <label className="flex items-center gap-x-2 gap-y-0">
+                  <Checkbox
+                    checked={categories.includes(category)}
+                    onCheckedChange={() => toggleCategory(category)}
+                  />
+                  {category}
+                </label>
+              </Badge>
+            ))}
+          </div>
+
+          <div className="flex justify-center gap-4 pt-2">
+            <Button className="w-[9.5rem]" type="submit" variant="profile">
               저장
             </Button>
-            <Button className="w-[15rem]" type="reset" variant="outline" onClick={handleCancel}>
+            <Button className="w-[9.5rem]" type="reset" variant="outline" onClick={handleCancel}>
               취소
             </Button>
           </div>
