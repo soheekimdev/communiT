@@ -1,14 +1,19 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search } from 'lucide-react';
+import { Bell, MessageCircle, Search } from 'lucide-react';
 import { SidebarTrigger } from '../ui/sidebar';
 import { Link } from 'react-router-dom';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { useState } from 'react';
 
 interface HeaderProps {
   userName?: string;
 }
 
 const Header = ({ userName }: HeaderProps) => {
+  const [profileImage, setProfileImage] = useState<string>('');
+  const defaultImage = 'https://example.com/my-default-image.png';
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex w-full items-center gap-4 h-16 px-8">
@@ -25,23 +30,20 @@ const Header = ({ userName }: HeaderProps) => {
         </div>
 
         {/* 우측 버튼들 */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-5">
           {userName ? (
             <>
               <Link to="/notifications">
-                <Button variant="ghost" size="sm">
-                  알림
-                </Button>
+                <Bell />
               </Link>
               <Link to="/message-channels">
-                <Button variant="ghost" size="sm">
-                  메시지
-                </Button>
+                <MessageCircle />
               </Link>
               <Link to="/my-profile">
-                <Button variant="ghost" size="sm">
-                  프로필
-                </Button>
+                <Avatar size="sm">
+                  <AvatarImage src={profileImage || defaultImage} alt="Profile Picture" />
+                  <AvatarFallback>사용자</AvatarFallback>
+                </Avatar>
               </Link>
             </>
           ) : (
