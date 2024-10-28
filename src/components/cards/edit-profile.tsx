@@ -102,9 +102,9 @@ const EditProfile = () => {
   };
 
   return (
-    <div className="bg-[#fafafa] overflow-hidden h-full mx-auto">
+    <div className="overflow-hidden h-full mx-auto">
       <div className="relative p-8 space-y-2">
-        <h1 className="text-3xl font-bold text-gray-800">정보 수정</h1>
+        <h1 className="text-3xl font-bold">정보 수정</h1>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="flex flex-col items-center space-y-4">
@@ -121,7 +121,7 @@ const EditProfile = () => {
                 type="button"
                 variant="outline"
                 size="icon"
-                className="absolute bottom-0 right-0 rounded-full bg-white"
+                className="absolute bottom-0 right-0 rounded-full"
                 onClick={() => imageFileRef.current?.click()}
               >
                 <Camera className="h-4 w-4" />
@@ -150,7 +150,7 @@ const EditProfile = () => {
                   {...register('userNickname')}
                   className={`pl-10 pr-10 ${errors.userNickname ? 'border-red-500' : ''}`}
                 />
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5" />
                 {errors.userNickname ? (
                   <XCircle className="absolute right-3 top-1/2 -translate-y-1/2 text-red-500 h-5 w-5" />
                 ) : (
@@ -173,10 +173,10 @@ const EditProfile = () => {
                 <Input
                   id="currentPassword"
                   value="현재 disabled 상태"
-                  className="pl-10 pr-10 text-violet-900"
+                  className="pl-10 pr-10 text-blue-500"
                   disabled
                 />
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5" />
                 <Button
                   type="button"
                   variant="ghost"
@@ -185,9 +185,9 @@ const EditProfile = () => {
                   onClick={() => setShowCurrentPassword(!showCurrentPassword)}
                 >
                   {showCurrentPassword ? (
-                    <EyeOff className="h-5 w-5 text-gray-400" />
+                    <EyeOff className="h-5 w-5" />
                   ) : (
-                    <Eye className="h-5 w-5 text-gray-400 " />
+                    <Eye className="h-5 w-5 " />
                   )}
                 </Button>
               </div>
@@ -207,7 +207,7 @@ const EditProfile = () => {
                   {...register('newPassword')}
                   className={`pl-10 pr-10 ${errors.newPassword ? 'border-red-500' : ''}`}
                 />
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5" />
                 <Button
                   type="button"
                   variant="ghost"
@@ -215,11 +215,7 @@ const EditProfile = () => {
                   className="absolute right-1 top-1/2 -translate-y-1/2 hover:bg-transparent hover:text-inherit"
                   onClick={() => setShowNewPassword(!showNewPassword)}
                 >
-                  {showNewPassword ? (
-                    <EyeOff className="h-5 w-5 text-gray-400" />
-                  ) : (
-                    <Eye className="h-5 w-5 text-gray-400" />
-                  )}
+                  {showNewPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </Button>
               </div>
               {errors.newPassword && (
@@ -238,7 +234,7 @@ const EditProfile = () => {
                   {...register('confirmPassword')}
                   className={`pl-10 pr-10 ${errors.confirmPassword ? 'border-red-500' : ''}`}
                 />
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5" />
                 <Button
                   type="button"
                   variant="ghost"
@@ -247,9 +243,9 @@ const EditProfile = () => {
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 >
                   {showConfirmPassword ? (
-                    <EyeOff className="h-5 w-5 text-gray-400" />
+                    <EyeOff className="h-5 w-5" />
                   ) : (
-                    <Eye className="h-5 w-5 text-gray-400" />
+                    <Eye className="h-5 w-5" />
                   )}
                 </Button>
               </div>

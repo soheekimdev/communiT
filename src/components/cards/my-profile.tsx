@@ -10,9 +10,9 @@ const MyProfile = () => {
   const defaultImage = 'https://example.com/my-default-image.png';
 
   return (
-    <div className="bg-[#fafafa] overflow-hidden h-full mx-auto">
+    <div className="overflow-hidden h-full mx-auto">
       <div className="relative p-8 space-y-2">
-        <h1 className="text-3xl font-bold text-gray-800">홍길동님의 정보</h1>
+        <h1 className="text-3xl font-bold">홍길동님의 정보</h1>
         <div className="grid gap-6">
           <div className="flex flex-col items-center gap-4">
             <div className="relative mt-4">
@@ -27,18 +27,18 @@ const MyProfile = () => {
             </div>
             <div className="flex flex-col items-center">
               <div className="flex items-center gap-2 mt-2">
-                <User className="text-gray-700 h-6 w-6" />
-                <h2 className="text-2xl font-semibold text-gray-800">길동무가없는홍길동</h2>
+                <User className=" h-6 w-6" />
+                <h2 className="text-2xl font-semibold">길동무가없는홍길동</h2>
               </div>
 
               <div className="flex items-center gap-2 mt-2">
-                <Mail className="text-gray-500 h-5 w-5" />
-                <p className="text-lg text-gray-600">userEmail@example.com</p>
+                <Mail className="h-5 w-5" />
+                <p className="text-lg">userEmail@example.com</p>
               </div>
             </div>
           </div>
           <div className="w-[20rem] m-auto space-y-4">
-            <p className="text-xl font-medium text-center text-gray-700">관심 카테고리</p>
+            <p className="text-xl font-medium text-center">관심 카테고리</p>
             <div className="grid grid-cols-3 gap-2">
               <Badge variant="soccer">축구</Badge>
               <Badge variant="tennis">테니스</Badge>
