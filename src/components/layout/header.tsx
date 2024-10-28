@@ -11,7 +11,7 @@ interface HeaderProps {
 }
 
 const Header = ({ userName }: HeaderProps) => {
-  const [profileImage, setProfileImage] = useState<string>('');
+  const [profileImage, _] = useState<string>('');
   const defaultImage = 'https://example.com/my-default-image.png';
 
   return (
