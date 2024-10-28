@@ -109,12 +109,8 @@ const EditProfile = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="flex flex-col items-center space-y-4">
             <div className="relative">
-              <Avatar className="h-32 w-32 border-4 border-gray shadow-lg">
-                <AvatarImage
-                  className="h-full w-full object-cover"
-                  src={profileImage || defaultImage}
-                  alt="Profile Picture"
-                />
+              <Avatar size="lg">
+                <AvatarImage src={profileImage || defaultImage} alt="Profile Picture" />
                 <AvatarFallback>사용자</AvatarFallback>
               </Avatar>
               <Button
