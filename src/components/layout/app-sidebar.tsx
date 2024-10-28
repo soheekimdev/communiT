@@ -1,4 +1,4 @@
-import { Home, Dumbbell, Users, LogOut, SunMoon } from 'lucide-react';
+import { Home, Dumbbell, Users, LogOut } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
@@ -11,12 +11,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { ModeToggle } from '@/components/ui/mode-toggle';
 import { Link } from 'react-router-dom';
 const mainMenuItems = [
   { title: '홈', url: '/', icon: Home },
@@ -58,23 +53,7 @@ const AppSidebar = () => {
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <div className="flex items-center w-full gap-4 px-2 py-2">
-                    <SunMoon className="w-5 h-5" />
-                    <span>테마 설정</span>
-                  </div>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem>라이트 모드</DropdownMenuItem>
-              <DropdownMenuItem>다크 모드</DropdownMenuItem>
-              <DropdownMenuItem>시스템 설정</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <ModeToggle />
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
               <div className="flex items-center w-full gap-4 px-2 py-2 cursor-pointer">
