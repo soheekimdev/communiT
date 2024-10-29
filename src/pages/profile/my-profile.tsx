@@ -45,7 +45,7 @@ const MyProfile = () => {
             <div className="flex flex-col items-center gap-4">
               <div className="relative mt-4">
                 <Avatar size="lg">
-                  <AvatarImage src="" alt="Profile Picture" />
+                  <AvatarImage src={profileImage || defaultImage} alt="Profile Picture" />
                   <AvatarFallback>사용자</AvatarFallback>
                 </Avatar>
               </div>
