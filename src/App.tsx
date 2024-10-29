@@ -8,8 +8,8 @@ import Posts from './pages/posts';
 import Notifications from './pages/notifications';
 import MessageChannels from './pages/message-channels';
 import Header from './components/layout/header';
-import MyProfile from './components/cards/my-profile';
-import EditProfile from './components/cards/edit-profile';
+import MyProfile from './pages/profile/my-profile';
+import EditProfile from './pages/profile/edit-profile';
 
 const userName = '김홍삼';
 
