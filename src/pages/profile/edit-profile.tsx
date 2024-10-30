@@ -253,15 +253,20 @@ const EditProfile = () => {
 
           <div className="w-[24rem] m-auto grid grid-cols-3 gap-2">
             {categoryOptions.map((category, index) => (
-              <Badge key={index} variant="options" className="">
-                <label className="flex items-center gap-x-2 gap-y-0">
+              <label
+                key={index}
+                htmlFor={index.toString()}
+                className="flex items-center hover:cursor-pointer"
+              >
+                <Badge variant="options" className="flex items-center justify-between w-full">
                   <Checkbox
+                    id={index.toString()}
                     checked={categories.includes(category)}
                     onCheckedChange={() => toggleCategory(category)}
                   />
-                  {category}
-                </label>
-              </Badge>
+                  <span className="flex-1 text-center">{category}</span>
+                </Badge>
+              </label>
             ))}
           </div>
 
