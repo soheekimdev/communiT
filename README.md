@@ -92,6 +92,8 @@
   !BREAKING CHANGE | 커다란 API 변경의 경우
   !HOTFIX | 급하게 치명적인 버그를 고쳐야 하는 경우
 
+## ChangeLog
+
 <details>
 <summary><strong>1주차(10/23 - 10/27)</strong></summary>
 <br>
@@ -112,7 +114,7 @@
   <hr>
 
   <div align=center>
-    <img src='https://github.com/user-attachments/assets/92c81496-daf4-4b47-902f-8aa2d3b67414' width=600/>
+    <img src='https://github.com/user-attachments/assets/92c81496-daf4-4b47-902f-8aa2d3b67414' width=500/>
   </div>
 
 </details>
@@ -134,8 +136,8 @@
   <hr>
 
   <div align=center>
-    <img src='https://github.com/user-attachments/assets/9d25bc4a-40f9-454d-8c91-93a7aaaad64c' width=500/>
-    <img src='https://github.com/user-attachments/assets/b8fc6f17-f873-4e82-82ba-e293a1617509' width=500/>
+    <img src='https://github.com/user-attachments/assets/9d25bc4a-40f9-454d-8c91-93a7aaaad64c' width=400/>
+    <img src='https://github.com/user-attachments/assets/b8fc6f17-f873-4e82-82ba-e293a1617509' width=400/>
   </div>
 
 </details>
@@ -155,8 +157,8 @@
   <hr>
 
   <div align=center>
-    <img src='https://github.com/user-attachments/assets/74409d35-f148-460f-ba6b-ed39106d7274' width=500/>
-    <img src='https://github.com/user-attachments/assets/b6321eec-f517-4d8d-bc4d-b3466e117369' width=500/>
+    <img src='https://github.com/user-attachments/assets/74409d35-f148-460f-ba6b-ed39106d7274' width=400/>
+    <img src='https://github.com/user-attachments/assets/b6321eec-f517-4d8d-bc4d-b3466e117369' width=400/>
   </div>
 
 </details>
