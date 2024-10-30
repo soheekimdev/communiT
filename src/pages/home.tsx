@@ -4,6 +4,7 @@ import ChangePassword from '@/components/cards/find-password/change-password';
 import FindPassword from '@/components/cards/find-password/find-password';
 import FindPasswordEmail from '@/components/cards/find-password/find-password-email';
 import FindEmail from '@/components/cards/find-password/find-email';
+import SignUp from '@/components/cards/sign-up';
 
 function DemoContainer({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
@@ -16,6 +17,9 @@ export default function HomePage() {
     <div className="grid items-start justify-center gap-6 rounded-lg p-8 md:grid lg:grid-cols-2 xl:grid-cols-3">
       {/* 여진 컴포넌트 확인용 */}
       <div className="col-span-2 grid items-start gap-6 lg:col-span-1">
+        <DemoContainer>
+          <SignUp />
+        </DemoContainer>
         <DemoContainer>
           <Signin />
         </DemoContainer>
