@@ -22,6 +22,7 @@
 ## 메뉴 구조
 
 - 챌린지 페이지
+
   - 챌린지 목록
   - 챌린지 상세
   - 챌린지 생성, 수정
@@ -34,12 +35,13 @@
     - 댓글 작성, 수정, 삭제
     - 댓글 추천
   - 게시물 작성, 수정
-  
 - 메세지 페이지 (확정 X)
+
   - 메세지 리스트 목록
-  - 메세지 채널 참가자 
+  - 메세지 채널 참가자
 
 - 사용자 페이지
+
   - 프로필
   - 프로필 수정
   - 차단한 유저 관리
@@ -51,9 +53,7 @@
   - 이메일 찾기
   - 비밀번호 찾기
   - 비밀번호 재설정
-    
 - 알림 목록
-  
 - 설정 페이지
   - 알림 설정
   - 테마 설정
@@ -91,3 +91,103 @@
   Remove or Delete | 파일을 삭제하는 작업만 수행한 경우
   !BREAKING CHANGE | 커다란 API 변경의 경우
   !HOTFIX | 급하게 치명적인 버그를 고쳐야 하는 경우
+
+<details>
+<summary><strong>1주차(10/23 - 10/27)</strong></summary>
+<br>
+<details>
+<summary><strong>[전체 메뉴 구현] 김소희</strong></summary>
+  
+  ### ✅ Done
+  <hr>
+  
+  - 전체 사이트의 메뉴 구조 및 네이게이션 UI/UX 디자인
+  
+  - 메뉴 컴포넌트 구현
+  
+  - 라우팅 구현
+
+### 🖼️ Preview
+
+  <hr>
+
+  <div align=center>
+    <img src='https://github.com/user-attachments/assets/92c81496-daf4-4b47-902f-8aa2d3b67414' width=600/>
+  </div>
+
+</details>
+
+<details>
+<summary><strong>[로그인/회원가입] 권여진</strong></summary>
+  
+  ### ✅ Done
+  <hr>
+  
+  - 로그인 UI/UX 디자인
+  
+  - 로그인 폼 컴포넌트 구현
+    
+  - 비밀번호 찾기 페이지 디자인 및 폼 구현
+
+### 🖼️ Preview
+
+  <hr>
+
+  <div align=center>
+    <img src='https://github.com/user-attachments/assets/9d25bc4a-40f9-454d-8c91-93a7aaaad64c' width=500/>
+    <img src='https://github.com/user-attachments/assets/b8fc6f17-f873-4e82-82ba-e293a1617509' width=500/>
+  </div>
+
+</details>
+
+<details>
+<summary><strong>[프로필] 주민재</strong></summary>
+  
+  ### ✅ Done
+  <hr>
+  
+  - 프로필 UI/UX 디자인
+  
+  - 프로필 수정 폼 컴포넌트 구현
+
+### 🖼️ Preview
+
+  <hr>
+
+  <div align=center>
+    <img src='https://github.com/user-attachments/assets/74409d35-f148-460f-ba6b-ed39106d7274' width=500/>
+    <img src='https://github.com/user-attachments/assets/b6321eec-f517-4d8d-bc4d-b3466e117369' width=500/>
+  </div>
+
+</details>
+
+</details>
+
+<hr>
+
+<details>  
+<summary><strong>작성예시</strong></summary>
+  
+  ### ✅ Done
+  <hr>
+  - 구현 내용
+
+### ⚙️ in Progress
+
+  <hr>
+  
+  - 구현 중인 내용
+    - 세부사항
+    - 세부사항
+        
+  ### 📚 Next
+  <hr>
+  
+  - 구현 예정
+    - 세부사항
+    - 세부사항
+   
+  ### 🖼️ Preview
+  <hr>
+  ![사진이름](사진URL)
+</details>
