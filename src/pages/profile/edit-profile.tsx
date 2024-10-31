@@ -3,14 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
+import PasswordInput from '@/components/PasswordInput';
+import CategorySelector from '@/components/CategorySelector';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Badge } from '@/components/ui/badge';
 import { User, Camera, CheckCircle, XCircle } from 'lucide-react';
-import PasswordInput from '@/components/PasswordInput';
 
 const formSchema = z
   .object({
@@ -180,24 +179,11 @@ const EditProfile = () => {
             />
           </div>
 
-          <div className="w-[24rem] m-auto grid grid-cols-3 gap-2">
-            {categoryOptions.map((category, index) => (
-              <label
-                key={index}
-                htmlFor={index.toString()}
-                className="flex items-center hover:cursor-pointer"
-              >
-                <Badge variant="options" className="flex items-center justify-between w-full">
-                  <Checkbox
-                    id={index.toString()}
-                    checked={categories.includes(category)}
-                    onCheckedChange={() => toggleCategory(category)}
-                  />
-                  <span className="flex-1 text-center">{category}</span>
-                </Badge>
-              </label>
-            ))}
-          </div>
+          <CategorySelector
+            categories={categoryOptions}
+            selectedCategories={categories}
+            toggleCategory={toggleCategory}
+          />
 
           <div className="flex justify-center gap-4 pt-2">
             <Button className="w-[9.5rem]" type="submit" variant="profile">
