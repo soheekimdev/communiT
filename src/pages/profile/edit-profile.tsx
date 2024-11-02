@@ -3,18 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
+import NicknameInput from '@/components/NicknameInput';
+import PasswordInput from '@/components/PasswordInput';
+import CategorySelector from '@/components/CategorySelector';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Badge } from '@/components/ui/badge';
-import { User, Camera, CheckCircle, XCircle } from 'lucide-react';
-import PasswordInput from '@/components/PasswordInput';
+import { Camera } from 'lucide-react';
 
 const formSchema = z
   .object({
-    userNickname: z
+    nickname: z
       .string()
       .trim()
       .nonempty('이름을 입력해 주세요.')
@@ -52,13 +51,10 @@ const EditProfile = () => {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
     reset,
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
   });
-
-  const userNicknameValue = watch('userNickname', '');
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -79,7 +75,7 @@ const EditProfile = () => {
     );
   };
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = async (data: FormData) => {
     // 프로필 수정 로직
     // 선택한 카테고리들을 제출하는 로직 추가
 
@@ -88,6 +84,7 @@ const EditProfile = () => {
       ...data,
     });
     console.log('선택된 카테고리:', categories);
+    navigate('/my-profile');
   };
 
   const handleCancel = () => {
@@ -133,32 +130,12 @@ const EditProfile = () => {
           </div>
 
           <div className="flex flex-col justify-center items-center space-y-4">
-            <div className="relative w-[20rem] ">
-              <Label htmlFor="name" className="text-sm font-medium">
-                닉네임
-              </Label>
-              <div className="relative mt-1">
-                <Input
-                  id="name"
-                  type="text"
-                  placeholder="길동무가없는홍길동"
-                  {...register('userNickname')}
-                  className={`pl-10 pr-10 ${errors.userNickname ? 'border-red-500' : ''}`}
-                />
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5" />
-                {errors.userNickname ? (
-                  <XCircle className="absolute right-3 top-1/2 -translate-y-1/2 text-red-500 h-5 w-5" />
-                ) : (
-                  userNicknameValue.trim().length >= 2 && (
-                    <CheckCircle className="absolute right-3 top-1/2 -translate-y-1/2 text-green-500 h-5 w-5" />
-                  )
-                )}
-              </div>
-              {errors.userNickname && (
-                <p className="text-red-500 text-xs mt-1">{errors.userNickname.message}</p>
-              )}
-            </div>
-
+            <NicknameInput
+              id="nickname"
+              label="닉네임"
+              register={register('nickname')}
+              error={errors.nickname}
+            />
             {/* 회원가입 기능 구현 완료 후 현재 비밀번호와 일치하는지 비교하는 기능 구현 예정 */}
             <PasswordInput
               id="password"
@@ -180,24 +157,11 @@ const EditProfile = () => {
             />
           </div>
 
-          <div className="w-[24rem] m-auto grid grid-cols-3 gap-2">
-            {categoryOptions.map((category, index) => (
-              <label
-                key={index}
-                htmlFor={index.toString()}
-                className="flex items-center hover:cursor-pointer"
-              >
-                <Badge variant="options" className="flex items-center justify-between w-full">
-                  <Checkbox
-                    id={index.toString()}
-                    checked={categories.includes(category)}
-                    onCheckedChange={() => toggleCategory(category)}
-                  />
-                  <span className="flex-1 text-center">{category}</span>
-                </Badge>
-              </label>
-            ))}
-          </div>
+          <CategorySelector
+            categories={categoryOptions}
+            selectedCategories={categories}
+            toggleCategory={toggleCategory}
+          />
 
           <div className="flex justify-center gap-4 pt-2">
             <Button className="w-[9.5rem]" type="submit" variant="profile">
