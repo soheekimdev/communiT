@@ -1,4 +1,4 @@
-import { Home, Dumbbell, Users, LogOut } from 'lucide-react';
+import { Home, Dumbbell, Users, LogOut, Settings } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
@@ -7,25 +7,22 @@ import {
   SidebarGroupContent,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
 } from '@/components/ui/sidebar';
-import { ModeToggle } from '@/components/ui/mode-toggle';
-import { Link } from 'react-router-dom';
+import SidebarLink from '../ui/sidebar-link';
+
 const mainMenuItems = [
   { title: '홈', url: '/', icon: Home },
   { title: '챌린지', url: '/challenges', icon: Dumbbell },
   { title: '커뮤니티', url: '/posts', icon: Users },
 ];
 
+const subMenuItems = [
+  { title: '설정', url: '/settings', icon: Settings },
+  { title: '로그아웃', url: '/', icon: LogOut },
+];
+
 const AppSidebar = () => {
-  const { setOpenMobile } = useSidebar(); // useSidebar hook 사용
-
-  const handleClick = () => {
-    setOpenMobile(false); // 메뉴 클릭 시 사이드바 닫기
-  };
-
   return (
     <Sidebar>
       <SidebarHeader>운동커뮤니T</SidebarHeader>
@@ -35,16 +32,9 @@ const AppSidebar = () => {
             <SidebarMenu>
               {mainMenuItems.map(item => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link
-                      to={item.url}
-                      className="flex items-center w-full gap-4 px-2 py-2"
-                      onClick={handleClick}
-                    >
-                      <item.icon className="w-5 h-5" />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
+                  <SidebarLink to={item.url} icon={item.icon}>
+                    {item.title}
+                  </SidebarLink>
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
@@ -53,15 +43,13 @@ const AppSidebar = () => {
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>
-          <ModeToggle />
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <div className="flex items-center w-full gap-4 px-2 py-2 cursor-pointer">
-                <LogOut className="w-5 h-5" />
-                <span>로그아웃</span>
-              </div>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+          {subMenuItems.map(item => (
+            <SidebarMenuItem key={item.title}>
+              <SidebarLink to={item.url} icon={item.icon}>
+                {item.title}
+              </SidebarLink>
+            </SidebarMenuItem>
+          ))}
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>

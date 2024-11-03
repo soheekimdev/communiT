@@ -10,6 +10,7 @@ import MessageChannels from './pages/message-channels';
 import Header from './components/layout/header';
 import MyProfile from './pages/profile/my-profile';
 import EditProfile from './pages/profile/edit-profile';
+import Settings from './pages/settings';
 
 const userName = '김홍삼';
 
@@ -29,6 +30,7 @@ export default function App() {
               <Route path="/message-channels" element={<MessageChannels />} />
               <Route path="/my-profile" element={<MyProfile />} />
               <Route path="/edit-profile" element={<EditProfile />} />
+              <Route path="/settings" element={<Settings />} />
             </Routes>
           </main>
         </SidebarProvider>
