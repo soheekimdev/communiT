@@ -13,7 +13,7 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
   toggleCategory,
 }) => {
   return (
-    <div className="w-[24rem] m-auto grid grid-cols-3 gap-2">
+    <div className="m-auto grid grid-cols-3 md:grid-cols-2 gap-2 w-full max-w-xl">
       {categories.map((category, index) => (
         <label
           key={index}

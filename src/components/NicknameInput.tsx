@@ -12,7 +12,7 @@ interface NicknameInputProps {
 
 const NicknameInput: React.FC<NicknameInputProps> = ({ id, label, register, error }) => {
   return (
-    <div className="relative w-[20rem] ">
+    <div className="relative w-full ">
       <Label htmlFor={id} className="text-sm font-medium">
         {label}
       </Label>
