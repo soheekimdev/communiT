@@ -41,68 +41,72 @@ const Signin = () => {
   };
 
   return (
-    <Card>
-      <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl">운동 커뮤니T</CardTitle>
-        <CardDescription>운동을 좋아하시나요? 여깁니다 여기</CardDescription>
-      </CardHeader>
+    <div className="flex justify-center items-center h-[80%] w-full">
+      <div className="max-w-lg w-full">
+        <Card>
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-2xl">운동 커뮤니T</CardTitle>
+            <CardDescription>운동을 좋아하시나요? 여깁니다 여기</CardDescription>
+          </CardHeader>
 
-      <CardContent className="grid gap-4">
-        <div className="relative mb-2">
-          <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t" />
-          </div>
-        </div>
+          <CardContent className="grid gap-4">
+            <div className="relative mb-2">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+            </div>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <SignEmailInput
-            id="email"
-            label="이메일"
-            register={register('email')}
-            error={errors.email}
-          />
-          <SignPasswordInput
-            id="password"
-            label="비밀번호"
-            register={register('password')}
-            error={errors.password}
-          />
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <SignEmailInput
+                id="email"
+                label="이메일"
+                register={register('email')}
+                error={errors.email}
+              />
+              <SignPasswordInput
+                id="password"
+                label="비밀번호"
+                register={register('password')}
+                error={errors.password}
+              />
 
-          <div className="pt-4 mt-8 mb-4">
-            <Button type="submit" className="w-full">
-              로그인
-            </Button>
-          </div>
+              <div className="pt-4 mt-8 mb-4">
+                <Button type="submit" className="w-full">
+                  로그인
+                </Button>
+              </div>
 
-          <div className="text-center w-full text-sm font-thin mb-4">
-            <Link to="/account/find-email" className="text-primary hover:underline">
-              이메일 찾기
-            </Link>
-            <Link to="/find-password" className="text-primary hover:underline ml-8">
-              비밀번호 찾기
-            </Link>
-            <Link to="/sign-up" className="text-primary hover:underline ml-8">
-              회원가입
-            </Link>
-          </div>
-        </form>
+              <div className="text-center w-full text-sm font-thin mb-4">
+                <Link to="/account/find-email" className="text-primary hover:underline">
+                  이메일 찾기
+                </Link>
+                <Link to="/find-password" className="text-primary hover:underline ml-8">
+                  비밀번호 찾기
+                </Link>
+                <Link to="/sign-up" className="text-primary hover:underline ml-8">
+                  회원가입
+                </Link>
+              </div>
+            </form>
 
-        <div className="relative mt-2 mb-2">
-          <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t" />
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-muted-foreground">SNS LOGIN</span>
-          </div>
-        </div>
+            <div className="relative mt-2 mb-2">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">SNS LOGIN</span>
+              </div>
+            </div>
 
-        <div className="flex flex-wrap justify-center gap-12 mb-4 mt-4">
-          <SocialButton imageSrc="/images/Naver.png" altText="Naver" />
-          <SocialButton imageSrc="/images/Kakao.png" altText="Kakao" />
-          <SocialButton imageSrc="/images/Google.png" altText="Google" />
-        </div>
-      </CardContent>
-    </Card>
+            <div className="flex flex-wrap justify-center gap-12 mb-4 mt-4">
+              <SocialButton imageSrc="/images/Naver.png" altText="Naver" />
+              <SocialButton imageSrc="/images/Kakao.png" altText="Kakao" />
+              <SocialButton imageSrc="/images/Google.png" altText="Google" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
   );
 };
 
