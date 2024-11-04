@@ -20,9 +20,9 @@ const dummyPosts = [
   },
   {
     id: 2,
-    title: '삼성 야구 경기 보러 갈 사람?',
+    title: '대구 수성못 스쿠버 다이빙 파티 구합니다.',
     content:
-      '대구 라팍으로 야구 경기 보러 가실 분 계시나요?대구 라팍으로 야구 경기 보러 가실 분 계시나요? 대구 라팍으로 야구 경기 보러 가실 분 계시나요?대구 라팍으로 야구 경기 보러 가실 분 계시나요?대구 라팍으로 야구 경기 보러 가실 분 계시나요?대구 라팍으로 야구 경기 보러 가실 분 계시나요?대구 라팍으로 야구 경기 보러 가실 분 계시나요?대구 라팍으로 야구 경기 보러 가실 분 계시나요?대구 라팍으로 야구 경기 보러 가실 분 계시나요?대구 라팍으로 야구 경기 보러 가실 분 계시나요?대구 라팍으로 야구 경기 보러 가실 분 계시나요?',
+      '대구 수성못에서 스쿠버 다이빙 같이 할 파티원 모집합니다. 저도 수영 잘 못하니까 알아서들 생존하셔야 합니다.',
     author: '용산손절장인',
     createdAt: '2024-10-30',
   },
@@ -80,14 +80,14 @@ const Posts = () => {
         className="max-w-md"
       />
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-6 md:grid-cols-2 max-w-4xl mx-auto">
         {currentPosts.map(post => (
-          <Card key={post.id}>
+          <Card key={post.id} className="overflow-hidden">
             <CardHeader>
               <CardTitle>{post.title}</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className=" overflow-hidden text-ellipsis whitespace-nowrap">{post.content}</p>
+              <p className="truncate">{post.content}</p>
             </CardContent>
             <CardFooter className="text-sm text-muted-foreground">
               <time dateTime={post.createdAt}>
