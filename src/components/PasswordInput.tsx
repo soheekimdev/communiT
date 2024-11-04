@@ -16,7 +16,7 @@ const PasswordInput: React.FC<PasswordInputProps> = ({ id, label, register, erro
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   return (
-    <div className="relative w-[20rem] ">
+    <div className="relative w-full ">
       <Label htmlFor={id} className="text-sm font-medium">
         {label}
       </Label>
