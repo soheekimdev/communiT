@@ -3,10 +3,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import SocialButton from '@/components/account/SocialButton';
 import SignEmailInput from '@/components/account/SignEmailInput';
 import SignPasswordInput from '@/components/account/SIgnPasswordInput';
+import { useDispatch } from 'react-redux';
+import { login } from '@/RTK/authSlice';
 
 const signInSchema = z.object({
   email: z.string().email('유효한 이메일 주소를 입력하세요'),
@@ -19,6 +21,9 @@ type FormData = {
 };
 
 const Signin = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -30,7 +35,9 @@ const Signin = () => {
 
   const onSubmit: SubmitHandler<FormData> = data => {
     console.log('로그인 성공', data);
+    dispatch(login({ email: data.email })); // 로그인 API 호출
     reset(); // 폼 초기화
+    navigate('/');
   };
 
   return (
