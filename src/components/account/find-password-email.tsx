@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 const FindPasswordEmail = () => {
+  // 모달 띄워주기
   return (
     <Card>
       <CardHeader className="space-y-1">

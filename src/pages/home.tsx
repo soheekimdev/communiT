@@ -1,10 +1,5 @@
 import { cn } from '@/lib/utils';
-import Signin from '@/components/cards/sign-in';
-import ChangePassword from '@/components/cards/find-password/change-password';
-import FindPassword from '@/components/cards/find-password/find-password';
-import FindPasswordEmail from '@/components/cards/find-password/find-password-email';
-import FindEmail from '@/components/cards/find-password/find-email';
-import SignUp from '@/components/cards/sign-up';
+import Signin from '@/pages/sign-in';
 
 function DemoContainer({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
@@ -18,22 +13,7 @@ export default function HomePage() {
       {/* 여진 컴포넌트 확인용 */}
       <div className="col-span-2 grid items-start gap-6 lg:col-span-1">
         <DemoContainer>
-          <SignUp />
-        </DemoContainer>
-        <DemoContainer>
           <Signin />
-        </DemoContainer>
-        <DemoContainer>
-          <FindEmail />
-        </DemoContainer>
-        <DemoContainer>
-          <FindPassword />
-        </DemoContainer>
-        <DemoContainer>
-          <FindPasswordEmail />
-        </DemoContainer>
-        <DemoContainer>
-          <ChangePassword />
         </DemoContainer>
       </div>
       {/*  */}
