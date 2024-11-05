@@ -1,12 +1,11 @@
-import { z } from 'zod';
+import * as z from 'zod';
 
 export const notificationSettingsSchema = z.object({
   desktopNotification: z.boolean(),
   commentNotification: z.object({
     newComment: z.boolean(),
-    myComment: z.boolean(),
-    mentionedComment: z.boolean(),
-    followedComment: z.boolean(),
+    likePost: z.boolean(),
+    likeComment: z.boolean(),
   }),
   challengeNotification: z.object({
     inProgress: z.boolean(),
@@ -14,9 +13,6 @@ export const notificationSettingsSchema = z.object({
     complete: z.boolean(),
     newChallenge: z.boolean(),
   }),
-  emailNotification: z.object({
-    important: z.boolean(),
-    comment: z.boolean(),
-    challenge: z.boolean(),
-  }),
 });
+
+export type NotificationSettings = z.infer<typeof notificationSettingsSchema>;
