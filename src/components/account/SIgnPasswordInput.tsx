@@ -5,18 +5,18 @@ import { Button } from '@/components/ui/button';
 import { Eye, EyeOff, Lock } from 'lucide-react';
 import { FieldError, UseFormRegisterReturn } from 'react-hook-form';
 
-interface PasswordInputProps {
+interface SignPasswordInputProps {
   id: string;
   label: string;
   register: UseFormRegisterReturn;
   error?: FieldError;
 }
 
-const PasswordInput: React.FC<PasswordInputProps> = ({ id, label, register, error }) => {
+const SignPasswordInput: React.FC<SignPasswordInputProps> = ({ id, label, register, error }) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   return (
-    <div className="relative w-full ">
+    <div className="relative mb-4 ">
       <Label htmlFor={id} className="text-sm font-medium">
         {label}
       </Label>
@@ -43,4 +43,4 @@ const PasswordInput: React.FC<PasswordInputProps> = ({ id, label, register, erro
   );
 };
 
-export default PasswordInput;
+export default SignPasswordInput;
