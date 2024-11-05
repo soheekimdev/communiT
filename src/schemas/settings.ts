@@ -8,7 +8,6 @@ export const notificationSettingsSchema = z.object({
     likeComment: z.boolean(),
   }),
   challengeNotification: z.object({
-    inProgress: z.boolean(),
     start: z.boolean(),
     complete: z.boolean(),
     newChallenge: z.boolean(),

@@ -78,7 +78,6 @@ const defaultValues: NotificationFormValues = {
     likeComment: true,
   },
   challengeNotification: {
-    inProgress: true,
     start: true,
     complete: true,
     newChallenge: true,

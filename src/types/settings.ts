@@ -6,7 +6,6 @@ export interface NotificationSettings {
     likeComment: boolean;
   };
   challengeNotification: {
-    inProgress: boolean;
     start: boolean;
     complete: boolean;
     newChallenge: boolean;
