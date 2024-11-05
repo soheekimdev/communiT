@@ -1,14 +1,7 @@
 import { useState } from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination';
+import PostPagination from '@/components/PostPagination';
 
 const dummyPosts = [
   {
@@ -101,32 +94,11 @@ const Posts = () => {
       </div>
 
       {pageCount > 1 && (
-        <Pagination>
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                aria-disabled={currentPage === 1}
-              />
-            </PaginationItem>
-            {[...Array(pageCount)].map((_, i) => (
-              <PaginationItem key={i}>
-                <PaginationLink
-                  onClick={() => setCurrentPage(i + 1)}
-                  isActive={currentPage === i + 1}
-                >
-                  {i + 1}
-                </PaginationLink>
-              </PaginationItem>
-            ))}
-            <PaginationItem>
-              <PaginationNext
-                onClick={() => setCurrentPage(prev => Math.min(prev + 1, pageCount))}
-                aria-disabled={currentPage === pageCount}
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+        <PostPagination
+          pageCount={pageCount}
+          currentPage={currentPage}
+          onPageChange={setCurrentPage}
+        />
       )}
     </div>
   );
