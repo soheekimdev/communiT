@@ -1,6 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs';
 import NotificationForm from '@/components/settings/notification-form';
-import { ModeToggle } from '@/components/ui/mode-toggle';
+import { ThemeSetting } from '@/components/settings/theme-setting';
 
 const tabTriggerStyles = 'data-[state=active]:font-bold';
 
@@ -33,7 +33,7 @@ const settings = () => {
           <p>메시지 설정</p>
         </TabsContent>
         <TabsContent value="theme">
-          <ModeToggle />
+          <ThemeSetting />
         </TabsContent>
         <TabsContent value="cookie">
           <p>쿠키 설정</p>
