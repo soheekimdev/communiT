@@ -20,19 +20,21 @@ export default function App() {
       <ThemeProvider>
         <SidebarProvider>
           <AppSidebar />
-          <main className="flex-1 max-h-screen overflow-y-auto">
+          <div className="flex-1 max-h-screen overflow-y-auto">
             <Header userName={userName} />
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/challenges" element={<Challenges />} />
-              <Route path="/posts" element={<Posts />} />
-              <Route path="/notifications" element={<Notifications />} />
-              <Route path="/message-channels" element={<MessageChannels />} />
-              <Route path="/my-profile" element={<MyProfile />} />
-              <Route path="/edit-profile" element={<EditProfile />} />
-              <Route path="/settings" element={<Settings />} />
-            </Routes>
-          </main>
+            <main className="p-8">
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/challenges" element={<Challenges />} />
+                <Route path="/posts" element={<Posts />} />
+                <Route path="/notifications" element={<Notifications />} />
+                <Route path="/message-channels" element={<MessageChannels />} />
+                <Route path="/my-profile" element={<MyProfile />} />
+                <Route path="/edit-profile" element={<EditProfile />} />
+                <Route path="/settings" element={<Settings />} />
+              </Routes>
+            </main>
+          </div>
         </SidebarProvider>
       </ThemeProvider>
     </BrowserRouter>

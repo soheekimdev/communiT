@@ -1,4 +1,4 @@
-import { Home, Dumbbell, Users, LogOut, Settings } from 'lucide-react';
+import { Home, Dumbbell, Users, LogOut, Settings, LucideIcon } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
@@ -11,15 +11,39 @@ import {
 } from '@/components/ui/sidebar';
 import SidebarLink from '../ui/sidebar-link';
 
-const mainMenuItems = [
-  { title: '홈', url: '/', icon: Home },
-  { title: '챌린지', url: '/challenges', icon: Dumbbell },
-  { title: '커뮤니티', url: '/posts', icon: Users },
+interface BaseMenuItem {
+  title: string;
+  icon: LucideIcon;
+}
+
+interface LinkMenuItem extends BaseMenuItem {
+  type: 'link';
+  to: string;
+}
+
+interface ButtonMenuItem extends BaseMenuItem {
+  type: 'button';
+  onClick: () => void;
+}
+
+type MenuItem = LinkMenuItem | ButtonMenuItem;
+
+const mainMenuItems: MenuItem[] = [
+  { type: 'link', title: '홈', to: '/', icon: Home },
+  { type: 'link', title: '챌린지', to: '/challenges', icon: Dumbbell },
+  { type: 'link', title: '커뮤니티', to: '/posts', icon: Users },
 ];
 
-const subMenuItems = [
-  { title: '설정', url: '/settings', icon: Settings },
-  { title: '로그아웃', url: '/', icon: LogOut },
+const subMenuItems: MenuItem[] = [
+  { type: 'link', title: '설정', to: '/settings', icon: Settings },
+  {
+    type: 'button',
+    title: '로그아웃',
+    icon: LogOut,
+    onClick: () => {
+      console.log('로그아웃 버튼 클릭'); // TODO: 로그아웃 로직에 연결
+    },
+  },
 ];
 
 const AppSidebar = () => {
@@ -32,9 +56,15 @@ const AppSidebar = () => {
             <SidebarMenu>
               {mainMenuItems.map(item => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarLink to={item.url} icon={item.icon}>
-                    {item.title}
-                  </SidebarLink>
+                  {item.type === 'link' ? (
+                    <SidebarLink type="link" to={item.to} icon={item.icon}>
+                      {item.title}
+                    </SidebarLink>
+                  ) : (
+                    <SidebarLink type="button" onClick={item.onClick} icon={item.icon}>
+                      {item.title}
+                    </SidebarLink>
+                  )}
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
@@ -45,9 +75,15 @@ const AppSidebar = () => {
         <SidebarMenu>
           {subMenuItems.map(item => (
             <SidebarMenuItem key={item.title}>
-              <SidebarLink to={item.url} icon={item.icon}>
-                {item.title}
-              </SidebarLink>
+              {item.type === 'link' ? (
+                <SidebarLink type="link" to={item.to} icon={item.icon}>
+                  {item.title}
+                </SidebarLink>
+              ) : (
+                <SidebarLink type="button" onClick={item.onClick} icon={item.icon}>
+                  {item.title}
+                </SidebarLink>
+              )}
             </SidebarMenuItem>
           ))}
         </SidebarMenu>
