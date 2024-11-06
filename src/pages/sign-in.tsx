@@ -1,7 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, useNavigate } from 'react-router-dom';
 import SocialButton from '@/components/account/SocialButton';
@@ -9,11 +8,7 @@ import SignEmailInput from '@/components/account/SignEmailInput';
 import SignPasswordInput from '@/components/account/SIgnPasswordInput';
 import { useDispatch } from 'react-redux';
 import { login } from '@/RTK/authSlice';
-
-const signInSchema = z.object({
-  email: z.string().email('유효한 이메일 주소를 입력하세요'),
-  password: z.string().min(8, '비밀번호는 최소 8자 이상이어야 합니다.'),
-});
+import { signInSchema } from '@/schemas/signInSchema';
 
 type FormData = {
   email: string;
@@ -28,15 +23,13 @@ const Signin = () => {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
   } = useForm<FormData>({
     resolver: zodResolver(signInSchema),
   });
 
   const onSubmit: SubmitHandler<FormData> = data => {
     console.log('로그인 성공', data);
-    dispatch(login({ email: data.email })); // 로그인 API 호출
-    reset(); // 폼 초기화
+    dispatch(login({ email: data.email }));
     navigate('/');
   };
 

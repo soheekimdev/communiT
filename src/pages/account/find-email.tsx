@@ -1,15 +1,11 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useState } from 'react';
-import { z } from 'zod';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import SignEmailInput from '@/components/account/SignEmailInput';
-
-const findEmailSchema = z.object({
-  email: z.string().email('유효한 이메일 주소를 입력하세요'),
-});
+import { findSchema } from '@/schemas/findSchema';
 
 type FindEmailFormData = {
   email: string;
@@ -21,7 +17,7 @@ const FindEmail = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<FindEmailFormData>({
-    resolver: zodResolver(findEmailSchema),
+    resolver: zodResolver(findSchema),
   });
 
   const [submittedEmail, setSubmittedEmail] = useState<string | null>(null);
