@@ -37,6 +37,8 @@ const mainMenuItems: MenuItem[] = [
   { type: 'link', title: '커뮤니티', to: '/posts', icon: Users },
 ];
 
+const subMenuItems: MenuItem[] = [{ type: 'link', title: '설정', to: '/settings', icon: Settings }];
+
 const AppSidebar = () => {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn); // 로그인 상태 가져오기
@@ -44,30 +46,6 @@ const AppSidebar = () => {
   const handleLogout = () => {
     dispatch(logout());
   };
-
-  const authMenuItem: MenuItem = isLoggedIn
-    ? {
-        type: 'button',
-        title: '로그아웃',
-        icon: LogOut,
-        onClick: handleLogout,
-      }
-    : {
-        type: 'link',
-        title: '로그인',
-        to: '/sign-in',
-        icon: LogIn,
-      };
-
-  const subMenuItems: MenuItem[] = [
-    {
-      type: 'link',
-      title: '설정',
-      to: '/settings',
-      icon: Settings,
-    },
-    authMenuItem,
-  ];
 
   return (
     <Sidebar>
@@ -95,6 +73,18 @@ const AppSidebar = () => {
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>
+          <SidebarMenuItem>
+            {isLoggedIn ? (
+              <SidebarLink type="button" icon={LogOut} onClick={handleLogout}>
+                로그아웃
+              </SidebarLink>
+            ) : (
+              <SidebarLink type="link" to="/sign-in" icon={LogIn}>
+                로그인
+              </SidebarLink>
+            )}
+          </SidebarMenuItem>
+
           {subMenuItems.map(item => (
             <SidebarMenuItem key={item.title}>
               {item.type === 'link' ? (
