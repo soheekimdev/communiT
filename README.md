@@ -95,6 +95,114 @@
 ## ChangeLog
 
 <details>
+<summary><strong>2주차(10/30 - 11/05)</strong></summary>
+<br>
+
+<details>  
+<summary><strong>[알림설정] 김소희</strong></summary>
+  
+  ### ✅ Done
+  <hr>
+  
+  - 알림 설정 UI/UX 디자인
+    - 사용자 인터페이스 설계
+    - 보여줄 정보와 알림 설정 방법 확정
+
+  - 알림 설정 폼 컴포넌트 구현
+
+### ⚙️ in Progress
+
+  <hr>
+  
+  - 구현 중인 내용
+
+    - 차단 유저 관리 UI/UX 디자인
+
+    - 차단 유저 목록 표시 및 차단/해제 버튼 구현
+   
+  ### 🖼️ Preview
+  <hr>
+
+<div align=center>
+  <img src="https://github.com/user-attachments/assets/25e1eb09-41ff-4153-a22b-9e8f09cebac3" width=400/>
+</div>
+
+  
+</details>
+
+<details>  
+<summary><strong>[로그인/회원가입] 권여진</strong></summary>
+  
+  ### ✅ Done
+  <hr>
+  
+  - 회원가입 페이지 디자인 및 폼 구현
+
+  - 이메일 찾기 페이지 디자인 및 폼 구현
+
+  - 로그인/회원가입 라우팅 설정
+
+### ⚙️ in Progress
+
+  <hr>
+  
+  - 구현 중인 내용
+
+    - 로그인/로그아웃 분기처리
+
+    - Redux Toolkit을 이용한 로그인 상태관리
+   
+    - 중복 컴포넌트 분리
+   
+  ### 🖼️ Preview
+  <hr>
+
+<div align=center>
+  <img src='https://github.com/user-attachments/assets/1bfa2f4c-63f1-44d0-8828-4c63d067a88a' width=400/>
+  <img src='https://github.com/user-attachments/assets/7c58aad1-a3f1-4e48-a57f-3df35257043a' width=400/>
+  <img src='https://github.com/user-attachments/assets/fff49704-c363-46a9-aa0f-37ccd6b2c032' width=400/>
+</div>
+  
+</details>
+
+<details>
+<summary><strong>[테마설정][비공개 계정 관리] 주민재</strong></summary>
+  
+  ### ✅ Done
+  <hr>
+  
+  - 테마 설정 UI/UX 디자인
+
+  - 테마 변경 기능 구현
+    - 라이트 모드, 다크 모드, 사용자 설정
+      
+  - 비공개 계정 설정 UI/UX 디자인
+    - 비공개 계정 활성화/비활성화 시 토스트 알림
+
+ ### ⚙️ in Progress
+
+  <hr>
+  
+  - 프로필 정보 수정
+    
+    - 아바타, 닉네임, 비밀번호, 카테고리 항목별 submit 버튼 추가 중 (개별 수정 가능)
+  
+
+### 🖼️ Preview
+
+  <hr>
+
+  <div align=center>
+    <img src='https://github.com/user-attachments/assets/eae525b7-cc5d-42d8-975f-f5fd0c6c7602' width=400/>
+    <img src='https://github.com/user-attachments/assets/c165de1b-018e-4aac-867b-f25ed81ba909' width=400/>
+    <img src='https://github.com/user-attachments/assets/ab2e5209-33b5-4c78-aa48-b6e8240ba3c0' width=400/>
+  </div>
+
+</details>
+
+</details>
+
+<details>
 <summary><strong>1주차(10/23 - 10/27)</strong></summary>
 <br>
 <details>
@@ -103,9 +211,9 @@
   ### ✅ Done
   <hr>
   
-  - 전체 사이트의 메뉴 구조 및 네이게이션 UI/UX 디자인
+  - 전체 사이트의 메뉴 구조 및 네비게이션 UI/UX 디자인
   
-  - 메뉴 컴포넌트 구현
+  - 헤더, 사이드바 컴포넌트 구현
   
   - 라우팅 구현
 
