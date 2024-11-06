@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/form';
 import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
-import { notificationSettingsSchema } from '@/schemas/settings';
+import { notificationSettingsSchema } from '@/schemas/settingsSchema';
 
 type NotificationFormValues = z.infer<typeof notificationSettingsSchema>;
 
@@ -117,7 +117,7 @@ const NotificationForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="max-w-[600px] space-y-8">
         <SwitchItem
           control={form.control}
           name="desktopNotification"
