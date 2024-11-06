@@ -1,25 +1,11 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'react-router-dom';
 import SignEmailInput from '@/components/account/SignEmailInput';
 import SignPasswordInput from '@/components/account/SIgnPasswordInput';
-
-const signUpSchema = z
-  .object({
-    email: z.string().email('유효한 이메일 주소를 입력하세요'),
-    password: z
-      .string()
-      .min(8, '비밀번호는 최소 8자 이상이어야 합니다.')
-      .regex(/^(?!.*(.)\1\1).*$/, '같은 문자를 3번 이상 반복할 수 없습니다.'),
-    confirmPassword: z.string(),
-  })
-  .refine(data => data.password === data.confirmPassword, {
-    message: '비밀번호가 일치하지 않습니다.',
-    path: ['confirmPassword'],
-  });
+import { signUpSchema } from '@/schemas/signUpSchema';
 
 type SignUpFormData = {
   email: string;
