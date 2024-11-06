@@ -1,7 +1,6 @@
 import { useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import z from 'zod';
 import NicknameInput from '@/components/NicknameInput';
 import PasswordInput from '@/components/PasswordInput';
 import CategorySelector from '@/components/CategorySelector';
@@ -11,35 +10,8 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Camera } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-
-const nicknameSchema = z.object({
-  nickname: z
-    .string()
-    .trim()
-    .nonempty('이름을 입력해 주세요.')
-    .regex(
-      /^[a-zA-Z0-9가-힣]*$/,
-      '공백, 특수 문자, 그리고 자음이나 모음만으로 이루어진 한글은 사용할 수 없습니다.',
-    )
-    .min(2, '이름은 최소 2자 이상이어야 합니다.'),
-});
-
-const passwordSchema = z
-  .object({
-    currentPassword: z.string().min(8, '비밀번호는 최소 8자 이상이어야 합니다.'),
-    newPassword: z
-      .string()
-      .min(8, '비밀번호는 최소 8자 이상이어야 합니다.')
-      .regex(/^(?!.*(.)\1\1).*$/, '같은 문자를 3번 이상 반복할 수 없습니다.'),
-    confirmPassword: z.string(),
-  })
-  .refine(data => data.newPassword === data.confirmPassword, {
-    message: '비밀번호가 일치하지 않습니다.',
-    path: ['confirmPassword'],
-  });
-
-type NicknameFormData = z.infer<typeof nicknameSchema>;
-type PasswordFormData = z.infer<typeof passwordSchema>;
+import { nicknameSchema, NicknameFormData } from '@/schemas/nicknameSchema';
+import { passwordSchema, PasswordFormData } from '@/schemas/passwordSchema';
 
 const categoryOptions = ['축구', '농구', '야구', '테니스', '스쿠버 다이빙', '수상스키', '런닝'];
 

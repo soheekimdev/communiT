@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import PostPagination from '@/components/PostPagination';
 import { Link } from 'react-router-dom';
 
@@ -46,34 +45,17 @@ const dummyPosts = [
 const POST_PER_PAGE = 4;
 
 const Posts = () => {
-  const [searchTerm, setSearchTerm] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
   const postsPerPage = POST_PER_PAGE;
 
-  const filteredPosts = dummyPosts.filter(
-    post =>
-      post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      post.content.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
-
+  const pageCount = Math.ceil(dummyPosts.length / postsPerPage);
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = filteredPosts.slice(indexOfFirstPost, indexOfLastPost);
-
-  const pageCount = Math.ceil(filteredPosts.length / postsPerPage);
+  const currentPosts = dummyPosts.slice(indexOfFirstPost, indexOfLastPost);
 
   return (
     <div className="container mx-auto p-4 space-y-6">
       <h1 className="text-3xl font-bold mb-6">커뮤니티 글 목록</h1>
-
-      <Input
-        type="search"
-        placeholder="게시글 검색..."
-        value={searchTerm}
-        onChange={e => setSearchTerm(e.target.value)}
-        className="max-w-md"
-      />
-
       <div className="grid gap-6 md:grid-cols-2 max-w-4xl mx-auto">
         {currentPosts.map(post => (
           <Card key={post.id} className="overflow-hidden">
