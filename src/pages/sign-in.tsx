@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -5,10 +6,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, useNavigate } from 'react-router-dom';
 import SocialButton from '@/components/account/SocialButton';
 import SignEmailInput from '@/components/account/SignEmailInput';
-import SignPasswordInput from '@/components/account/SIgnPasswordInput';
+
 import { useDispatch } from 'react-redux';
 import { login } from '@/RTK/authSlice';
 import { signInSchema } from '@/schemas/signInSchema';
+import { signinApi } from '@/api/Sign';
+import SignPasswordInput from '@/components/account/SIgnPasswordInput';
 
 type FormData = {
   email: string;
@@ -16,6 +19,7 @@ type FormData = {
 };
 
 const Signin = () => {
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -27,10 +31,17 @@ const Signin = () => {
     resolver: zodResolver(signInSchema),
   });
 
-  const onSubmit: SubmitHandler<FormData> = data => {
-    console.log('로그인 성공', data);
-    dispatch(login({ email: data.email }));
-    navigate('/');
+  const onSubmit: SubmitHandler<FormData> = async data => {
+    try {
+      const userData = await signinApi(data.email, data.password);
+      console.log('로그인 성공: ', userData);
+      setErrorMessage(null);
+      dispatch(login({ email: data.email }));
+      navigate('/');
+    } catch (error) {
+      console.error('로그인 실패: ', error);
+      setErrorMessage('아이디 혹은 비밀먼호가 일치하지 않습니다');
+    }
   };
 
   return (
@@ -62,7 +73,7 @@ const Signin = () => {
                 register={register('password')}
                 error={errors.password}
               />
-
+              {errorMessage && <p className="text-red-500 text-center mb-4">{errorMessage}</p>}
               <div className="pt-4 mt-8 mb-4">
                 <Button type="submit" className="w-full">
                   로그인
