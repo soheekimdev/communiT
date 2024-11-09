@@ -1,19 +1,19 @@
 import { Routes, Route } from 'react-router-dom';
-import HomePage from './pages/home';
-import Challenges from './pages/challenges';
-import Posts from './pages/posts';
-import Notifications from './pages/notifications';
-import MessageChannels from './pages/message-channels';
-import Header from './components/layout/header';
-import MyProfile from './pages/profile/my-profile';
-import EditProfile from './pages/profile/edit-profile';
-import Settings from './pages/settings';
-import Signin from './pages/sign-in';
-import SignUp from './pages/sign-up';
-import FindPassword from './pages/find-password';
-import FindEmail from './pages/account/find-email';
-import ChangePassword from './pages/account/change-password';
-import PostDetail from './pages/post-detail';
+import Header from './components/layout/Header';
+import HomePage from './pages/Home';
+import Challenges from './pages/Challenges';
+import Posts from './pages/Posts';
+import PostDetail from './pages/PostDetail';
+import Notifications from './pages/Notifications';
+import MessageChannels from './pages/MessageChannels';
+import MyProfile from './pages/profile/MyProfile';
+import EditProfile from './pages/profile/EditProfile';
+import Signin from './pages/Signin';
+import SignUp from './pages/Signup';
+import FindPassword from './pages/FindPassword';
+import FindEmail from './pages/account/FindEmail';
+import ChangePassword from './pages/account/ChangePassword';
+import Settings from './pages/Settings';
 
 const userName = '김홍삼';
 

@@ -1,5 +1,5 @@
 import { Sun, Moon, Laptop } from 'lucide-react';
-import { useTheme } from '@/components/theme-provider';
+import { useTheme } from '@/components/ThemeProvider';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 type Theme = 'light' | 'dark' | 'system';

@@ -1,6 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs';
-import NotificationForm from '@/components/settings/notification-form';
-import { ThemeSetting } from '@/components/settings/theme-setting';
+import NotificationForm from '@/components/settings/NotificationForm';
+import { ThemeSetting } from '@/components/settings/ThemeSetting';
 
 const tabTriggerStyles = 'data-[state=active]:font-bold';
 
