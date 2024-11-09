@@ -10,7 +10,7 @@ import SignEmailInput from '@/components/account/SignEmailInput';
 import { useDispatch } from 'react-redux';
 import { login } from '@/RTK/authSlice';
 import { signInSchema } from '@/schemas/signInSchema';
-import { signinApi } from '@/api/Sign';
+import { signinApi } from '@/api/signApi';
 import SignPasswordInput from '@/components/account/SIgnPasswordInput';
 
 type FormData = {
