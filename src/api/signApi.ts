@@ -11,3 +11,8 @@ export const signinApi = async (email: string, password: string) => {
   const response = await accountsapi.post(`/sign-in`, { email, password });
   return response.data;
 };
+
+export const signupApi = async (email: string, password: string, confirmPassword: string) => {
+  const response = await accountsapi.post(`/sign-up`, { email, password, confirmPassword });
+  return response.data;
+};

@@ -12,6 +12,7 @@ import { login } from '@/RTK/authSlice';
 import { signInSchema } from '@/schemas/signInSchema';
 import { signinApi } from '@/api/signApi';
 import SignPasswordInput from '@/components/account/SIgnPasswordInput';
+import { Checkbox } from '@/components/ui/checkbox';
 
 type FormData = {
   email: string;
@@ -20,6 +21,7 @@ type FormData = {
 
 const Signin = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [checked, setChecked] = useState<boolean>(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -27,6 +29,7 @@ const Signin = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<FormData>({
     resolver: zodResolver(signInSchema),
   });
@@ -40,7 +43,8 @@ const Signin = () => {
       navigate('/');
     } catch (error) {
       console.error('로그인 실패: ', error);
-      setErrorMessage('아이디 혹은 비밀먼호가 일치하지 않습니다');
+      setErrorMessage('아이디 혹은 비밀번호가 일치하지 않습니다');
+      reset({ email: '', password: '' });
     }
   };
 
@@ -73,7 +77,18 @@ const Signin = () => {
                 register={register('password')}
                 error={errors.password}
               />
-              {errorMessage && <p className="text-red-500 text-center mb-4">{errorMessage}</p>}
+
+              <div className="flex items-center space-x-2 ml-4 mb-4 text-gray-500">
+                <Checkbox id="autologin" name="autoLogin" onChange={() => setChecked(!checked)} />
+                <label
+                  htmlFor="autologin"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  자동 로그인
+                </label>
+              </div>
+
+              {errorMessage && <p className="text-red-500 text-sm text-center">{errorMessage}</p>}
               <div className="pt-4 mt-8 mb-4">
                 <Button type="submit" className="w-full">
                   로그인

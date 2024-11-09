@@ -2,10 +2,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import SignEmailInput from '@/components/account/SignEmailInput';
 import SignPasswordInput from '@/components/account/SIgnPasswordInput';
 import { signUpSchema } from '@/schemas/signUpSchema';
+import { signupApi } from '@/api/signApi';
 
 type SignUpFormData = {
   email: string;
@@ -14,6 +15,7 @@ type SignUpFormData = {
 };
 
 const SignUp = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -22,8 +24,15 @@ const SignUp = () => {
     resolver: zodResolver(signUpSchema),
   });
 
-  const onSubmit: SubmitHandler<SignUpFormData> = data => {
-    console.log('회원가입 성공', data);
+  const onSubmit: SubmitHandler<SignUpFormData> = async data => {
+    try {
+      const response = await signupApi(data.email, data.password, data.confirmPassword);
+      console.log('회원가입 성공', response);
+      navigate('/sign-in');
+    } catch (error) {
+      console.error('회원가입 실패', error);
+      // 왜 실패했는지 이유 로즥추가..? 해야함
+    }
   };
 
   return (
