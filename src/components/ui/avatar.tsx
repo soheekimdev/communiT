@@ -3,10 +3,11 @@ import * as AvatarPrimitive from '@radix-ui/react-avatar';
 
 import { cn } from '@/lib/utils';
 
-type AvatarSize = 'sm' | 'md' | 'lg';
+type AvatarSize = 'xs' | 'sm' | 'md' | 'lg';
 
 const sizeMap: Record<AvatarSize, { container: string; fallback: string }> = {
-  sm: { container: 'h-8 w-8', fallback: 'text-xs' },
+  xs: { container: 'h-8 w-8', fallback: 'text-xs' },
+  sm: { container: 'h-14 w-14', fallback: 'text-xs' },
   md: { container: 'h-20 w-20', fallback: 'text-l' },
   lg: { container: 'h-32 w-32', fallback: 'text-xl' },
 };
@@ -23,7 +24,7 @@ const Avatar = React.forwardRef<React.ElementRef<typeof AvatarPrimitive.Root>, A
       <AvatarPrimitive.Root
         ref={ref}
         className={cn(
-          'relative flex shrink-0 overflow-hidden rounded-full border-2 border-gray',
+          'relative flex shrink-0 overflow-hidden rounded-full border-2 border-gray text-center',
           sizeMap[size].container,
           className,
         )}
@@ -53,7 +54,7 @@ const AvatarFallback = React.forwardRef<
   const size = React.useContext(AvatarContext);
 
   const displayText = React.useMemo(() => {
-    if (size === 'sm' && typeof children === 'string') {
+    if (size === 'xs' && typeof children === 'string') {
       return children.charAt(0);
     }
     return children;

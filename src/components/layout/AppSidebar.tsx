@@ -73,18 +73,6 @@ const AppSidebar = () => {
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>
-          <SidebarMenuItem>
-            {isLoggedIn ? (
-              <SidebarLink type="button" icon={LogOut} onClick={handleLogout}>
-                로그아웃
-              </SidebarLink>
-            ) : (
-              <SidebarLink type="link" to="/sign-in" icon={LogIn}>
-                로그인
-              </SidebarLink>
-            )}
-          </SidebarMenuItem>
-
           {subMenuItems.map(item => (
             <SidebarMenuItem key={item.title}>
               {item.type === 'link' ? (
@@ -98,6 +86,17 @@ const AppSidebar = () => {
               )}
             </SidebarMenuItem>
           ))}
+          <SidebarMenuItem>
+            {isLoggedIn ? (
+              <SidebarLink type="button" icon={LogOut} onClick={handleLogout}>
+                로그아웃
+              </SidebarLink>
+            ) : (
+              <SidebarLink type="link" to="/sign-in" icon={LogIn}>
+                로그인
+              </SidebarLink>
+            )}
+          </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
