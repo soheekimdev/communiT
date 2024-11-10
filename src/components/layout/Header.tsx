@@ -40,7 +40,7 @@ const Header = ({ userName }: HeaderProps) => {
                 <MessageCircle />
               </Link>
               <Link to="/my-profile">
-                <Avatar size="sm">
+                <Avatar size="xs">
                   <AvatarImage src={profileImage || defaultImage} alt="Profile Picture" />
                   <AvatarFallback>사용자</AvatarFallback>
                 </Avatar>
