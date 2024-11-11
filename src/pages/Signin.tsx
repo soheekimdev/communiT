@@ -6,13 +6,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, useNavigate } from 'react-router-dom';
 import SocialButton from '@/components/account/SocialButton';
 import SignEmailInput from '@/components/account/SignEmailInput';
-
-import { useDispatch } from 'react-redux';
-import { login } from '@/RTK/authSlice';
-import { signInSchema } from '@/schemas/signInSchema';
-import { signinApi } from '@/api/signApi';
 import SignPasswordInput from '@/components/account/SIgnPasswordInput';
 import { Checkbox } from '@/components/ui/checkbox';
+import { signInSchema } from '@/schemas/signInSchema';
+import { useAppDispatch, useAppSelector } from '@/RTK/hooks';
+import { signIn } from '@/RTK/authSlice';
 
 type FormData = {
   email: string;
@@ -20,10 +18,10 @@ type FormData = {
 };
 
 const Signin = () => {
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [checked, setChecked] = useState<boolean>(false);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { isLoading, error } = useAppSelector(state => state.auth);
 
   const {
     register,
@@ -36,14 +34,19 @@ const Signin = () => {
 
   const onSubmit: SubmitHandler<FormData> = async data => {
     try {
-      const userData = await signinApi(data.email, data.password);
-      console.log('로그인 성공: ', userData);
-      setErrorMessage(null);
-      dispatch(login({ email: data.email }));
+      const result = await dispatch(
+        signIn({
+          email: data.email,
+          password: data.password,
+        }),
+      ).unwrap();
+      console.log('로그인 성공:', result);
+      if (checked) {
+        localStorage.setItem('autoLogin', 'true');
+      }
       navigate('/');
     } catch (error) {
-      console.error('로그인 실패: ', error);
-      setErrorMessage('아이디 혹은 비밀번호가 일치하지 않습니다');
+      console.error('로그인 실패:', error);
       reset({ email: '', password: '' });
     }
   };
@@ -79,7 +82,12 @@ const Signin = () => {
               />
 
               <div className="flex items-center space-x-2 ml-4 mb-4 text-gray-500">
-                <Checkbox id="autologin" name="autoLogin" onChange={() => setChecked(!checked)} />
+                <Checkbox
+                  id="autologin"
+                  name="autoLogin"
+                  checked={checked}
+                  onCheckedChange={checked => setChecked(checked as boolean)}
+                />
                 <label
                   htmlFor="autologin"
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -88,10 +96,10 @@ const Signin = () => {
                 </label>
               </div>
 
-              {errorMessage && <p className="text-red-500 text-sm text-center">{errorMessage}</p>}
+              {error && <p className="text-red-500 text-sm text-center">{error}</p>}
               <div className="pt-4 mt-8 mb-4">
-                <Button type="submit" className="w-full">
-                  로그인
+                <Button type="submit" disabled={isLoading} className="w-full">
+                  {isLoading ? '로그인 중...' : '로그인'}
                 </Button>
               </div>
 

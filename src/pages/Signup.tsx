@@ -6,7 +6,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import SignEmailInput from '@/components/account/SignEmailInput';
 import SignPasswordInput from '@/components/account/SIgnPasswordInput';
 import { signUpSchema } from '@/schemas/signUpSchema';
-import { signupApi } from '@/api/signApi';
+import { useAppDispatch, useAppSelector } from '@/RTK/hooks';
+import { signUp } from '@/RTK/authSlice';
 
 type SignUpFormData = {
   email: string;
@@ -16,6 +17,8 @@ type SignUpFormData = {
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { isLoading, error } = useAppSelector(state => state.auth);
   const {
     register,
     handleSubmit,
@@ -26,8 +29,14 @@ const SignUp = () => {
 
   const onSubmit: SubmitHandler<SignUpFormData> = async data => {
     try {
-      const response = await signupApi(data.email, data.password, data.confirmPassword);
-      console.log('회원가입 성공', response);
+      const result = await dispatch(
+        signUp({
+          email: data.email,
+          password: data.password,
+          confirmPassword: data.confirmPassword,
+        }),
+      ).unwrap();
+      console.log('회원가입 성공', result);
       navigate('/sign-in');
     } catch (error) {
       console.error('회원가입 실패', error);
@@ -73,6 +82,8 @@ const SignUp = () => {
                 error={errors.confirmPassword}
               />
 
+              {error && <div className="text-red-500 text-sm text-center mt-2">{error}</div>}
+
               <div className="text-center w-full text-sm font-thin mb-4">
                 <Link to="/sign-in" className="text-primary hover:underline">
                   이미 계정이 있으신가요? 로그인
@@ -80,8 +91,8 @@ const SignUp = () => {
               </div>
 
               <div className="pt-4 mt-8">
-                <Button className="w-full" type="submit">
-                  회원가입
+                <Button className="w-full" type="submit" disabled={isLoading}>
+                  {isLoading ? '회원가입 중...' : '회원가입'}
                 </Button>
               </div>
             </form>
