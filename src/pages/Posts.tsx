@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 import PostPagination from '@/components/PostPagination';
 import { Link } from 'react-router-dom';
 
@@ -42,19 +43,38 @@ const fetchPosts = async (
   }
 };
 
+const PostSkeleton = () => (
+  <Card className="overflow-hidden">
+    <CardHeader>
+      <Skeleton className="h-6 w-3/4" />
+    </CardHeader>
+    <CardContent>
+      <Skeleton className="h-4 w-full mb-2" />
+      <Skeleton className="h-4 w-2/3" />
+    </CardContent>
+    <CardFooter>
+      <Skeleton className="h-4 w-1/2" />
+    </CardFooter>
+  </Card>
+);
+
 const Posts = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageCount, setPageCount] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const loadPosts = async () => {
+      setIsLoading(true);
       try {
         const { data, meta } = await fetchPosts(currentPage, POST_PER_PAGE);
         setPosts(data);
         setPageCount(Math.ceil(meta.total / POST_PER_PAGE));
       } catch (error) {
         console.error('Failed to load posts:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -65,31 +85,32 @@ const Posts = () => {
     <div className="container mx-auto p-4 space-y-6">
       <h1 className="text-3xl font-bold mb-6">커뮤니티 글 목록</h1>
       <div className="grid gap-6 md:grid-cols-2 max-w-4xl mx-auto">
-        {posts.map(post => (
-          <Card key={post.id} className="overflow-hidden">
-            <Link to={`/posts/detail/${post.id}`}>
-              <CardHeader>
-                <CardTitle>{post.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="truncate">{post.content}</p>
-              </CardContent>
-              <CardFooter className="text-sm text-muted-foreground">
-                {/* ToDo: post.author 받아오기  */}
-                <span>작성자: {post.author}</span> |{' '}
-                <time dateTime={post.createdAt}>
-                  {new Date(post.createdAt).toLocaleString('ko-KR', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}
-                </time>
-              </CardFooter>
-            </Link>
-          </Card>
-        ))}
+        {isLoading
+          ? Array.from({ length: POST_PER_PAGE }).map((_, index) => <PostSkeleton key={index} />)
+          : posts.map(post => (
+              <Card key={post.id} className="overflow-hidden">
+                <Link to={`/posts/detail/${post.id}`}>
+                  <CardHeader>
+                    <CardTitle>{post.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="truncate">{post.content}</p>
+                  </CardContent>
+                  <CardFooter className="text-sm text-muted-foreground">
+                    <span>작성자: {post.author}</span> |{' '}
+                    <time dateTime={post.createdAt}>
+                      {new Date(post.createdAt).toLocaleString('ko-KR', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
+                    </time>
+                  </CardFooter>
+                </Link>
+              </Card>
+            ))}
       </div>
 
       {pageCount > 1 && (
