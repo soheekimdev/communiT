@@ -1,63 +1,71 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import PostPagination from '@/components/PostPagination';
 import { Link } from 'react-router-dom';
 
-const dummyPosts = [
-  {
-    id: 1,
-    title: '11월 8일 22시 파주 풋살 용병 구해요.',
-    content: '다치지 않고 즐겁게 하실 분 ~~~',
-    author: '길동무가없는홍길동',
-    createdAt: '2024-11-04',
-  },
-  {
-    id: 2,
-    title: '대구 수성못 스쿠버 다이빙 파티 구합니다.',
-    content:
-      '대구 수성못에서 스쿠버 다이빙 같이 할 파티원 모집합니다. 저도 수영 잘 못하니까 알아서들 생존하셔야 합니다.',
-    author: '용산손절장인',
-    createdAt: '2024-10-30',
-  },
-  {
-    id: 3,
-    title: '주인과 함께 하는 유산소 운동',
-    content: '유산소 운동으로 체력을 키워보세요! 걷기, 뛰기 추천합니다.',
-    author: '홍삼이',
-    createdAt: '2023-10-25',
-  },
-  {
-    id: 4,
-    title: '한강에서 런닝 같이 해요~~',
-    content: '한강 공원에서 런닝 같이 뛰어요~~',
-    author: '이봉주',
-    createdAt: '2023-10-28',
-  },
-  {
-    id: 5,
-    title: '농구 1대1 상대 구함',
-    content: '아무나 들어와',
-    author: '하승진',
-    createdAt: '2023-10-19',
-  },
-];
+type Post = {
+  id: string;
+  title: string;
+  content: string;
+  createdAt: string;
+  author: string;
+  accountId: string;
+};
 
-const POST_PER_PAGE = 4;
+type Meta = {
+  total: number;
+  page: number;
+  limit: number;
+  isLastPage: boolean;
+};
+
+const POST_PER_PAGE = 6;
+
+const fetchPosts = async (
+  page = 1,
+  limit = POST_PER_PAGE,
+): Promise<{ data: Post[]; meta: Meta }> => {
+  try {
+    const response = await axios.get(
+      `https://ozadv6.beavercoding.net/api/posts?page=${page}&limit=${limit}`,
+      {
+        headers: {
+          Accept: 'application/json',
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching posts: ', error);
+    throw error;
+  }
+};
 
 const Posts = () => {
+  const [posts, setPosts] = useState<Post[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const postsPerPage = POST_PER_PAGE;
+  const [pageCount, setPageCount] = useState<number>(0);
 
-  const pageCount = Math.ceil(dummyPosts.length / postsPerPage);
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = dummyPosts.slice(indexOfFirstPost, indexOfLastPost);
+  useEffect(() => {
+    const loadPosts = async () => {
+      try {
+        const { data, meta } = await fetchPosts(currentPage, POST_PER_PAGE);
+        setPosts(data);
+        setPageCount(Math.ceil(meta.total / POST_PER_PAGE));
+      } catch (error) {
+        console.error('Failed to load posts:', error);
+      }
+    };
+
+    loadPosts();
+  }, [currentPage]);
 
   return (
     <div className="container mx-auto p-4 space-y-6">
       <h1 className="text-3xl font-bold mb-6">커뮤니티 글 목록</h1>
       <div className="grid gap-6 md:grid-cols-2 max-w-4xl mx-auto">
-        {currentPosts.map(post => (
+        {posts.map(post => (
           <Card key={post.id} className="overflow-hidden">
             <Link to={`/posts/detail/${post.id}`}>
               <CardHeader>
@@ -67,10 +75,16 @@ const Posts = () => {
                 <p className="truncate">{post.content}</p>
               </CardContent>
               <CardFooter className="text-sm text-muted-foreground">
+                {/* ToDo: post.author 받아오기  */}
+                <span>작성자: {post.author}</span> |{' '}
                 <time dateTime={post.createdAt}>
-                  <span>
-                    {post.author} | {post.createdAt}
-                  </span>
+                  {new Date(post.createdAt).toLocaleString('ko-KR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
                 </time>
               </CardFooter>
             </Link>

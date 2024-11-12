@@ -1,48 +1,44 @@
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-const dummyPosts = [
-  {
-    id: 1,
-    title: '11월 8일 22시 파주 풋살 용병 구해요.',
-    content: '다치지 않고 즐겁게 하실 분 ~~~',
-    author: '길동무가없는홍길동',
-    createdAt: '2024-11-04',
-  },
-  {
-    id: 2,
-    title: '대구 수성못 스쿠버 다이빙 파티 구합니다.',
-    content:
-      '대구 수성못에서 스쿠버 다이빙 같이 할 파티원 모집합니다. 저도 수영 잘 못하니까 알아서들 생존하셔야 합니다.',
-    author: '용산손절장인',
-    createdAt: '2024-10-30',
-  },
-  {
-    id: 3,
-    title: '주인과 함께 하는 유산소 운동',
-    content: '유산소 운동으로 체력을 키워보세요! 걷기, 뛰기 추천합니다.',
-    author: '홍삼이',
-    createdAt: '2023-10-25',
-  },
-  {
-    id: 4,
-    title: '한강에서 런닝 같이 해요~~',
-    content: '한강 공원에서 런닝 같이 뛰어요~~',
-    author: '이봉주',
-    createdAt: '2023-10-28',
-  },
-  {
-    id: 5,
-    title: '농구 1대1 상대 구함',
-    content: '아무나 들어와',
-    author: '하승진',
-    createdAt: '2023-10-19',
-  },
-];
+type Post = {
+  id: string;
+  title: string;
+  content: string;
+  author: string;
+  createdAt: string;
+};
+
+const fetchPostById = async (id: string): Promise<Post | null> => {
+  try {
+    const response = await axios.get(`https://ozadv6.beavercoding.net/api/posts/${id}`, {
+      headers: { Accept: 'application/json' },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching post:', error);
+    return null;
+  }
+};
 
 const PostDetail = () => {
   const { id } = useParams();
-  const postId = id ? parseInt(id, 10) : null;
-  const post = dummyPosts.find(post => post.id === postId);
+  const [post, setPost] = useState<Post | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (id) {
+      fetchPostById(id).then(data => {
+        setPost(data);
+        setLoading(false);
+      });
+    }
+  }, [id]);
+
+  if (loading) {
+    return <p>로딩 중입니다...</p>;
+  }
 
   if (!post) {
     return <p>게시글을 찾을 수 없습니다.</p>;
@@ -53,7 +49,17 @@ const PostDetail = () => {
       <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
       <p className="text-gray-700">{post.content}</p>
       <footer className="text-sm text-muted-foreground">
-        <span>작성자: {post.author}</span> | <time>{post.createdAt}</time>
+        {/* ToDo: post.author 받아오기  */}
+        <span>작성자: {post.author}</span> |{' '}
+        <time dateTime={post.createdAt}>
+          {new Date(post.createdAt).toLocaleString('ko-KR', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+          })}
+        </time>
       </footer>
     </div>
   );
