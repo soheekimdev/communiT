@@ -3,16 +3,16 @@ import { authAPI } from '../api/auth';
 import type { User } from '../types/user';
 
 interface AuthState {
+  isLoading: boolean;
   isLoggedIn: boolean;
   user: User | null;
-  isLoading: boolean;
   error: string | null;
 }
 
 const initialState: AuthState = {
+  isLoading: false,
   isLoggedIn: false,
   user: null,
-  isLoading: false,
   error: null,
 };
 
@@ -49,6 +49,18 @@ export const signUp = createAsyncThunk(
   },
 );
 
+export const fetchCurrentUser = createAsyncThunk(
+  'auth/fetchCurrentUser',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await authAPI.getCurrentUser();
+      return response.account;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || '사용자 정보 조회에 실패했습니다.');
+    }
+  },
+);
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -58,6 +70,12 @@ const authSlice = createSlice({
       state.user = null;
       state.error = null;
       authAPI.logout();
+    },
+    setError: (state, action) => {
+      state.error = action.payload;
+    },
+    clearError: state => {
+      state.error = null;
     },
   },
   extraReducers: builder => {
@@ -85,9 +103,24 @@ const authSlice = createSlice({
       .addCase(signUp.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
+      })
+      .addCase(fetchCurrentUser.pending, state => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchCurrentUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isLoggedIn = true;
+        state.user = action.payload;
+      })
+      .addCase(fetchCurrentUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isLoggedIn = false;
+        state.user = null;
+        state.error = action.payload as string;
       });
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, setError, clearError } = authSlice.actions;
 export default authSlice.reducer;
