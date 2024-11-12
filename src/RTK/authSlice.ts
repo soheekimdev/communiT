@@ -53,8 +53,8 @@ export const fetchCurrentUser = createAsyncThunk(
   'auth/fetchCurrentUser',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await authAPI.getCurrentUser();
-      return response.account;
+      const user = await authAPI.getCurrentUser();
+      return user;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || '사용자 정보 조회에 실패했습니다.');
     }
