@@ -8,8 +8,6 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { Mail, User } from 'lucide-react';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/RTK/store';
 
 const MyProfile = () => {
   const { toast } = useToast();
@@ -25,12 +23,6 @@ const MyProfile = () => {
       duration: 3000,
     });
   };
-
-  // test
-  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
-  const user = useSelector((state: RootState) => state.auth.user);
-  console.log('isLoggedIn:', isLoggedIn);
-  console.log('user:', user);
 
   return (
     <div className="overflow-hidden h-full mx-auto">
