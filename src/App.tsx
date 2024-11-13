@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import HomePage from './pages/Home';
 import Challenges from './pages/Challenges';
@@ -14,8 +14,12 @@ import FindPassword from './pages/FindPassword';
 import FindEmail from './pages/account/FindEmail';
 import ChangePassword from './pages/account/ChangePassword';
 import Settings from './pages/Settings';
+import { useSelector } from 'react-redux';
+import { RootState } from './RTK/store';
 
 export default function App() {
+  const user = useSelector((state: RootState) => state.auth.user);
+
   return (
     <Routes>
       <Route element={<Layout />}>
@@ -25,8 +29,14 @@ export default function App() {
         <Route path="/posts/detail/:id" element={<PostDetail />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/message-channels" element={<MessageChannels />} />
-        <Route path="/my-profile" element={<MyProfile />} />
-        <Route path="/edit-profile" element={<EditProfile />} />
+        <Route
+          path="/my-profile"
+          element={user ? <MyProfile /> : <Navigate to="/sign-in" replace />}
+        />
+        <Route
+          path="/edit-profile"
+          element={user ? <EditProfile /> : <Navigate to="/sign-in" replace />}
+        />
         <Route path="/sign-in" element={<Signin />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/find-password" element={<FindPassword />} />
