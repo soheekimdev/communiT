@@ -11,8 +11,8 @@ interface AuthState {
 
 const initialState: AuthState = {
   isLoading: false,
-  isLoggedIn: false,
-  user: null,
+  isLoggedIn: !!localStorage.getItem('accessToken'),
+  user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')!) : null,
   error: null,
 };
 
@@ -23,6 +23,7 @@ export const signIn = createAsyncThunk(
       const response = await authAPI.signin(email, password);
       localStorage.setItem('accessToken', response.accessToken);
       localStorage.setItem('refreshToken', response.refreshToken);
+      localStorage.setItem('user', JSON.stringify(response.account));
       return response.account;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || '로그인에 실패했습니다.');
@@ -70,6 +71,9 @@ const authSlice = createSlice({
       state.user = null;
       state.error = null;
       authAPI.logout();
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('user');
     },
     setError: (state, action) => {
       state.error = action.payload;
