@@ -4,15 +4,14 @@ import { Bell, MessageCircle, Search } from 'lucide-react';
 import { SidebarTrigger } from '../ui/sidebar';
 import { Link } from 'react-router-dom';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { useState } from 'react';
 
-interface HeaderProps {
-  userName?: string;
-}
+import { useSelector } from 'react-redux';
+import { RootState } from '@/RTK/store';
+import { useAppSelector } from '@/RTK/hooks';
 
-const Header = ({ userName }: HeaderProps) => {
-  const [profileImage, _] = useState<string>('');
-  const defaultImage = 'https://example.com/my-default-image.png';
+const Header = () => {
+  const { isLoggedIn } = useAppSelector(state => state.auth);
+  const user = useSelector((state: RootState) => state.auth.user);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -31,7 +30,7 @@ const Header = ({ userName }: HeaderProps) => {
 
         {/* 우측 버튼들 */}
         <div className="flex items-center gap-5">
-          {userName ? (
+          {isLoggedIn ? (
             <>
               <Link to="/notifications">
                 <Bell />
@@ -41,13 +40,18 @@ const Header = ({ userName }: HeaderProps) => {
               </Link>
               <Link to="/my-profile">
                 <Avatar size="xs">
-                  <AvatarImage src={profileImage || defaultImage} alt="Profile Picture" />
+                  <AvatarImage
+                    src={user?.profileImageUrl || user?.username}
+                    alt="Profile Picture"
+                  />
                   <AvatarFallback>사용자</AvatarFallback>
                 </Avatar>
               </Link>
             </>
           ) : (
-            <Button size="sm">로그인</Button>
+            <Link to="sign-in">
+              <Button size="sm">로그인</Button>
+            </Link>
           )}
         </div>
       </div>
