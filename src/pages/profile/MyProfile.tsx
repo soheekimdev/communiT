@@ -7,7 +7,7 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { Mail, User } from 'lucide-react';
+import { Mail, User, FileText } from 'lucide-react';
 import { useAppDispatch } from '@/RTK/hooks';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/RTK/store';
@@ -78,8 +78,11 @@ const MyProfile = () => {
               <Mail className="h-5 w-5" />
               <p className="text-lg">{user?.email}</p>
             </div>
+            <div className="flex items-center gap-2 mt-2">
+              <FileText className="h-5 w-5" />
+              <p className="text-base">{user?.bio && user?.bio}</p>
+            </div>
           </div>
-          {user?.bio && user?.bio}
         </div>
         <div className="w-[20rem] m-auto space-y-4">
           <p className="text-xl font-medium text-center">관심 카테고리</p>
