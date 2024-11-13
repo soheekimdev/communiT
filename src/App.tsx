@@ -3,6 +3,7 @@ import Layout from './components/layout/Layout';
 import HomePage from './pages/Home';
 import Challenges from './pages/Challenges';
 import Posts from './pages/posts/Posts';
+import NewPost from './pages/posts/NewPost';
 import PostDetail from './pages/posts/PostDetail';
 import Notifications from './pages/Notifications';
 import MessageChannels from './pages/MessageChannels';
@@ -26,6 +27,7 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/challenges" element={<Challenges />} />
         <Route path="/posts" element={<Posts />} />
+        <Route path="/new-post" element={<NewPost />} />
         <Route path="/posts/detail/:id" element={<PostDetail />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/message-channels" element={<MessageChannels />} />

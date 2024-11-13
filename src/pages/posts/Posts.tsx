@@ -3,7 +3,8 @@ import axios from 'axios';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import PostPagination from '@/components/PostPagination';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 
 type Post = {
   id: string;
@@ -64,6 +65,8 @@ const Posts = () => {
   const [pageCount, setPageCount] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const loadPosts = async () => {
       setIsLoading(true);
@@ -81,9 +84,16 @@ const Posts = () => {
     loadPosts();
   }, [currentPage]);
 
+  const createNewPost = () => {
+    navigate('/new-post');
+  };
+
   return (
     <div className="container mx-auto p-4 space-y-6">
-      <h1 className="text-3xl font-bold mb-6">커뮤니티 글 목록</h1>
+      <div className="flex justify-between">
+        <h1 className="text-3xl font-bold mb-6">커뮤니티 글 목록</h1>
+        <Button onClick={createNewPost}>글 작성하기</Button>
+      </div>
       <div className="grid gap-6 md:grid-cols-2 max-w-4xl mx-auto">
         {isLoading
           ? Array.from({ length: POST_PER_PAGE }).map((_, index) => <PostSkeleton key={index} />)
