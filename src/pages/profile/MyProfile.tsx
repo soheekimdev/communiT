@@ -31,10 +31,10 @@ const MyProfile = () => {
           return result;
         } catch (error) {
           console.error('Fetch error:', error);
-          navigate('/login');
+          navigate('/sign-in');
         }
       } else {
-        navigate('/login');
+        navigate('/sign-in');
       }
     };
 
