@@ -12,6 +12,9 @@ import { toast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { nicknameSchema, NicknameFormData } from '@/schemas/nicknameSchema';
 import { passwordSchema, PasswordFormData } from '@/schemas/passwordSchema';
+import { updateNickname, updateProfileImg } from '@/api/eidt-profile';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/RTK/store';
 
 const categoryOptions = ['축구', '농구', '야구', '테니스', '스쿠버 다이빙', '수상스키', '런닝'];
 
@@ -19,7 +22,11 @@ const EditProfile = () => {
   const [profileImage, setProfileImage] = useState<string>('');
   const [categories, setCategories] = useState<string[]>([]);
   const imageFileRef = useRef<HTMLInputElement>(null);
-  const defaultImage = 'https://example.com/my-default-image.png';
+
+  const user = useSelector((state: RootState) => state.auth.user);
+  const userId = user?.id;
+  const token = localStorage.getItem('accessToken');
+  console.log(userId, token);
 
   const {
     register: registerNickname,
@@ -49,11 +56,26 @@ const EditProfile = () => {
   };
 
   const handleImageSubmit = async () => {
-    // 이미지 업로드 로직
-    toast({
-      title: '프로필 이미지 업데이트',
-      description: '프로필 이미지가 성공적으로 업데이트되었습니다.',
-    });
+    if (!profileImage || !userId || !token) {
+      toast({
+        title: '업데이트 실패',
+        description: '이미지 파일이나 인증 토큰이 없습니다.',
+      });
+      return;
+    }
+
+    try {
+      await updateProfileImg(userId, profileImage, token);
+      toast({
+        title: '프로필 이미지 업데이트',
+        description: '프로필 이미지가 성공적으로 업데이트되었습니다.',
+      });
+    } catch (error) {
+      toast({
+        title: '프로필 이미지 업데이트 실패',
+        description: '프로필 이미지 업데이트 중 오류가 발생했습니다.',
+      });
+    }
   };
 
   const toggleCategory = (category: string) => {
@@ -74,12 +96,26 @@ const EditProfile = () => {
   };
 
   const onSubmitNickname = async (data: NicknameFormData) => {
-    // 닉네임 업데이트 로직
-    console.log('닉네임 업데이트:', data);
-    toast({
-      title: '닉네임 업데이트',
-      description: '닉네임이 성공적으로 업데이트되었습니다.',
-    });
+    if (!userId || !token) {
+      toast({
+        title: '닉네임 업데이트 실패',
+        description: '사용자 정보 또는 토큰이 없습니다.',
+      });
+      return;
+    }
+
+    try {
+      await updateNickname(userId, data.nickname, token);
+      toast({
+        title: '닉네임 업데이트',
+        description: '닉네임이 성공적으로 업데이트되었습니다.',
+      });
+    } catch (error) {
+      toast({
+        title: '닉네임 업데이트 실패',
+        description: '닉네임 업데이트 중 오류가 발생했습니다.',
+      });
+    }
   };
 
   const onSubmitPassword = async (data: PasswordFormData) => {
@@ -103,7 +139,10 @@ const EditProfile = () => {
           <CardContent className="flex flex-col items-center space-y-4">
             <div className="relative">
               <Avatar className="w-32 h-32">
-                <AvatarImage src={profileImage || defaultImage} alt="Profile Picture" />
+                <AvatarImage
+                  src={profileImage || user?.profileImageUrl || ''}
+                  alt="Profile Picture"
+                />
                 <AvatarFallback>사용자</AvatarFallback>
               </Avatar>
               <Button
@@ -137,6 +176,7 @@ const EditProfile = () => {
               <NicknameInput
                 id="nickname"
                 label="닉네임"
+                placeholderValue={user?.username || ''}
                 register={registerNickname('nickname')}
                 error={nicknameErrors.nickname}
               />
