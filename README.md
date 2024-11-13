@@ -102,6 +102,7 @@
 <summary><strong>[차단 관리][공통 레이아웃] 김소희</strong></summary>
   
 ### ✅ Done
+
 <hr>
 
 - 차단 유저 관리 UI/UX 디자인
@@ -136,11 +137,15 @@
   - 챌린지 상세 화면 구현
  
 ### 🖼️ Preview
+
 <hr>
 
 <div align=center>
-  ![스크린샷 2024-11-13 오후 6 33 01](https://github.com/user-attachments/assets/0abf9b6a-9ef7-46fc-afd7-509d7da4bb8f)
-  ![스크린샷 2024-11-13 오후 6 33 17](https://github.com/user-attachments/assets/e903ab94-d1d6-4afd-84f8-817e12061359)
+
+  ![changelog_term3_sohee_01](https://github.com/user-attachments/assets/8b337fdd-c413-4fbc-8c6d-f7ce7d4e8b31)
+  ![changelog_term3_sohee_02](https://github.com/user-attachments/assets/267119af-8356-43b1-86bb-8559e9e41499)
+
+  
 </div>
 
 </details>
