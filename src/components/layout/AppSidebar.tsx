@@ -10,9 +10,10 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import SidebarLink from '../ui/sidebar-link';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '@/RTK/store';
 import { logout } from '@/RTK/authSlice';
+import { useAppDispatch } from '@/RTK/hooks';
 
 interface BaseMenuItem {
   title: string;
@@ -40,7 +41,7 @@ const mainMenuItems: MenuItem[] = [
 const subMenuItems: MenuItem[] = [{ type: 'link', title: '설정', to: '/settings', icon: Settings }];
 
 const AppSidebar = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn); // 로그인 상태 가져오기
 
   const handleLogout = () => {
