@@ -95,6 +95,58 @@
 ## ChangeLog
 
 <details>
+<summary><strong>3주차(11/06 - 11/12)</strong></summary>
+<br>
+
+<details>  
+<summary><strong>[차단 관리][공통 레이아웃] 김소희</strong></summary>
+  
+### ✅ Done
+<hr>
+
+- 차단 유저 관리 UI/UX 디자인
+  - 사용자 경험을 고려한 레이아웃 설계
+  - 차단된 사용자 목록 표시 및 차단 해제 버튼 구현
+  - 차단 해제 버튼 클릭 시 Toast 알림을 통한 사용자 피드백 제공
+
+- RTK를 활용한 상태 관리 구조 개선
+  - Redux Thunk를 사용한 비동기 액션 처리
+  - 로그인 시 토큰 로컬 스토리지 저장 기능 구현
+
+- Layout 컴포넌트 구조 개선
+  - Providers, Routes, Layout 컴포넌트 분리 및 리팩토링
+    - main.tsx: 전역 상태 및 테마 관리
+    - App.tsx: 라우팅 로직 분리
+    - Layout.tsx: 공통 UI 구조 관리
+
+- 사이드바 구조 개선
+  - 로그인/로그아웃 버튼을 subMenuItems에서 분리하여 독립적으로 렌더링
+  - 사용자 경험 및 유지보수성 향상
+
+- 컴포넌트 개선
+  - Avatar 컴포넌트에 새로운 size 옵션 추가
+    - 다양한 사용 컨텍스트 지원
+
+### ⚙️ in Progress
+
+<hr>
+
+- 챌린지 UI/UX 디자인
+  - 챌린지 목록 구현
+  - 챌린지 상세 화면 구현
+ 
+### 🖼️ Preview
+<hr>
+
+<div align=center>
+  ![스크린샷 2024-11-13 오후 6 33 01](https://github.com/user-attachments/assets/0abf9b6a-9ef7-46fc-afd7-509d7da4bb8f)
+  ![스크린샷 2024-11-13 오후 6 33 17](https://github.com/user-attachments/assets/e903ab94-d1d6-4afd-84f8-817e12061359)
+</div>
+
+</details>
+</details>
+
+<details>
 <summary><strong>2주차(10/30 - 11/05)</strong></summary>
 <br>
 
