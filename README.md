@@ -98,6 +98,81 @@
 <summary><strong>3주차(11/06 - 11/12)</strong></summary>
 <br>
 
+<details>
+<summary><strong>[프로필][글 생성/수정][글 상세/삭제] 주민재</strong></summary>
+  
+  ### ✅ Done
+  <hr>
+  
+  - 프로필
+    - 프로필 데이터 API 요청 및 응답 처리
+    - 프로필 수정 API 연동  
+    - 프로필 정보 수정
+      - 프로필 이미지, 닉네임, 비밀번호, 카테고리 항목별 submit 버튼 추가 중 (개별 수정 가능)
+      - 현재 닉네임, 프로필 이미지, 자기소개 수정 가능
+
+  - 게시물
+    - 게시물 글 목록 API 요청 및 응답 처리
+    - 글 상세 페이지
+    - 새 게시물 작성 폼 제작
+
+ ### ⚙️ in Progress
+  <hr>
+  
+  - 글 생성/수정 
+    - 글 생성 API 요청 및 응답 처리
+  
+
+### 🖼️ Preview
+
+  <hr>
+
+  <div align=center>
+    <img src='https://github.com/user-attachments/assets/0d25fc0b-8051-489c-9759-b6208ccf293e' width=400/>
+    <img src='https://github.com/user-attachments/assets/c509df72-f25d-4ea2-89cb-0d27eba0c2b7' width=400/>
+  </div>
+
+</details>
+
+<details>  
+<summary><strong>[로그인/회원가입] 권여진</strong></summary>
+  
+  ### ✅ Done
+  
+  <hr>
+
+  - 로그인/회원가입 API 연결
+
+  - Redux Toolkit을 이용한 로그인 상태관리 (수정)
+
+  - 로그인/로그아웃 분기처리 (수정)
+
+   
+
+### ⚙️ in Progress
+
+  <hr>
+
+  - 새 댓글 작성 폼 컴포넌트 구현
+   
+  - 댓글 수정 페이지 및 폼 구현
+   
+  - 댓글 목록 UI/UX 디자인
+   
+
+   
+  ### 🖼️ Preview
+  
+  <hr>
+
+
+<div align=center>
+  <img src='https://github.com/user-attachments/assets/7f54078f-7ab4-4cd7-9e76-bfb7d676b81f' width=400/>
+  <img src="https://github.com/user-attachments/assets/8e3ac124-92d8-4e80-a0a4-f1b863b248f6" width="400" /> 
+</div>
+  
+</details>
+
 <details>  
 <summary><strong>[차단 관리][공통 레이아웃] 김소희</strong></summary>
   
@@ -143,8 +218,8 @@
 <div align=center>
 
   ![changelog_term3_sohee_01](https://github.com/user-attachments/assets/8b337fdd-c413-4fbc-8c6d-f7ce7d4e8b31)
+  
   ![changelog_term3_sohee_02](https://github.com/user-attachments/assets/267119af-8356-43b1-86bb-8559e9e41499)
-
   
 </div>
 
