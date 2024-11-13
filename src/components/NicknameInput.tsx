@@ -6,11 +6,18 @@ import { FieldError, UseFormRegisterReturn } from 'react-hook-form';
 interface NicknameInputProps {
   id: string;
   label: string;
+  placeholderValue: string;
   register: UseFormRegisterReturn;
   error?: FieldError | null;
 }
 
-const NicknameInput: React.FC<NicknameInputProps> = ({ id, label, register, error }) => {
+const NicknameInput: React.FC<NicknameInputProps> = ({
+  id,
+  label,
+  placeholderValue,
+  register,
+  error,
+}) => {
   return (
     <div className="relative w-full ">
       <Label htmlFor={id} className="text-sm font-medium">
@@ -20,7 +27,7 @@ const NicknameInput: React.FC<NicknameInputProps> = ({ id, label, register, erro
         <Input
           id={id}
           type="text"
-          placeholder="길동무가없는홍길동"
+          placeholder={placeholderValue}
           {...register}
           className={`pl-10 pr-10 ${error ? 'border-red-500' : ''}`}
         />

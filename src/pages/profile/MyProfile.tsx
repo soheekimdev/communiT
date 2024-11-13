@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -8,12 +8,38 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { Mail, User } from 'lucide-react';
+import { useAppDispatch } from '@/RTK/hooks';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/RTK/store';
+import { fetchCurrentUser } from '@/RTK/authSlice';
 
 const MyProfile = () => {
   const { toast } = useToast();
-  const [profileImage, _] = useState<any>('');
   const [isSwitchOn, setIsSwitchOn] = useState<boolean>(false);
-  const defaultImage = 'https://example.com/my-default-image.png';
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const user = useSelector((state: RootState) => state.auth.user);
+
+  useEffect(() => {
+    const checkUser = async () => {
+      const token = localStorage.getItem('accessToken');
+
+      if (token) {
+        try {
+          const result = await dispatch(fetchCurrentUser()).unwrap();
+          return result;
+        } catch (error) {
+          console.error('Fetch error:', error);
+          navigate('/login');
+        }
+      } else {
+        navigate('/login');
+      }
+    };
+
+    checkUser();
+  }, [dispatch, navigate]);
 
   const handleSwitchChange = () => {
     setIsSwitchOn(prev => !prev);
@@ -28,7 +54,7 @@ const MyProfile = () => {
     <div className="overflow-hidden h-full mx-auto">
       <div className="relative p-8 space-y-2">
         <div className="flex justify-between">
-          <h1 className="text-3xl font-bold">홍길동님의 정보</h1>
+          <h1 className="text-3xl font-bold">{user?.username}님의 정보</h1>
           <div className="flex items-center">
             <Label className="mr-4">계정 비공개</Label>
             <Switch checked={isSwitchOn} onCheckedChange={handleSwitchChange} />
@@ -39,20 +65,21 @@ const MyProfile = () => {
         <div className="flex flex-col items-center gap-4">
           <div className="relative mt-4">
             <Avatar size="lg">
-              <AvatarImage src={profileImage || defaultImage} alt="Profile Picture" />
+              <AvatarImage src={user?.profileImageUrl || ''} alt="Profile Picture" />
               <AvatarFallback>사용자</AvatarFallback>
             </Avatar>
           </div>
           <div className="flex flex-col items-center">
             <div className="flex items-center gap-2 mt-2">
               <User className=" h-6 w-6" />
-              <h2 className="text-2xl font-semibold">길동무가없는홍길동</h2>
+              <h2 className="text-2xl font-semibold">{user?.username}</h2>
             </div>
             <div className="flex items-center gap-2 mt-2">
               <Mail className="h-5 w-5" />
-              <p className="text-lg">userEmail@example.com</p>
+              <p className="text-lg">{user?.email}</p>
             </div>
           </div>
+          {user?.bio && user?.bio}
         </div>
         <div className="w-[20rem] m-auto space-y-4">
           <p className="text-xl font-medium text-center">관심 카테고리</p>
