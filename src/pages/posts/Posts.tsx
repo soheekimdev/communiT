@@ -1,48 +1,13 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import PostPagination from '@/components/PostPagination';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-
-type Post = {
-  id: string;
-  title: string;
-  content: string;
-  createdAt: string;
-  author: string;
-  accountId: string;
-};
-
-type Meta = {
-  total: number;
-  page: number;
-  limit: number;
-  isLastPage: boolean;
-};
+import { Post, fetchPosts } from '@/api/post';
 
 const POST_PER_PAGE = 6;
-
-const fetchPosts = async (
-  page = 1,
-  limit = POST_PER_PAGE,
-): Promise<{ data: Post[]; meta: Meta }> => {
-  try {
-    const response = await axios.get(
-      `https://ozadv6.beavercoding.net/api/posts?page=${page}&limit=${limit}`,
-      {
-        headers: {
-          Accept: 'application/json',
-        },
-      },
-    );
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching posts: ', error);
-    throw error;
-  }
-};
 
 const PostSkeleton = () => (
   <Card className="overflow-hidden">
