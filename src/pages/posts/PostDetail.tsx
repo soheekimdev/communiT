@@ -122,23 +122,28 @@ const PostDetail = () => {
           <div className="flex justify-between items-center">
             <CardTitle className="text-3xl font-bold">{post.title}</CardTitle>
             {userId === post.accountId ? (
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button>삭제</Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>게시글 삭제</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      정말로 게시글을 삭제하시겠습니까? 삭제된 후에는 복구할 수 없습니다.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>취소</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleDelete}>삭제</AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
+              <div>
+                <Button className="mr-2" onClick={() => navigate(`/posts/update/${id}`)}>
+                  수정
+                </Button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button>삭제</Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>게시글 삭제</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        정말로 게시글을 삭제하시겠습니까? 삭제된 후에는 복구할 수 없습니다.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>취소</AlertDialogCancel>
+                      <AlertDialogAction onClick={handleDelete}>삭제</AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
             ) : null}
           </div>
         </CardHeader>

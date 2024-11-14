@@ -91,3 +91,27 @@ export const deletePost = async (id: string, token: string): Promise<boolean> =>
     return false;
   }
 };
+
+export const updatePost = async (id: string, updatedPost: Post, token: string) => {
+  try {
+    const response = await axios.patch(`${API_BASE_URL}/posts/${id}`, updatedPost, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    // 응답 상태가 200이면 성공
+    if (response.status === 204) {
+      return true;
+    }
+
+    // 응답 상태가 200이 아니면 실패 처리
+    console.error('Unexpected response status:', response.status);
+    return false;
+  } catch (err) {
+    // 에러 로깅
+    console.error('Error updating post:', err);
+    return false;
+  }
+};
