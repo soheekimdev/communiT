@@ -6,6 +6,7 @@ import PostPagination from '@/components/PostPagination';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Post, fetchPosts } from '@/api/post';
+import ReactMarkdown from 'react-markdown';
 
 const POST_PER_PAGE = 6;
 
@@ -69,10 +70,10 @@ const Posts = () => {
                     <CardTitle>{post.title}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="truncate">{post.content}</p>
+                    <ReactMarkdown className="max-h-10 truncate">{post.content}</ReactMarkdown>
                   </CardContent>
-                  <CardFooter className="text-sm text-muted-foreground">
-                    <span>작성자: {post.author}</span> |{' '}
+                  <CardFooter className="flex flex-col items-start text-sm text-muted-foreground">
+                    <p>작성자: {post.accountUsername}</p>
                     <time dateTime={post.createdAt}>
                       {new Date(post.createdAt).toLocaleString('ko-KR', {
                         year: 'numeric',

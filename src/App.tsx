@@ -17,6 +17,7 @@ import ChangePassword from './pages/account/ChangePassword';
 import Settings from './pages/Settings';
 import { useSelector } from 'react-redux';
 import { RootState } from './RTK/store';
+import UpdatePost from './pages/posts/UpdatePost';
 
 export default function App() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -29,6 +30,7 @@ export default function App() {
         <Route path="/posts" element={<Posts />} />
         <Route path="/new-post" element={<NewPost />} />
         <Route path="/posts/detail/:id" element={<PostDetail />} />
+        <Route path="/posts/update/:id" element={<UpdatePost />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/message-channels" element={<MessageChannels />} />
         <Route
