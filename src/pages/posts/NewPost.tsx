@@ -5,18 +5,22 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
+import { createNewPost } from '@/api/post';
 
-export default function NewPost() {
+const NewPost = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+
+  const token = localStorage.getItem('accessToken');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     try {
+      await createNewPost(title, content, token || '');
       navigate('/posts');
     } catch (error) {
       console.error('Failed to create post:', error);
@@ -72,4 +76,6 @@ export default function NewPost() {
       </Card>
     </div>
   );
-}
+};
+
+export default NewPost;

@@ -1,43 +1,47 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { CalendarIcon, UserIcon } from 'lucide-react';
-
-type Post = {
-  id: string;
-  title: string;
-  content: string;
-  author: string;
-  createdAt: string;
-};
-
-const fetchPostById = async (id: string): Promise<Post | null> => {
-  try {
-    const response = await axios.get(`https://ozadv6.beavercoding.net/api/posts/${id}`, {
-      headers: { Accept: 'application/json' },
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching post:', error);
-    return null;
-  }
-};
+import { Button } from '@/components/ui/button';
+import { Post, deletePost, fetchPostDetail } from '@/api/post';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/RTK/store';
 
 const PostDetail = () => {
   const { id } = useParams();
   const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const user = useSelector((state: RootState) => state.auth.user);
+  const userId = user?.id;
+  const token = localStorage.getItem('accessToken');
 
   useEffect(() => {
     if (id) {
-      fetchPostById(id).then(data => {
+      fetchPostDetail(id).then(data => {
         setPost(data);
         setLoading(false);
       });
     }
   }, [id]);
+
+  const handleDelete = async () => {
+    if (id && token) {
+      const deleteConfirm = confirm('게시글을 삭제하시겠습니까?');
+      if (deleteConfirm) {
+        const isDeleted = await deletePost(id, token);
+        if (isDeleted) {
+          alert('게시글이 성공적으로 삭제되었습니다.');
+          navigate('/posts');
+        } else {
+          alert('게시글 삭제에 실패했습니다.');
+        }
+      }
+    } else {
+      alert('삭제할 게시글 정보가 없거나, 로그인 상태가 아닙니다.');
+    }
+  };
 
   if (loading) {
     return (
@@ -75,7 +79,10 @@ const PostDetail = () => {
     <div className="container mx-auto p-4 max-w-2xl">
       <Card>
         <CardHeader>
-          <CardTitle className="text-3xl font-bold">{post.title}</CardTitle>
+          <div className="flex justify-between items-center">
+            <CardTitle className="text-3xl font-bold">{post.title}</CardTitle>
+            {userId === post.accountId ? <Button onClick={handleDelete}>삭제</Button> : null}
+          </div>
         </CardHeader>
         <CardContent>
           <div className="prose max-w-none">
