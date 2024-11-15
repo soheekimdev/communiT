@@ -38,11 +38,12 @@ export const signUp = createAsyncThunk(
       email,
       password,
       confirmPassword,
-    }: { email: string; password: string; confirmPassword: string },
+      username,
+    }: { email: string; password: string; confirmPassword: string; username: string },
     { rejectWithValue },
   ) => {
     try {
-      const response = await authAPI.signup(email, password, confirmPassword);
+      const response = await authAPI.signup(email, password, confirmPassword, username);
       return response.account;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || '회원가입에 실패했습니다.');

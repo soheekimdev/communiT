@@ -46,11 +46,13 @@ export const authAPI = {
     email: string,
     password: string,
     confirmPassword: string,
+    username: string,
   ): Promise<AuthResponse> => {
     const response = await axiosInstance.post('/sign-up', {
       email,
       password,
       confirmPassword,
+      username,
     });
     return response.data;
   },
