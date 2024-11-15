@@ -1,12 +1,11 @@
-import { useEffect, useState } from 'react';
-
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
+import PostPagination from '@/components/PostPagination';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import PostPagination from '@/components/PostPagination';
-import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Post, fetchPosts } from '@/api/post';
-import ReactMarkdown from 'react-markdown';
+import usePostForm from '@/hooks/usePosts';
 
 const POST_PER_PAGE = 6;
 
@@ -26,33 +25,15 @@ const PostSkeleton = () => (
 );
 
 const Posts = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [pageCount, setPageCount] = useState<number>(0);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-
+  const { posts, meta, isLoading } = usePostForm(currentPage);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const loadPosts = async () => {
-      setIsLoading(true);
-      try {
-        const { data, meta } = await fetchPosts(currentPage, POST_PER_PAGE);
-        setPosts(data);
-        setPageCount(Math.ceil(meta.total / POST_PER_PAGE));
-      } catch (error) {
-        console.error('Failed to load posts:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadPosts();
-  }, [currentPage]);
 
   const createNewPost = () => {
     navigate('/new-post');
   };
+
+  const pageCount = meta ? Math.ceil(meta.total / POST_PER_PAGE) : 0;
 
   return (
     <div className="container mx-auto p-4 space-y-6">
@@ -60,6 +41,7 @@ const Posts = () => {
         <h1 className="text-3xl font-bold mb-6">커뮤니티 글 목록</h1>
         <Button onClick={createNewPost}>글 작성하기</Button>
       </div>
+
       <div className="grid gap-6 md:grid-cols-2 max-w-4xl mx-auto">
         {isLoading
           ? Array.from({ length: POST_PER_PAGE }).map((_, index) => <PostSkeleton key={index} />)

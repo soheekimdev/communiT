@@ -8,81 +8,93 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import usePostForm from '@/hooks/usePostForm';
 
 const UpdatePost = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [post, setPost] = useState<Post | null>(null);
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
   const user = useSelector((state: RootState) => state.auth.user);
   const token = localStorage.getItem('accessToken');
 
+  const { values, error, handleChange, validate } = usePostForm({
+    title: '',
+    content: '',
+  });
+
   useEffect(() => {
     if (id) {
-      setIsLoading(true); // Start loading
+      setIsLoading(true);
       fetchPostDetail(id)
         .then(data => {
           if (data) {
             if (data.accountId === user?.id) {
               setPost(data);
-              setTitle(data.title);
-              setContent(data.content);
+              values.title = data.title;
+              values.content = data.content;
             } else {
-              setError('권한이 없습니다.');
+              setAlertMessage('권한이 없습니다.');
+              setShowAlert(true);
             }
           } else {
-            setError('게시글을 불러오는 데 실패했습니다.');
+            setAlertMessage('게시글을 불러오는 데 실패했습니다.');
+            setShowAlert(true);
           }
         })
         .catch(err => {
           console.error(err);
-          setError('게시글을 불러오는 데 실패했습니다.');
+          setAlertMessage('게시글을 불러오는 데 실패했습니다.');
+          setShowAlert(true);
         })
         .finally(() => {
-          setIsLoading(false); // End loading
+          setIsLoading(false);
         });
     }
   }, [id, user?.id]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title || title.length < 4) {
-      setError('제목은 4자 이상이어야 합니다.');
-      return;
-    }
 
-    if (!content) {
-      setError('내용을 입력해야 합니다.');
+    if (!validate()) return;
+
+    if (!token) {
+      setAlertMessage('로그인 상태여야 게시물을 수정할 수 있습니다.');
+      setShowAlert(true);
       return;
     }
 
     if (id && post && token) {
       try {
-        const updatedPost = { ...post, title, content };
-        const isUpdated = await updatePost(id, updatedPost, token); // 토큰을 함께 전달
+        const updatedPost = { ...post, title: values.title, content: values.content };
+        const isUpdated = await updatePost(id, updatedPost, token);
         if (isUpdated) {
           navigate(`/posts/detail/${id}`);
         } else {
-          setError('게시글 수정에 실패했습니다.');
+          setAlertMessage('게시글 수정에 실패했습니다.');
+          setShowAlert(true);
         }
       } catch (err) {
-        setError('게시글 수정 중 오류가 발생했습니다.');
+        setAlertMessage('게시글 수정 중 오류가 발생했습니다.');
+        setShowAlert(true);
       }
     } else {
-      setError('로그인 상태여야 게시물을 수정할 수 있습니다.');
+      setAlertMessage('게시글 수정에 실패했습니다.');
+      setShowAlert(true);
     }
   };
 
   if (isLoading) {
-    return <div className="text-center">로딩 중...</div>; // Loading indicator
+    return <div className="text-center">로딩 중...</div>;
   }
 
-  if (error) {
-    return <div className="text-red-500">{error}</div>;
-  }
+  const handleCancel = () => {
+    values.title = '';
+    values.content = '';
+    navigate(-1);
+  };
 
   return (
     <div className="container mx-auto p-4 max-w-2xl">
@@ -90,41 +102,43 @@ const UpdatePost = () => {
         <CardHeader>
           <CardTitle className="text-3xl font-bold">게시글 수정</CardTitle>
         </CardHeader>
-        {post && (
-          <form onSubmit={handleSubmit}>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="title">제목</Label>
-                <Input
-                  id="title"
-                  value={title}
-                  onChange={e => setTitle(e.target.value)}
-                  placeholder="게시물 제목을 입력하세요 (4자 이상)"
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="content">내용</Label>
-                <Textarea
-                  id="content"
-                  value={content}
-                  onChange={e => setContent(e.target.value)}
-                  placeholder="게시물 내용을 입력하세요"
-                  required
-                  className="min-h-[200px]"
-                />
-              </div>
-            </CardContent>
-            <CardFooter className="flex justify-end space-x-2">
-              <Button type="submit" className="mt-4">
-                수정 완료
-              </Button>
-              <Button className="mt-4" onClick={() => navigate(-1)}>
-                취소
-              </Button>
-            </CardFooter>
-          </form>
-        )}
+        <form onSubmit={handleSubmit}>
+          <CardContent className="space-y-4">
+            {showAlert && <div className="text-red-500">{alertMessage}</div>}
+            {error && <div className="text-red-500">{error}</div>}
+            <div className="space-y-2">
+              <Label htmlFor="title">제목</Label>
+              <Input
+                id="title"
+                name="title"
+                value={values.title}
+                onChange={handleChange}
+                placeholder="게시물 제목을 입력하세요 (4자 이상)"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="content">내용</Label>
+              <Textarea
+                id="content"
+                name="content"
+                value={values.content}
+                onChange={handleChange}
+                placeholder="게시물 내용을 입력하세요"
+                required
+                className="min-h-[200px]"
+              />
+            </div>
+          </CardContent>
+          <CardFooter className="flex justify-end space-x-2">
+            <Button type="submit" className="mt-4">
+              수정 완료
+            </Button>
+            <Button className="mt-4" onClick={handleCancel}>
+              취소
+            </Button>
+          </CardFooter>
+        </form>
       </Card>
     </div>
   );
