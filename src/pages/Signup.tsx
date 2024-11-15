@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, useNavigate } from 'react-router-dom';
 import SignEmailInput from '@/components/account/SignEmailInput';
 import SignPasswordInput from '@/components/account/SIgnPasswordInput';
+import SignUserNameInput from '@/components/account/SignUserNameInput';
 import { signUpSchema } from '@/schemas/signUpSchema';
 import { useAppDispatch, useAppSelector } from '@/RTK/hooks';
 import { signUp } from '@/RTK/authSlice';
@@ -13,6 +14,7 @@ type SignUpFormData = {
   email: string;
   password: string;
   confirmPassword: string;
+  username: string;
 };
 
 const SignUp = () => {
@@ -34,13 +36,13 @@ const SignUp = () => {
           email: data.email,
           password: data.password,
           confirmPassword: data.confirmPassword,
+          username: data.username,
         }),
       ).unwrap();
       console.log('회원가입 성공', result);
       navigate('/sign-in');
     } catch (error) {
       console.error('회원가입 실패', error);
-      // 왜 실패했는지 이유 로즥추가..? 해야함
     }
   };
 
@@ -61,6 +63,13 @@ const SignUp = () => {
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)}>
+              <SignUserNameInput
+                id="username"
+                label="닉네임"
+                register={register('username')}
+                error={errors.username}
+              />
+
               <SignEmailInput
                 id="email"
                 label="이메일"

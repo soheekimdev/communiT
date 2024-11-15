@@ -12,7 +12,7 @@ import { signInSchema } from '@/schemas/signInSchema';
 import { useAppDispatch, useAppSelector } from '@/RTK/hooks';
 import { signIn } from '@/RTK/authSlice';
 
-type FormData = {
+type SignInFormData = {
   email: string;
   password: string;
 };
@@ -28,11 +28,11 @@ const Signin = () => {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<FormData>({
+  } = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
   });
 
-  const onSubmit: SubmitHandler<FormData> = async data => {
+  const onSubmit: SubmitHandler<SignInFormData> = async data => {
     try {
       const result = await dispatch(
         signIn({
