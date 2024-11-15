@@ -34,7 +34,7 @@ export const fetchPosts = async (
   limit = POST_PER_PAGE,
 ): Promise<{ data: Post[]; meta: Meta }> => {
   try {
-    const response = await apiClient.get(`/posts`, { params: { page, limit } });
+    const response = await apiClient.get(`/posts`, { params: { page, limit, type: 'post' } });
     return response.data;
   } catch (error) {
     handleApiError(error, 'Error fetching posts');
@@ -76,14 +76,19 @@ export const createNewPost = async (title: string, content: string, token: strin
   }
 };
 
-export const updatePost = async (id: string, updatedPost: Post, token: string) => {
+export const updatePost = async (
+  id: string,
+  updatedPost: Partial<Post>,
+  token: string,
+): Promise<boolean> => {
   try {
     const response = await apiClient.patch(`/posts/${id}`, updatedPost, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    return response.status === 204;
+    return response.status === 200;
   } catch (error) {
     handleApiError(error, 'Error updating post');
+    return false;
   }
 };
 
