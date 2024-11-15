@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { createNewPost } from '@/api/post';
 import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
+import useForm from '@/hooks/usePostForm';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Info } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,22 +18,25 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { createNewPost } from '@/api/post';
-import { Info } from 'lucide-react';
 
 const NewPost = () => {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+  const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [showDialog, setShowDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState('');
-  const navigate = useNavigate();
+  const token = localStorage.getItem('accessToken');
+
+  const { values, handleChange, validate } = useForm({
+    title: '',
+    content: '',
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const token = localStorage.getItem('accessToken');
+
+    if (!validate()) return;
 
     if (!token) {
       setDialogMessage('로그인이 필요합니다.');
@@ -38,29 +44,22 @@ const NewPost = () => {
       return;
     }
 
-    if (title.trim().length < 4) {
-      setAlertMessage('제목은 최소 4자 이상이어야 합니다.');
-      setShowAlert(true);
-      return;
-    }
-
     setIsSubmitting(true);
-
     try {
-      await createNewPost(title, content, token);
-      setDialogMessage('게시물이 성공적으로 작성되었습니다.');
-      setShowDialog(true);
-      setTitle('');
-      setContent('');
-    } catch (error: any) {
-      if (error.response && error.response.status === 401) {
-        setDialogMessage('로그인이 필요합니다. 다시 로그인해 주세요.');
+      const isCreated = await createNewPost(values.title, values.content, token);
+      if (isCreated) {
+        setDialogMessage('게시물이 성공적으로 작성되었습니다.');
         setShowDialog(true);
+        values.title = ''; // 폼 초기화
+        values.content = '';
       } else {
         setAlertMessage('게시물 생성에 실패했습니다. 잠시 후 다시 시도해주세요.');
         setShowAlert(true);
       }
+    } catch (error: any) {
       console.error('Failed to create post:', error);
+      setAlertMessage('게시물 생성에 실패했습니다. 잠시 후 다시 시도해주세요.');
+      setShowAlert(true);
     } finally {
       setIsSubmitting(false);
     }
@@ -85,8 +84,9 @@ const NewPost = () => {
               <Label htmlFor="title">제목</Label>
               <Input
                 id="title"
-                value={title}
-                onChange={e => setTitle(e.target.value)}
+                name="title"
+                value={values.title}
+                onChange={handleChange}
                 placeholder="게시물 제목을 입력하세요 (4자 이상)"
                 required
               />
@@ -95,8 +95,9 @@ const NewPost = () => {
               <Label htmlFor="content">내용</Label>
               <Textarea
                 id="content"
-                value={content}
-                onChange={e => setContent(e.target.value)}
+                name="content"
+                value={values.content}
+                onChange={handleChange}
                 placeholder="게시물 내용을 입력하세요"
                 required
                 className="min-h-[200px]"

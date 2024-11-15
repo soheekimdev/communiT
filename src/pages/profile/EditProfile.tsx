@@ -9,12 +9,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Camera } from 'lucide-react';
-import { toast } from '@/hooks/use-toast';
+import { toast } from '@/hooks/useToast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { nicknameSchema, NicknameFormData } from '@/schemas/nicknameSchema';
 import { passwordSchema, PasswordFormData } from '@/schemas/passwordSchema';
 import { bioSchema, BioFormData } from '@/schemas/bioSchema';
-import { updateNickname, updateProfileImg, updateBio } from '@/api/eidt-profile';
+import { updateNickname, updateProfileImg, updateBio } from '@/api/profile';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/RTK/store';
 
