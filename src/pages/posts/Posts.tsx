@@ -6,6 +6,8 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import usePostForm from '@/hooks/usePosts';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/RTK/store';
 
 const POST_PER_PAGE = 6;
 
@@ -28,9 +30,11 @@ const Posts = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const { posts, meta, isLoading } = usePostForm(currentPage);
   const navigate = useNavigate();
+  const user = useSelector((state: RootState) => state.auth.user);
 
   const createNewPost = () => {
-    navigate('/new-post');
+    if (user) navigate('/new-post');
+    else navigate('/sign-in');
   };
 
   const pageCount = meta ? Math.ceil(meta.total / POST_PER_PAGE) : 0;

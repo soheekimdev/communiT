@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { CalendarIcon, UserIcon, AlertCircle } from 'lucide-react';
+import { CalendarIcon, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/RTK/store';
@@ -20,14 +20,26 @@ import {
 import ReactMarkdown from 'react-markdown';
 import usePostDetail from '@/hooks/usePostDetail';
 import ErrorAlert from '@/components/post-alert/ErrorAlert';
+import { fetchProfileImageURL } from '@/api/profileURL';
+import ProfileImage from '@/components/ProfileImage';
+import { useEffect, useState } from 'react';
 
-const PostDetail = () => {
+export default function PostDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.auth.user);
   const userId = user?.id;
   const token = localStorage.getItem('accessToken');
   const { post, loading, error, success, handleDelete } = usePostDetail(id, token);
+  const [author, setAuthor] = useState<{ username: string; profileImageUrl?: string } | null>(null);
+
+  useEffect(() => {
+    if (post?.accountId) {
+      fetchProfileImageURL(post.accountId)
+        .then(data => setAuthor(data))
+        .catch(err => console.error(err));
+    }
+  }, [post]);
 
   if (loading) {
     return (
@@ -110,8 +122,8 @@ const PostDetail = () => {
         </CardContent>
         <CardFooter className="flex flex-col sm:flex-row justify-between items-start sm:items-center text-sm text-muted-foreground">
           <div className="flex items-center mb-2 sm:mb-0">
-            <UserIcon className="mr-2 h-4 w-4" />
-            <span>작성자: {post.accountUsername}</span>
+            {author && <ProfileImage profileImageUrl={author.profileImageUrl} />}
+            <span>{post.accountUsername}</span>
           </div>
           <div className="flex items-center">
             <CalendarIcon className="mr-2 h-4 w-4" />
@@ -129,6 +141,4 @@ const PostDetail = () => {
       </Card>
     </div>
   );
-};
-
-export default PostDetail;
+}
