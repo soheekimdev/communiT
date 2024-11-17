@@ -22,7 +22,7 @@ export default function BioInput({ id, label, placeholderValue, register, error 
           id={id}
           placeholder={placeholderValue}
           {...register}
-          className={`pl-10 pr-4 min-h-[100px] ${error ? 'border-red-500' : ''}`}
+          className={`pl-10 pr-4 min-h-[100px] h-[160px] ${error ? 'border-red-500' : ''}`}
         />
         <FileText className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
       </div>
