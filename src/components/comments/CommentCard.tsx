@@ -10,29 +10,21 @@ import {
 import { MoreVertical } from 'lucide-react';
 import LikeButton from '../LikeButton';
 import CommentEdit from './CommentEdit';
+import { Comment } from '@/api/comment';
 
-type Comment = {
-  id: string;
-  content: string;
-  createdAt: string;
-  likeCount: number;
-  dislikeCount: number;
-  accountUsername: string;
+type CommentCardProps = {
+  comment: Comment;
 };
 
-interface CommentCardProps {
-  comment: Comment;
-}
-
 const CommentCard: React.FC<CommentCardProps> = ({ comment }) => {
-  const [isEditing, setIsEditing] = useState(false); // 수정 모드 상태 추가
+  const [isEditing, setIsEditing] = useState(false);
 
   const handleEditClick = () => {
-    setIsEditing(true); // 수정 모드 활성화
+    setIsEditing(true);
   };
 
   const handleCancelEdit = () => {
-    setIsEditing(false); // 수정 모드 비활성화
+    setIsEditing(false);
   };
 
   return (

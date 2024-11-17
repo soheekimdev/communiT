@@ -3,7 +3,7 @@ import CommentList from './CommentList';
 
 const CommentForm = () => {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 mt-4">
       <CommentList />
       <CommentInput />
     </div>

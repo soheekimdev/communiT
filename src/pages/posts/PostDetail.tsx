@@ -23,6 +23,7 @@ import ErrorAlert from '@/components/post-alert/ErrorAlert';
 import { fetchProfileImageURL } from '@/api/profileURL';
 import ProfileImage from '@/components/ProfileImage';
 import { useEffect, useState } from 'react';
+import CommentForm from '@/components/comments/CommentForm';
 
 export default function PostDetail() {
   const { id } = useParams();
@@ -139,6 +140,7 @@ export default function PostDetail() {
           </div>
         </CardFooter>
       </Card>
+      <CommentForm />
     </div>
   );
 }
