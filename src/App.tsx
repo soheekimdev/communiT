@@ -28,7 +28,7 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/challenges" element={<Challenges />} />
         <Route path="/posts" element={<Posts />} />
-        <Route path="/new-post" element={<NewPost />} />
+        <Route path="/new-post" element={user ? <NewPost /> : <Navigate to="sign-in" replace />} />
         <Route path="/posts/detail/:id" element={<PostDetail />} />
         <Route path="/posts/update/:id" element={<UpdatePost />} />
         <Route path="/notifications" element={<Notifications />} />

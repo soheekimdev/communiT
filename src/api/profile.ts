@@ -1,64 +1,36 @@
 import axios from 'axios';
 
-export const updateNickname = async (id: string, username: string, token: string) => {
+const API_BASE_URL = 'https://ozadv6.beavercoding.net/api';
+
+const apiClient = axios.create({
+  baseURL: API_BASE_URL,
+  headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+});
+
+const setAuthHeader = (token: string) => ({
+  Authorization: `Bearer ${token}`,
+});
+
+const apiPatchRequest = async (url: string, data: object, token: string) => {
   try {
-    const response = await axios.patch(
-      `https://ozadv6.beavercoding.net/api/accounts/${id}`,
-      {
-        username: username,
-      },
-      {
-        headers: {
-          accept: 'application/json',
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      },
-    );
-    console.log(response);
+    const response = await apiClient.patch(url, data, {
+      headers: setAuthHeader(token),
+    });
+    return response.data;
   } catch (error) {
     console.error(error);
+    throw error;
   }
 };
 
-export const updateProfileImg = async (id: string, profileImageUrl: string, token: string) => {
-  try {
-    const response = await axios.patch(
-      `https://ozadv6.beavercoding.net/api/accounts/${id}`,
-      {
-        profileImageUrl: profileImageUrl,
-      },
-      {
-        headers: {
-          accept: 'application/json',
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      },
-    );
-    console.log(response);
-  } catch (error) {
-    console.error(error);
-  }
+export const updateNickname = (id: string, username: string, token: string) => {
+  return apiPatchRequest(`/accounts/${id}`, { username }, token);
 };
 
-export const updateBio = async (id: string, bio: string, token: string) => {
-  try {
-    const response = await axios.patch(
-      `https://ozadv6.beavercoding.net/api/accounts/${id}`,
-      {
-        bio: bio,
-      },
-      {
-        headers: {
-          accept: 'application/json',
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      },
-    );
-    console.log(response);
-  } catch (error) {
-    console.error(error);
-  }
+export const updateProfileImg = (id: string, profileImageUrl: string, token: string) => {
+  return apiPatchRequest(`/accounts/${id}`, { profileImageUrl }, token);
+};
+
+export const updateBio = (id: string, bio: string, token: string) => {
+  return apiPatchRequest(`/accounts/${id}`, { bio }, token);
 };

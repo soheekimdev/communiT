@@ -21,7 +21,7 @@ import ReactMarkdown from 'react-markdown';
 import usePostDetail from '@/hooks/usePostDetail';
 import ErrorAlert from '@/components/post-alert/ErrorAlert';
 import { fetchProfileImageURL } from '@/api/profileURL';
-import ProfileImage from '@/components/ProfileImage';
+import ProfileImage from '@/components/profile/ProfileImage';
 import { useEffect, useState } from 'react';
 import CommentForm from '@/components/comments/CommentForm';
 
