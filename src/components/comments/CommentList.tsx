@@ -1,13 +1,18 @@
 import { useParams } from 'react-router-dom';
 import CommentCard from './CommentCard';
 import { useEffect, useState } from 'react';
-import { Comment, getComments } from '@/api/comment';
+import { UserComment, getComments } from '@/api/comment';
 import { Skeleton } from '../ui/skeleton';
 import { Card } from '../ui/card';
 
-const CommentList = () => {
+type CommentListProps = {
+  comments: UserComment[];
+  setComments: React.Dispatch<React.SetStateAction<UserComment[]>>;
+  onDelete: (commentId: string) => void;
+};
+
+const CommentList = ({ comments, setComments, onDelete }: CommentListProps) => {
   const { id: postId } = useParams();
-  const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -33,7 +38,7 @@ const CommentList = () => {
     };
 
     fetchComments();
-  }, [postId]);
+  }, [postId, setComments]);
 
   if (loading) {
     return (
@@ -59,9 +64,12 @@ const CommentList = () => {
 
   return (
     <div className="space-y-4">
-      {comments.map(comment => (
-        <CommentCard key={comment.id} comment={comment} />
-      ))}
+      {comments
+        .slice()
+        .reverse()
+        .map(comment => (
+          <CommentCard key={comment.id} comment={comment} onDelete={onDelete} />
+        ))}
     </div>
   );
 };
