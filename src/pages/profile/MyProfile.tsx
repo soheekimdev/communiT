@@ -35,7 +35,6 @@ const MyProfile = () => {
         try {
           const result = await dispatch(fetchCurrentUser()).unwrap();
           setIsSwitchOn(result?.isPrivate ?? false);
-          return result;
         } catch (error) {
           console.error('Fetch error:', error);
           navigate('/sign-in');
@@ -44,7 +43,6 @@ const MyProfile = () => {
         navigate('/sign-in');
       }
     };
-
     checkUser();
   }, [dispatch, navigate]);
 
@@ -57,19 +55,19 @@ const MyProfile = () => {
       });
       return;
     }
-
+    const newStatus = !isSwitchOn;
+    setIsSwitchOn(newStatus);
     try {
-      const newStatus = !isSwitchOn;
-      setIsSwitchOn(newStatus);
       await updatePrivate(user?.id ?? '', newStatus, token);
       toast({
         title: newStatus ? '계정 비공개' : '계정 공개',
-        description: newStatus
-          ? `${user?.username}님의 계정이 비공개로 설정되었습니다.`
-          : `${user?.username}님의 계정이 공개로 설정되었습니다.`,
+        description: `${user?.username}님의 계정이 ${
+          newStatus ? '비공개로' : '공개로'
+        } 설정되었습니다.`,
       });
     } catch (error) {
       console.error('Private update error:', error);
+      setIsSwitchOn(!newStatus);
       toast({
         title: '오류',
         description: '설정을 변경하는 동안 문제가 발생했습니다.',
