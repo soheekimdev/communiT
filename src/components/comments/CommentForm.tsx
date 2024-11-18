@@ -10,9 +10,13 @@ const CommentForm = () => {
     setComments(prevComments => [newComment, ...prevComments]);
   };
 
+  const handleDeleteComment = (commentId: string) => {
+    setComments(prevComments => prevComments.filter(comment => comment.id !== commentId));
+  };
+
   return (
     <div className="flex flex-col gap-4 mt-4">
-      <CommentList comments={comments} setComments={setComments} />
+      <CommentList comments={comments} setComments={setComments} onDelete={handleDeleteComment} />
       <CommentInput addComment={addComment} />
     </div>
   );

@@ -45,3 +45,15 @@ export const createNewComment = async (postId: string, content: string, token: s
     return null;
   }
 };
+
+export const deleteComment = async (postId: string, id: string, token: string) => {
+  try {
+    await apiClient.delete(`/${postId}/comments/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return true;
+  } catch (error) {
+    console.error('Error deleting comment', error);
+    return false;
+  }
+};

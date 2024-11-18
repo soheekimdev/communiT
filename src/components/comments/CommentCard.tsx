@@ -10,16 +10,17 @@ import {
 import { MoreVertical } from 'lucide-react';
 import LikeButton from '../LikeButton';
 import CommentEdit from './CommentEdit';
-import { UserComment } from '@/api/comment';
+import { deleteComment, UserComment } from '@/api/comment';
 import { useAppSelector } from '@/RTK/hooks';
 import ProfileImage from '../profile/ProfileImage';
 import { fetchProfileImageURL } from '@/api/profileURL';
 
 type CommentCardProps = {
   comment: UserComment;
+  onDelete: (CommentId: string) => void;
 };
 
-const CommentCard: React.FC<CommentCardProps> = ({ comment }) => {
+const CommentCard: React.FC<CommentCardProps> = ({ comment, onDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
   const user = useAppSelector(state => state.auth.user);
   const [author, setAuthor] = useState<{ username: string; profileImageUrl?: string } | null>(null);
@@ -38,6 +39,18 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment }) => {
 
   const handleCancelEdit = () => {
     setIsEditing(false);
+  };
+
+  const handleDeleteClick = async () => {
+    const token = localStorage.getItem('accessToken');
+    if (!token) return;
+
+    const success = await deleteComment(comment.postId, comment.id, token);
+    if (success) {
+      onDelete(comment.id);
+    } else {
+      alert('댓글 삭제에 실패했습니다.');
+    }
   };
 
   const isOwnComment = user?.username === comment.accountUsername;
@@ -62,7 +75,9 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment }) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={handleEditClick}>수정</DropdownMenuItem>
-              <DropdownMenuItem className="text-red-600">삭제</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleDeleteClick} className="text-red-600">
+                삭제
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         )}

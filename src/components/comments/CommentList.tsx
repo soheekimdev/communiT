@@ -8,9 +8,10 @@ import { Card } from '../ui/card';
 type CommentListProps = {
   comments: UserComment[];
   setComments: React.Dispatch<React.SetStateAction<UserComment[]>>;
+  onDelete: (commentId: string) => void;
 };
 
-const CommentList = ({ comments, setComments }: CommentListProps) => {
+const CommentList = ({ comments, setComments, onDelete }: CommentListProps) => {
   const { id: postId } = useParams();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -67,7 +68,7 @@ const CommentList = ({ comments, setComments }: CommentListProps) => {
         .slice()
         .reverse()
         .map(comment => (
-          <CommentCard key={comment.id} comment={comment} />
+          <CommentCard key={comment.id} comment={comment} onDelete={onDelete} />
         ))}
     </div>
   );
