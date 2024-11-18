@@ -1,15 +1,5 @@
-import axios from 'axios';
+import instance from '@/api/axios';
 import type { Challenge, ChallengeResponse, CreateChallengeRequest } from '@/types/challenge';
-
-const API_BASE_URL = 'https://ozadv6.beavercoding.net/api';
-
-const axiosInstance = axios.create({
-  baseURL: API_BASE_URL,
-  timeout: 30000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
 
 const MAX_RETRIES = 3;
 const RETRY_DELAY = 2000;
@@ -21,7 +11,7 @@ export const createChallenge = async (data: CreateChallengeRequest) => {
 
   for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
     try {
-      const response = await axiosInstance.post<Challenge>('/challenges', data);
+      const response = await instance.post<Challenge>('api/challenges', data);
       return response.data;
     } catch (error) {
       console.log(`시도 ${attempt + 1}/${MAX_RETRIES} 실패:`, error);
@@ -37,7 +27,7 @@ export const createChallenge = async (data: CreateChallengeRequest) => {
 };
 
 export const getChallenges = async (page: number = 1, limit: number = 20) => {
-  const response = await axiosInstance.get<ChallengeResponse>('/challenges', {
+  const response = await instance.get<ChallengeResponse>('api/challenges', {
     params: {
       page,
       limit,
@@ -47,6 +37,6 @@ export const getChallenges = async (page: number = 1, limit: number = 20) => {
 };
 
 export const getChallenge = async (id: string) => {
-  const response = await axiosInstance.get<Challenge>(`/challenges/${id}`);
+  const response = await instance.get<Challenge>(`api/challenges/${id}`);
   return response.data;
 };

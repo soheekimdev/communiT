@@ -69,7 +69,7 @@ export const ChallengeCard = ({
       <p className="text-sm">
         {formatDate(startDate)} ~ {formatDate(endDate)}
       </p>
-      <p className="text-sm text-muted-foreground mb-6">{description}</p>
+      <p className="text-sm text-muted-foreground mb-6 line-clamp-3">{description}</p>
     </div>
   );
 };

@@ -71,15 +71,15 @@ const ChallengeDetail = () => {
       <div className="space-y-6">
         <div className="flex items-start justify-between">
           <div>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
+            <div className="flex items-center gap-2 flex-wrap text-sm text-muted-foreground mb-2">
               <User className="h-4 w-4" />
               <span>개설자: {challenge.accountUsername}</span>
               <span>•</span>
               <Calendar className="h-4 w-4" />
               <span>개설일: {format(new Date(challenge.createdAt), 'PPP', { locale: ko })}</span>
             </div>
-            <h1 className="text-3xl font-bold mb-2">{challenge.title}</h1>
-            <div className="flex items-center gap-4 text-sm text-muted-foreground">
+            <h1 className="text-3xl font-bold mb-4">{challenge.title}</h1>
+            <div className="flex items-center gap-4 flex-wrap text-sm text-muted-foreground">
               <span className="flex items-center gap-1">
                 <Calendar className="h-4 w-4" />
                 {format(startDate, 'PPP', { locale: ko })} ~{' '}
