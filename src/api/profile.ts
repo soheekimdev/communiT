@@ -34,3 +34,7 @@ export const updateProfileImg = (id: string, profileImageUrl: string, token: str
 export const updateBio = (id: string, bio: string, token: string) => {
   return apiPatchRequest(`/accounts/${id}`, { bio }, token);
 };
+
+export const updatePrivate = (id: string, isPrivate: boolean, token: string) => {
+  return apiPatchRequest(`/accounts/${id}`, { isPrivate }, token);
+};
