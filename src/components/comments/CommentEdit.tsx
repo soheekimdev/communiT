@@ -5,6 +5,7 @@ import * as z from 'zod';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
+import { updateComment } from '@/api/comment';
 
 const formSchema = z.object({
   content: z
@@ -16,12 +17,14 @@ const formSchema = z.object({
 interface CommentEditProps {
   comment: {
     id: string;
+    postId: string;
     content: string;
   };
-  onCancel: () => void; // 취소 버튼을 클릭했을 때 호출되는 함수
+  onCancel: () => void;
+  onUpdate: (updatedComment: { id: string; content: string }) => void;
 }
 
-const CommentEdit: React.FC<CommentEditProps> = ({ comment, onCancel }) => {
+const CommentEdit: React.FC<CommentEditProps> = ({ comment, onCancel, onUpdate }) => {
   const [charCount, setCharCount] = useState(comment.content.length);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -31,9 +34,24 @@ const CommentEdit: React.FC<CommentEditProps> = ({ comment, onCancel }) => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    // TODO: 여기에 댓글 수정 제출 로직 추가
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      console.error('사용자 인증이 필요합니다.');
+      return;
+    }
+
+    try {
+      const success = await updateComment(comment.postId, comment.id, token, values.content);
+      if (success) {
+        onUpdate({ id: comment.id, content: values.content });
+        onCancel();
+      } else {
+        console.error('댓글 수정에 실패했습니다.');
+      }
+    } catch (err) {
+      console.error('API 요청 중 오류가 발생했습니다.', err);
+    }
   }
 
   return (

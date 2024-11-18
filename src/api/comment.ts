@@ -53,7 +53,23 @@ export const deleteComment = async (postId: string, id: string, token: string) =
     });
     return true;
   } catch (error) {
-    console.error('Error deleting comment', error);
+    console.error('Error deleting comment: ', error);
+    return false;
+  }
+};
+
+export const updateComment = async (postId: string, id: string, token: string, content: string) => {
+  try {
+    const response = await apiClient.patch(
+      `/${postId}/comments/${id}`,
+      { content },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      },
+    );
+    return response.status === 200;
+  } catch (error) {
+    console.error('Error updating comment: ', error);
     return false;
   }
 };
