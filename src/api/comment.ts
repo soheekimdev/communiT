@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export type Comment = {
+export type UserComment = {
   id: string;
   postId: string;
   accountId: string;

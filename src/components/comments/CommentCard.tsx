@@ -10,10 +10,10 @@ import {
 import { MoreVertical } from 'lucide-react';
 import LikeButton from '../LikeButton';
 import CommentEdit from './CommentEdit';
-import { Comment } from '@/api/comment';
+import { UserComment } from '@/api/comment';
 
 type CommentCardProps = {
-  comment: Comment;
+  comment: UserComment;
 };
 
 const CommentCard: React.FC<CommentCardProps> = ({ comment }) => {

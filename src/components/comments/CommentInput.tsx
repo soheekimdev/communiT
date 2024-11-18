@@ -9,9 +9,13 @@ import { useAppSelector } from '@/RTK/hooks';
 import { RootState } from '@/RTK/store';
 import { formSchema } from '@/schemas/commentSchema';
 import { Link, useParams } from 'react-router-dom';
-import { createNewComment } from '@/api/comment';
+import { createNewComment, UserComment } from '@/api/comment';
 
-const CommentInput = () => {
+type CommentInputProps = {
+  addComment: (newComment: UserComment) => void;
+};
+
+const CommentInput = ({ addComment }: CommentInputProps) => {
   const { id: postId } = useParams();
   const [charCount, setCharCount] = useState(0);
   const [, setLoading] = useState(false);
@@ -39,6 +43,7 @@ const CommentInput = () => {
 
       if (newComment) {
         console.log('댓글 작성 성공:', newComment);
+        addComment(newComment);
         form.reset();
         setCharCount(0);
       } else {
