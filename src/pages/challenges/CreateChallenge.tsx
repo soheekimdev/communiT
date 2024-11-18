@@ -88,6 +88,7 @@ const CreateChallenge = () => {
             name="description"
             placeholder="챌린지에 대해 자세히 설명해주세요"
             required
+            className="h-40"
           />
         </div>
 
