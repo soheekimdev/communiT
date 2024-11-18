@@ -20,6 +20,7 @@ export type Post = {
   createdAt: string;
   accountUsername: string;
   accountId: string;
+  viewCount: number;
 };
 
 export type Meta = {

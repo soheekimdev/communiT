@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import PostPagination from '@/components/PostPagination';
@@ -8,6 +8,9 @@ import { Button } from '@/components/ui/button';
 import usePostForm from '@/hooks/usePosts';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/RTK/store';
+import ProfileImage from '@/components/profile/ProfileImage';
+import { fetchProfileImageURL } from '@/api/profileURL';
+import { Eye } from 'lucide-react';
 
 const POST_PER_PAGE = 6;
 
@@ -26,11 +29,31 @@ const PostSkeleton = () => (
   </Card>
 );
 
-const Posts = () => {
+export default function Posts() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const { posts, meta, isLoading } = usePostForm(currentPage);
+  const [userProfiles, setUserProfiles] = useState<{ [key: string]: string }>({});
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.auth.user);
+
+  useEffect(() => {
+    if (posts) {
+      posts.forEach(post => {
+        if (!userProfiles[post.accountId]) {
+          fetchProfileImageURL(post.accountId)
+            .then(data => {
+              setUserProfiles(prev => ({
+                ...prev,
+                [post.accountId]: data.profileImageUrl,
+              }));
+            })
+            .catch(error => {
+              console.error('프로필 이미지를 가져오는 데 실패했습니다:', error);
+            });
+        }
+      });
+    }
+  }, [posts, userProfiles]);
 
   const createNewPost = () => {
     if (user) navigate('/new-post');
@@ -41,8 +64,8 @@ const Posts = () => {
 
   return (
     <div className="container mx-auto p-4 space-y-6">
-      <div className="flex justify-between">
-        <h1 className="text-3xl font-bold mb-6">커뮤니티 글 목록</h1>
+      <div className="flex justify-between items-center">
+        <h1 className="text-3xl font-bold">커뮤니티 글 목록</h1>
         <Button onClick={createNewPost}>글 작성하기</Button>
       </div>
 
@@ -53,20 +76,29 @@ const Posts = () => {
               <Card key={post.id} className="overflow-hidden">
                 <Link to={`/posts/detail/${post.id}`}>
                   <CardHeader>
-                    <CardTitle>{post.title}</CardTitle>
+                    <div className="flex justify-between items-center">
+                      <CardTitle className="text-lg">{post.title}</CardTitle>
+                      <div className="flex items-center text-sm text-muted-foreground">
+                        <Eye className="w-4 h-4 mr-1" />
+                        <span>{post.viewCount}</span>
+                      </div>
+                    </div>
                   </CardHeader>
                   <CardContent>
-                    <ReactMarkdown className="max-h-10 truncate">{post.content}</ReactMarkdown>
+                    <ReactMarkdown className="max-h-20 overflow-hidden text-sm text-muted-foreground">
+                      {post.content}
+                    </ReactMarkdown>
                   </CardContent>
-                  <CardFooter className="flex flex-col items-start text-sm text-muted-foreground">
-                    <p>작성자: {post.accountUsername}</p>
+                  <CardFooter className="flex justify-between items-center text-sm text-muted-foreground">
+                    <div className="flex items-center">
+                      <ProfileImage profileImageUrl={userProfiles[post.accountId]} />
+                      <span>{post.accountUsername || '익명의 사용자'}</span>
+                    </div>
                     <time dateTime={post.createdAt}>
                       {new Date(post.createdAt).toLocaleString('ko-KR', {
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
                       })}
                     </time>
                   </CardFooter>
@@ -84,6 +116,4 @@ const Posts = () => {
       )}
     </div>
   );
-};
-
-export default Posts;
+}
