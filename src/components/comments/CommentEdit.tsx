@@ -49,8 +49,8 @@ const CommentEdit: React.FC<CommentEditProps> = ({ comment, onCancel, onUpdate }
       } else {
         console.error('댓글 수정에 실패했습니다.');
       }
-    } catch (err) {
-      console.error('API 요청 중 오류가 발생했습니다.', err);
+    } catch (error) {
+      console.error('API 요청 중 오류가 발생했습니다.', error);
     }
   }
 

@@ -57,7 +57,7 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, onDelete }) => {
       onDelete(comment.id);
       toast({
         title: '댓글 삭제 완료',
-        description: '선택하신 댓글이 삭제되었습니다.',
+        description: '댓글이 삭제되었습니다.',
       });
     } else {
       toast({
