@@ -45,3 +45,8 @@ export const getChallenges = async (page: number = 1, limit: number = 20) => {
   });
   return response.data;
 };
+
+export const getChallenge = async (id: string) => {
+  const response = await axiosInstance.get<Challenge>(`/challenges/${id}`);
+  return response.data;
+};

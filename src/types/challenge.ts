@@ -39,7 +39,6 @@ type ChallengeCardProps = {
   description: string;
 };
 
-// 새로 추가하는 타입
 type CreateChallengeRequest = {
   title: string;
   description: string;

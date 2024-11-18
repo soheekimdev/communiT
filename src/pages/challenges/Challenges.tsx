@@ -75,6 +75,7 @@ const Challenges = () => {
           {challenges.map(challenge => (
             <ChallengeCard
               key={challenge.id}
+              id={challenge.id}
               isMine={user?.id === challenge.accountId}
               likeCount={challenge.likeCount}
               title={challenge.title}
