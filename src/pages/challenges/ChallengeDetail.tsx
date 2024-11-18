@@ -69,7 +69,6 @@ const ChallengeDetail = () => {
       </Button>
 
       <div className="space-y-6">
-        {/* 개설자 정보와 기간 정보 */}
         <div className="flex items-start justify-between">
           <div>
             <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
