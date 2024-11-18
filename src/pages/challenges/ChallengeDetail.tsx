@@ -3,7 +3,10 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getChallenge } from '@/api/challenges';
 import { Button } from '@/components/ui/button';
-import { Crown, Heart, ArrowLeft } from 'lucide-react';
+import CommentForm from '@/components/comments/CommentForm';
+import { format, differenceInDays } from 'date-fns';
+import { ko } from 'date-fns/locale';
+import { Crown, Heart, ArrowLeft, User, Calendar, Clock } from 'lucide-react';
 import type { Challenge } from '@/types/challenge';
 import type { RootState } from '@/RTK/store';
 
@@ -53,11 +56,10 @@ const ChallengeDetail = () => {
     );
   }
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString();
-  };
-
   const isMine = user?.id === challenge.accountId;
+  const startDate = new Date(challenge.startDate);
+  const endDate = new Date(challenge.endDate);
+  const totalDays = differenceInDays(endDate, startDate) + 1;
 
   return (
     <div className="container mx-auto p-4 max-w-4xl">
@@ -67,12 +69,28 @@ const ChallengeDetail = () => {
       </Button>
 
       <div className="space-y-6">
+        {/* 개설자 정보와 기간 정보 */}
         <div className="flex items-start justify-between">
-          <div className="flex flex-col flex-wrap">
+          <div>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
+              <User className="h-4 w-4" />
+              <span>개설자: {challenge.accountUsername}</span>
+              <span>•</span>
+              <Calendar className="h-4 w-4" />
+              <span>개설일: {format(new Date(challenge.createdAt), 'PPP', { locale: ko })}</span>
+            </div>
             <h1 className="text-3xl font-bold mb-2">{challenge.title}</h1>
-            <p className="text-muted-foreground">
-              {formatDate(challenge.startDate)} ~ {formatDate(challenge.endDate)}
-            </p>
+            <div className="flex items-center gap-4 text-sm text-muted-foreground">
+              <span className="flex items-center gap-1">
+                <Calendar className="h-4 w-4" />
+                {format(startDate, 'PPP', { locale: ko })} ~{' '}
+                {format(endDate, 'PPP', { locale: ko })}
+              </span>
+              <span className="flex items-center gap-1">
+                <Clock className="h-4 w-4" />
+                {totalDays}일간의 도전
+              </span>
+            </div>
           </div>
           <div className="flex items-center gap-4">
             {isMine && <Crown className="h-6 w-6" />}
@@ -93,6 +111,8 @@ const ChallengeDetail = () => {
           </Button>
         </div>
       </div>
+
+      <CommentForm />
     </div>
   );
 };
