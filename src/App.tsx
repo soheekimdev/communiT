@@ -1,7 +1,9 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import HomePage from './pages/Home';
-import Challenges from './pages/Challenges';
+import Challenges from './pages/challenges/Challenges';
+import CreateChallenge from './pages/challenges/CreateChallenge';
+import ChallengeDetail from './pages/challenges/ChallengeDetail';
 import Posts from './pages/posts/Posts';
 import NewPost from './pages/posts/NewPost';
 import PostDetail from './pages/posts/PostDetail';
@@ -27,6 +29,8 @@ export default function App() {
       <Route element={<Layout />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/challenges" element={<Challenges />} />
+        <Route path="/challenges/create" element={<CreateChallenge />} />
+        <Route path="/challenges/:id" element={<ChallengeDetail />} />
         <Route path="/posts" element={<Posts />} />
         <Route path="/new-post" element={user ? <NewPost /> : <Navigate to="sign-in" replace />} />
         <Route path="/posts/detail/:id" element={<PostDetail />} />
