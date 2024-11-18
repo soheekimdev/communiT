@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
@@ -12,14 +11,21 @@ import { useAppDispatch } from '@/RTK/hooks';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/RTK/store';
 import { fetchCurrentUser } from '@/RTK/authSlice';
+import { updatePrivate } from '@/api/profile';
+
+const ProfileInfo = ({ icon, text }: { icon: React.ReactNode; text: string | undefined }) => (
+  <div className="flex items-center gap-2 mt-2">
+    {icon}
+    <p className="text-lg">{text}</p>
+  </div>
+);
 
 const MyProfile = () => {
   const { toast } = useToast();
-  const [isSwitchOn, setIsSwitchOn] = useState<boolean>(false);
-
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.auth.user);
+  const [isSwitchOn, setIsSwitchOn] = useState<boolean>(user?.isPrivate ?? false);
 
   useEffect(() => {
     const checkUser = async () => {
@@ -28,6 +34,7 @@ const MyProfile = () => {
       if (token) {
         try {
           const result = await dispatch(fetchCurrentUser()).unwrap();
+          setIsSwitchOn(result?.isPrivate ?? false);
           return result;
         } catch (error) {
           console.error('Fetch error:', error);
@@ -41,13 +48,33 @@ const MyProfile = () => {
     checkUser();
   }, [dispatch, navigate]);
 
-  const handleSwitchChange = () => {
-    setIsSwitchOn(prev => !prev);
-    toast({
-      title: isSwitchOn ? '계정 공개' : '계정 비공개',
-      description: isSwitchOn ? '계정이 공개로 설정되었습니다.' : '계정이 비공개로 설정되었습니다.',
-      duration: 3000,
-    });
+  const handleSwitchChange = async () => {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      toast({
+        title: '오류',
+        description: '인증 토큰이 유효하지 않습니다. 다시 로그인하세요.',
+      });
+      return;
+    }
+
+    try {
+      const newStatus = !isSwitchOn;
+      setIsSwitchOn(newStatus);
+      await updatePrivate(user?.id ?? '', newStatus, token);
+      toast({
+        title: newStatus ? '계정 비공개' : '계정 공개',
+        description: newStatus
+          ? `${user?.username}님의 계정이 비공개로 설정되었습니다.`
+          : `${user?.username}님의 계정이 공개로 설정되었습니다.`,
+      });
+    } catch (error) {
+      console.error('Private update error:', error);
+      toast({
+        title: '오류',
+        description: '설정을 변경하는 동안 문제가 발생했습니다.',
+      });
+    }
   };
 
   return (
@@ -57,7 +84,7 @@ const MyProfile = () => {
           <h1 className="text-3xl font-bold">{user?.username}님의 정보</h1>
           <div className="flex items-center">
             <Label className="mr-4">계정 비공개</Label>
-            <Switch checked={isSwitchOn} onCheckedChange={handleSwitchChange} />
+            <Switch checked={!!isSwitchOn} onCheckedChange={handleSwitchChange} />
           </div>
         </div>
       </div>
@@ -65,25 +92,23 @@ const MyProfile = () => {
         <div className="flex flex-col items-center gap-4">
           <div className="relative mt-4">
             <Avatar size="lg">
-              <AvatarImage src={user?.profileImageUrl || ''} alt="Profile Picture" />
+              <AvatarImage
+                src={user?.profileImageUrl || '/default/profile.png'}
+                alt="Profile Picture"
+              />
               <AvatarFallback>사용자</AvatarFallback>
             </Avatar>
           </div>
           <div className="flex flex-col items-center">
-            <div className="flex items-center gap-2 mt-2">
-              <User className=" h-6 w-6" />
-              <h2 className="text-2xl font-semibold">{user?.username}</h2>
-            </div>
-            <div className="flex items-center gap-2 mt-2">
-              <Mail className="h-5 w-5" />
-              <p className="text-lg">{user?.email}</p>
-            </div>
-            <div className="flex items-center gap-2 mt-2">
-              <FileText className="h-5 w-5" />
-              <p className="text-base">{user?.bio && user?.bio}</p>
-            </div>
+            <ProfileInfo icon={<User className="h-6 w-6" />} text={user?.username} />
+            <ProfileInfo icon={<Mail className="h-5 w-5" />} text={user?.email} />
+            <ProfileInfo
+              icon={<FileText className="h-5 w-5" />}
+              text={user?.bio || '소개가 없습니다.'}
+            />
           </div>
         </div>
+        {/* 카테고리 백엔드 api 연동 x */}
         <div className="w-[20rem] m-auto space-y-4">
           <p className="text-xl font-medium text-center">관심 카테고리</p>
           <div className="grid grid-cols-3 gap-2">
@@ -99,9 +124,7 @@ const MyProfile = () => {
       </div>
       <div className="mt-4 flex justify-center">
         <Link to="/edit-profile">
-          <Button className="w-[20rem]" variant="profile">
-            정보 수정
-          </Button>
+          <Button className="w-[20rem]">정보 수정</Button>
         </Link>
       </div>
     </div>
