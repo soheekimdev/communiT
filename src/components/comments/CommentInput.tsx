@@ -8,10 +8,16 @@ import { Textarea } from '@/components/ui/textarea';
 import { useAppSelector } from '@/RTK/hooks';
 import { RootState } from '@/RTK/store';
 import { formSchema } from '@/schemas/commentSchema';
+import { Link, useParams } from 'react-router-dom';
+import { createNewComment } from '@/api/comment';
 
 const CommentInput = () => {
+  const { id: postId } = useParams();
   const [charCount, setCharCount] = useState(0);
+  const [, setLoading] = useState(false);
+  const [, setError] = useState<string | null>(null);
   const user = useAppSelector((state: RootState) => state.auth.user);
+  const token = localStorage.getItem('accessToken');
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -20,9 +26,44 @@ const CommentInput = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    // TODO: 여기에 댓글 제출 로직 추가
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    if (!token) {
+      setError('로그인이 필요합니다.');
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+    try {
+      const newComment = await createNewComment(postId!, values.content, token);
+
+      if (newComment) {
+        console.log('댓글 작성 성공:', newComment);
+        form.reset();
+        setCharCount(0);
+      } else {
+        throw new Error('댓글 작성 실패');
+      }
+    } catch (err) {
+      console.error(err);
+      setError('댓글 작성 중 오류가 발생했습니다.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (!user) {
+    return (
+      <div className="border border-gray-200 p-4 rounded-xl bg-card text-card-foreground shadow">
+        <p className="text-center text-gray-500">
+          댓글을 작성하려면{' '}
+          <Link to="/sign-in" className="text-blue-500">
+            로그인
+          </Link>
+          이 필요합니다.
+        </p>
+      </div>
+    );
   }
 
   return (
