@@ -14,6 +14,7 @@ import { deleteComment, UserComment } from '@/api/comment';
 import { useAppSelector } from '@/RTK/hooks';
 import ProfileImage from '../profile/ProfileImage';
 import { fetchProfileImageURL } from '@/api/profileURL';
+import { useToast } from '@/hooks/useToast';
 
 type CommentCardProps = {
   comment: UserComment;
@@ -24,6 +25,7 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, onDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
   const user = useAppSelector(state => state.auth.user);
   const [author, setAuthor] = useState<{ username: string; profileImageUrl?: string } | null>(null);
+  const { toast } = useToast();
 
   useEffect(() => {
     if (comment?.accountId) {
@@ -41,6 +43,11 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, onDelete }) => {
     setIsEditing(false);
   };
 
+  const handleUpdate = (updatedComment: { id: string; content: string }) => {
+    comment.content = updatedComment.content;
+    setIsEditing(false);
+  };
+
   const handleDeleteClick = async () => {
     const token = localStorage.getItem('accessToken');
     if (!token) return;
@@ -48,8 +55,15 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, onDelete }) => {
     const success = await deleteComment(comment.postId, comment.id, token);
     if (success) {
       onDelete(comment.id);
+      toast({
+        title: '댓글 삭제 완료',
+        description: '댓글이 삭제되었습니다.',
+      });
     } else {
-      alert('댓글 삭제에 실패했습니다.');
+      toast({
+        title: '댓글 삭제 실패',
+        description: '댓글 삭제 중 문제가 발생했습니다.',
+      });
     }
   };
 
@@ -84,7 +98,7 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, onDelete }) => {
       </CardHeader>
       <CardContent className="px-0 py-2">
         {isEditing ? (
-          <CommentEdit comment={comment} onCancel={handleCancelEdit} />
+          <CommentEdit comment={comment} onCancel={handleCancelEdit} onUpdate={handleUpdate} />
         ) : (
           <p>{comment.content}</p>
         )}
