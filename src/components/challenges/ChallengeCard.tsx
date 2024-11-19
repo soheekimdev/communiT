@@ -37,9 +37,9 @@ export const ChallengeCard = ({
       onClick={handleClick}
       className="flex flex-col gap-2 p-6 border rounded-xl bg-card text-card-foreground shadow overflow-hidden cursor-pointer transition-colors"
     >
-      <div className="flex gap-4 justify-between">
+      <div className="flex gap-2 justify-between flex-wrap">
         <div className="flex">
-          <Avatar size="xs" className="ml-[-10%]">
+          <Avatar size="xs">
             <AvatarFallback>김홍삼</AvatarFallback>
           </Avatar>
           <Avatar size="xs" className="ml-[-10%]">
@@ -69,7 +69,7 @@ export const ChallengeCard = ({
       <p className="text-sm">
         {formatDate(startDate)} ~ {formatDate(endDate)}
       </p>
-      <p className="text-sm text-muted-foreground mb-6">{description}</p>
+      <p className="text-sm text-muted-foreground line-clamp-3">{description}</p>
     </div>
   );
 };

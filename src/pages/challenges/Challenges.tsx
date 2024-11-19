@@ -65,8 +65,8 @@ const Challenges = () => {
 
   return (
     <div className="container mx-auto p-4 space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-semibold">챌린지 목록</h2>
+      <div className="flex items-center justify-between mb-12">
+        <h2 className="text-3xl font-bold">챌린지 목록</h2>
         <CreateChallengeButton />
       </div>
 

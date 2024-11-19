@@ -14,7 +14,6 @@ const CreateChallenge = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [date, setDate] = useState<DateRange>();
   const [error, setError] = useState<string | null>(null);
-  const [attempt, setAttempt] = useState(0);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -22,7 +21,6 @@ const CreateChallenge = () => {
 
     setIsLoading(true);
     setError(null);
-    setAttempt(1);
 
     try {
       const formData = new FormData(e.currentTarget);
@@ -53,7 +51,6 @@ const CreateChallenge = () => {
       }
     } finally {
       setIsLoading(false);
-      setAttempt(0);
     }
   };
 
@@ -65,9 +62,9 @@ const CreateChallenge = () => {
         <div className="mb-4 p-4 bg-red-50 border border-red-200 text-red-700 rounded">{error}</div>
       )}
 
-      {isLoading && attempt > 0 && (
+      {isLoading && (
         <div className="mb-4 p-4 bg-blue-50 border border-blue-200 text-blue-700 rounded">
-          챌린지를 생성하고 있습니다... (시도 {attempt}/3)
+          챌린지를 생성하고 있습니다...
         </div>
       )}
 
@@ -76,7 +73,13 @@ const CreateChallenge = () => {
           <label htmlFor="title" className="text-sm font-medium">
             챌린지 제목
           </label>
-          <Input id="title" name="title" placeholder="예) 30일 플랭크 챌린지" required />
+          <Input
+            id="title"
+            name="title"
+            placeholder="예) 30일 플랭크 챌린지"
+            maxLength={60}
+            required
+          />
         </div>
 
         <div className="space-y-2">
