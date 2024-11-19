@@ -21,6 +21,7 @@ export type Post = {
   accountUsername: string;
   accountId: string;
   viewCount: number;
+  commentCount: number;
 };
 
 export type Meta = {
