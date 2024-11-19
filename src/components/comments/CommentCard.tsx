@@ -76,7 +76,13 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, onDelete }) => {
           {author && <ProfileImage profileImageUrl={author.profileImageUrl} />}
           <p className="text-sm font-semibold">{comment.accountUsername}</p>
           <p className="text-xs text-gray-500 ml-2">
-            {new Date(comment.createdAt).toLocaleString()}
+            {new Date(comment.createdAt).toLocaleString('ko-KR', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit',
+            })}
           </p>
           <LikeButton initialLikes={comment.likeCount} />
         </div>
