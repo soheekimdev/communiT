@@ -28,8 +28,12 @@ const ChallengeDetail = () => {
   useEffect(() => {
     if (challenge?.accountId) {
       fetchProfileImageURL(challenge.accountId)
-        .then(data => setAuthor(data))
-        .catch(err => console.error(err));
+        .then(data => {
+          setAuthor(data);
+        })
+        .catch(err => {
+          console.error('Failed to fetch profile', err);
+        });
     }
   }, [challenge]);
 
