@@ -4,11 +4,19 @@ import { useSelector } from 'react-redux';
 import { getChallenge } from '@/api/challenges';
 import { Button } from '@/components/ui/button';
 import CommentForm from '@/components/comments/CommentForm';
+import ProfileImage from '@/components/profile/ProfileImage';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { format, differenceInDays } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import { Crown, Heart, ArrowLeft, User, Calendar, Clock } from 'lucide-react';
+import { Heart, ArrowLeft, Calendar, Clock, MoreHorizontal } from 'lucide-react';
 import type { Challenge } from '@/types/challenge';
 import type { RootState } from '@/RTK/store';
+import { fetchProfileImageURL } from '@/api/profileURL';
 
 const ChallengeDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -16,6 +24,15 @@ const ChallengeDetail = () => {
   const [challenge, setChallenge] = useState<Challenge | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [author, setAuthor] = useState<{ username: string; profileImageUrl?: string } | null>(null);
+
+  useEffect(() => {
+    if (challenge?.accountId) {
+      fetchProfileImageURL(challenge.accountId)
+        .then(data => setAuthor(data))
+        .catch(err => console.error(err));
+    }
+  }, [challenge]);
 
   // 임시 데이터: 내가 참여한 챌린지 여부
   const isParticipating = false;
@@ -56,6 +73,15 @@ const ChallengeDetail = () => {
     );
   }
 
+  const handleDelete = () => {
+    // TODO: 삭제 확인 모달 표시
+    console.log('삭제 클릭');
+  };
+
+  const handleEdit = () => {
+    navigate(`/challenges/${challenge.id}/edit`);
+  };
+
   const isMine = user?.id === challenge.accountId;
   const startDate = new Date(challenge.startDate);
   const endDate = new Date(challenge.endDate);
@@ -69,45 +95,68 @@ const ChallengeDetail = () => {
       </Button>
 
       <div className="space-y-6">
-        <div className="flex items-start justify-between">
-          <div>
-            <div className="flex items-center gap-2 flex-wrap text-sm text-muted-foreground mb-2">
-              <User className="h-4 w-4" />
-              <span>개설자: {challenge.accountUsername}</span>
-              <span>•</span>
-              <Calendar className="h-4 w-4" />
-              <span>개설일: {format(new Date(challenge.createdAt), 'PPP', { locale: ko })}</span>
-            </div>
-            <h1 className="text-3xl font-bold mb-4">{challenge.title}</h1>
-            <div className="flex items-center gap-4 flex-wrap text-sm text-muted-foreground">
-              <span className="flex items-center gap-1">
-                <Calendar className="h-4 w-4" />
-                {format(startDate, 'PPP', { locale: ko })} ~{' '}
-                {format(endDate, 'PPP', { locale: ko })}
-              </span>
-              <span className="flex items-center gap-1">
-                <Clock className="h-4 w-4" />
-                {totalDays}일간의 도전
-              </span>
-            </div>
+        <div className="flex flex-col items-start justify-between">
+          <div className="flex flex-row-reverse items-start flex-wrap gap-2 w-full mb-4">
+            {isMine && (
+              <div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon">
+                      <MoreHorizontal className="h-5 w-5" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={handleEdit}>수정</DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={handleDelete}
+                      className="text-red-600 focus:text-red-600"
+                    >
+                      삭제
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            )}
+            <h1 className="flex-1 min-w-40 text-3xl font-bold">{challenge.title}</h1>
           </div>
-          <div className="flex items-center gap-4">
-            {isMine && <Crown className="h-6 w-6" />}
-            <Button variant="outline" className="gap-2">
-              <Heart />
-              <span>{challenge.likeCount}</span>
-            </Button>
+
+          <div className="flex items-center gap-4 flex-wrap text-sm text-muted-foreground">
+            <span className="flex items-center gap-1">
+              <Calendar className="h-4 w-4" />
+              {format(startDate, 'PPP', { locale: ko })} ~ {format(endDate, 'PPP', { locale: ko })}
+            </span>
+            <span className="flex items-center gap-1">
+              <Clock className="h-4 w-4" />
+              {totalDays}일간의 도전
+            </span>
           </div>
         </div>
 
-        <div className="prose dark:prose-invert max-w-none">
+        <div className="prose dark:prose-invert max-w-none py-4">
           <p>{challenge.description}</p>
         </div>
 
-        <div className="pt-6">
-          <Button size="lg" className="w-full sm:w-auto">
-            {isParticipating ? '챌린지 인증하기' : '참여하기'}
-          </Button>
+        <div className="flex flex-col sm:flex-row justify-between gap-4 w-full text-sm text-muted-foreground">
+          <div className="self-start flex items-center gap-1 flex-wrap">
+            <div className="flex items-center mr-4">
+              {author && <ProfileImage profileImageUrl={author.profileImageUrl} />}
+              <span>{challenge.accountUsername}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Calendar className="h-4 w-4" />
+              <span>{format(new Date(challenge.createdAt), 'PPP', { locale: ko })}</span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Button size="lg" variant="outline" className="gap-2 px-4">
+              <Heart />
+              <span>{challenge.likeCount}</span>
+            </Button>
+            <Button size="lg" className="w-full sm:w-auto">
+              {isParticipating ? '챌린지 인증하기' : '참여하기'}
+            </Button>
+          </div>
         </div>
       </div>
 

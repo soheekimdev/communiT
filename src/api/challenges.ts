@@ -40,3 +40,12 @@ export const getChallenge = async (id: string) => {
   const response = await instance.get<Challenge>(`api/challenges/${id}`);
   return response.data;
 };
+
+export const updateChallenge = async (id: string, data: CreateChallengeRequest) => {
+  const response = await instance.patch<Challenge>(`api/challenges/${id}`, data);
+  return response.data;
+};
+
+export const deleteChallenge = async (id: string) => {
+  await instance.delete(`api/challenges/${id}`);
+};
