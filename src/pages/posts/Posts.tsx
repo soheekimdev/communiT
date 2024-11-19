@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/RTK/store';
 import ProfileImage from '@/components/profile/ProfileImage';
 import { fetchProfileImageURL } from '@/api/profileURL';
-import { Eye } from 'lucide-react';
+import { Eye, MessageCircle } from 'lucide-react';
 
 const POST_PER_PAGE = 6;
 
@@ -28,32 +28,68 @@ const PostSkeleton = () => (
     </CardFooter>
   </Card>
 );
-
-export default function Posts() {
+const Post = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const { posts, meta, isLoading } = usePostForm(currentPage);
-  const [userProfiles, setUserProfiles] = useState<{ [key: string]: string }>({});
+  const [userProfiles, setUserProfiles] = useState<{ [key: string]: string | null }>({});
+  const [loadingProfiles, setLoadingProfiles] = useState<{ [key: string]: boolean }>({});
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.auth.user);
 
   useEffect(() => {
-    if (posts) {
-      posts.forEach(post => {
-        if (!userProfiles[post.accountId]) {
-          fetchProfileImageURL(post.accountId)
-            .then(data => {
-              setUserProfiles(prev => ({
-                ...prev,
-                [post.accountId]: data.profileImageUrl,
-              }));
-            })
-            .catch(error => {
-              console.error('프로필 이미지를 가져오는 데 실패했습니다:', error);
-            });
-        }
-      });
-    }
-  }, [posts, userProfiles]);
+    const fetchMissingProfiles = async () => {
+      if (!posts) return;
+
+      const newProfilePromises = posts
+        .filter(
+          post => !userProfiles.hasOwnProperty(post.accountId) && !loadingProfiles[post.accountId],
+        )
+        .map(async post => {
+          if (loadingProfiles[post.accountId]) return;
+
+          setLoadingProfiles(prev => ({
+            ...prev,
+            [post.accountId]: true,
+          }));
+
+          try {
+            const data = await fetchProfileImageURL(post.accountId);
+            return { id: post.accountId, url: data.profileImageUrl };
+          } catch (error) {
+            console.error(`Failed to load profile for ${post.accountId}`);
+            return { id: post.accountId, url: null };
+          }
+        });
+
+      if (newProfilePromises.length > 0) {
+        const results = await Promise.all(newProfilePromises);
+
+        setUserProfiles(prev => {
+          const updates = results.reduce((acc, result) => {
+            if (result) {
+              acc[result.id] = result.url;
+            }
+            return acc;
+          }, {} as { [key: string]: string | null });
+
+          return { ...prev, ...updates };
+        });
+
+        setLoadingProfiles(prev => {
+          const updates = results.reduce((acc, result) => {
+            if (result) {
+              acc[result.id] = false;
+            }
+            return acc;
+          }, {} as { [key: string]: boolean });
+
+          return { ...prev, ...updates };
+        });
+      }
+    };
+
+    fetchMissingProfiles();
+  }, [posts]);
 
   const createNewPost = () => {
     if (user) navigate('/new-post');
@@ -78,9 +114,15 @@ export default function Posts() {
                   <CardHeader>
                     <div className="flex justify-between items-center">
                       <CardTitle className="text-lg">{post.title}</CardTitle>
-                      <div className="flex items-center text-sm text-muted-foreground">
-                        <Eye className="w-4 h-4 mr-1" />
-                        <span>{post.viewCount}</span>
+                      <div className="flex gap-2">
+                        <div className="flex  items-center text-sm text-muted-foreground">
+                          <Eye className="w-4 h-4 mr-1" />
+                          <span>{post.viewCount}</span>
+                        </div>
+                        <div className="flex  items-center text-sm text-muted-foreground">
+                          <MessageCircle className="w-4 h-4 mr-1" />
+                          <span>{post.commentCount}</span>
+                        </div>
                       </div>
                     </div>
                   </CardHeader>
@@ -91,7 +133,7 @@ export default function Posts() {
                   </CardContent>
                   <CardFooter className="flex justify-between items-center text-sm text-muted-foreground">
                     <div className="flex items-center">
-                      <ProfileImage profileImageUrl={userProfiles[post.accountId]} />
+                      <ProfileImage profileImageUrl={userProfiles[post.accountId] || undefined} />
                       <span>{post.accountUsername || '익명의 사용자'}</span>
                     </div>
                     <time dateTime={post.createdAt}>
@@ -116,4 +158,6 @@ export default function Posts() {
       )}
     </div>
   );
-}
+};
+
+export default Post;
