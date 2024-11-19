@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getChallenge } from '@/api/challenges';
 import { Button } from '@/components/ui/button';
-import CommentForm from '@/components/comments/CommentForm';
 import ProfileImage from '@/components/profile/ProfileImage';
 import {
   DropdownMenu,
@@ -159,8 +158,6 @@ const ChallengeDetail = () => {
           </div>
         </div>
       </div>
-
-      <CommentForm />
     </div>
   );
 };
