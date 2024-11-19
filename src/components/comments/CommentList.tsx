@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { UserComment, getComments } from '@/api/comment';
 import { Skeleton } from '../ui/skeleton';
 import { Card } from '../ui/card';
+import { Button } from '../ui/button';
 
 type CommentListProps = {
   comments: UserComment[];
@@ -15,6 +16,7 @@ const CommentList = ({ comments, setComments, onDelete }: CommentListProps) => {
   const { id: postId } = useParams();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [sort, setSort] = useState<'latest' | 'oldest'>('oldest');
 
   useEffect(() => {
     if (!postId) return;
@@ -40,6 +42,17 @@ const CommentList = ({ comments, setComments, onDelete }: CommentListProps) => {
     fetchComments();
   }, [postId, setComments]);
 
+  const handleSortChange = (order: 'latest' | 'oldest') => {
+    setSort(order);
+  };
+
+  const sortedComments = [...comments].sort((a, b) => {
+    if (sort === 'latest') {
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    }
+    return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+  });
+
   if (loading) {
     return (
       <div className="space-y-4">
@@ -63,13 +76,33 @@ const CommentList = ({ comments, setComments, onDelete }: CommentListProps) => {
   }
 
   return (
-    <div className="space-y-4">
-      {comments
-        .slice()
-        .reverse()
-        .map(comment => (
+    <div>
+      <div className="flex justify-end mb-4 mr-4">
+        <Button
+          variant="ghost"
+          className={`text-sm px-2 py-2 rounded hover:bg-white  ${
+            sort === 'oldest' ? 'text-black ' : ' text-gray-400'
+          }`}
+          onClick={() => handleSortChange('oldest')}
+        >
+          등록순
+        </Button>
+        <Button
+          variant="ghost"
+          className={`text-sm px-2 py-2 rounded hover:bg-white ${
+            sort === 'latest' ? 'text-black ' : ' text-gray-400'
+          }`}
+          onClick={() => handleSortChange('latest')}
+        >
+          최신순
+        </Button>
+      </div>
+
+      <div className="space-y-4">
+        {sortedComments.map(comment => (
           <CommentCard key={comment.id} comment={comment} onDelete={onDelete} />
         ))}
+      </div>
     </div>
   );
 };
