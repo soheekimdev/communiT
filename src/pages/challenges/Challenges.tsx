@@ -12,11 +12,7 @@ const Challenges = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const {
-    user,
-    isLoggedIn,
-    isLoading: authLoading,
-  } = useSelector<RootState, AuthState>(state => state.auth);
+  const { user, isLoggedIn } = useSelector<RootState, AuthState>(state => state.auth);
 
   useEffect(() => {
     const fetchChallenges = async () => {
@@ -31,26 +27,13 @@ const Challenges = () => {
       }
     };
 
-    if (isLoggedIn) {
-      fetchChallenges();
-    }
-  }, [isLoggedIn]);
+    fetchChallenges();
+  }, []);
 
-  if (authLoading || isLoading) {
+  if (isLoading) {
     return (
       <div className="container mx-auto p-4">
         <div>Loading...</div>
-      </div>
-    );
-  }
-
-  if (!isLoggedIn) {
-    return (
-      <div className="container mx-auto p-4">
-        <div className="text-center p-6">
-          <h2 className="text-xl font-semibold mb-2">로그인이 필요한 서비스입니다</h2>
-          <p className="text-muted-foreground">챌린지 목록을 보려면 로그인해 주세요.</p>
-        </div>
       </div>
     );
   }
@@ -65,9 +48,9 @@ const Challenges = () => {
 
   return (
     <div className="container mx-auto p-4 space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-semibold">챌린지 목록</h2>
-        <CreateChallengeButton />
+      <div className="flex items-center justify-between mb-12">
+        <h2 className="text-3xl font-bold">챌린지 목록</h2>
+        {isLoggedIn && <CreateChallengeButton />}
       </div>
 
       {challenges.length > 0 ? (
@@ -88,7 +71,7 @@ const Challenges = () => {
       ) : (
         <div className="text-center py-12">
           <p className="text-lg text-muted-foreground mb-4">등록된 챌린지가 없습니다</p>
-          <CreateChallengeButton />
+          {isLoggedIn && <CreateChallengeButton />}
         </div>
       )}
     </div>
