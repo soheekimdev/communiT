@@ -95,6 +95,152 @@
 ## ChangeLog
 
 <details>
+<summary><strong>4주차(11/13 - 11/19)</strong></summary>
+<br>
+
+<details>  
+<summary><strong>[챌린지] 김소희</strong></summary>
+  
+### ✅ Done
+
+<hr>
+
+- 챌린지 목록 조회 기능 구현
+  - 제목, 기간, 설명, 좋아요 수, 내가 작성한 챌린지 여부, 참여자 목록(UI만 일단 만들어놓음) 표시
+  - 반응형 Grid 레이아웃
+
+- 챌린지 생성 기능 구현
+  - 챌린지 생성 페이지(/challenges/create) 구현
+    - DatePickerWithRange 컴포넌트를 활용한 기간 선택
+    - 제목, 설명 입력 폼 구현
+  - 폼 유효성 검증 추가
+    - 필수 입력값 검증
+    - 날짜 선택 여부 확인
+
+- API 연동 및 에러 처리
+  - createChallenge API 구현
+    - CreateChallengeRequest 타입 정의
+  - 에러 처리 및 UX 개선
+    - API 타임아웃 대응 (최대 3회 재시도)
+    - 로딩 상태 및 에러 메시지 표시
+    - 진행 상태 피드백 제공
+
+- 챌린지 상세 페이지 구현
+  - 챌린지 상세 정보 표시
+    - 개설자 정보, 개설일, 챌린지 기간
+  - UI/UX 디자인 정리
+    
+- 버그 수정
+  - 챌린지 생성 시 발생하던 504 Gateway Timeout 에러 해결
+    - API 엔드포인트 경로 수정
+    - axios 인스턴스 통합으로 인증 처리 개선
+  - 비로그인 사용자의 챌린지 목록 조회 허용
+
+### ⚙️ in Progress
+
+<hr>
+
+- 챌린지 기능 개선
+  - 챌린지 수정/삭제 기능 구현
+  - 챌린지 참여 기능 구현
+  - 참여자 관리 기능 개발
+  - 진행 상태 표시 개선
+
+### 🖼️ Preview
+
+<hr>
+
+<div align=center>
+  
+<img src='https://github.com/user-attachments/assets/a9a6bf13-bf7e-4978-aa44-33999b45156b' width=500 />
+<img src='https://github.com/user-attachments/assets/8f2d767c-e243-48a7-90b0-0918ec25c8ba' width=500 />
+<img src='https://github.com/user-attachments/assets/6b0f42a7-6f11-48fd-afce-8f01a8f8b9ea' width=500 />
+
+</div>
+
+</details>
+
+<details>  
+<summary><strong>[댓글] 권여진</strong></summary>
+  
+  ### ✅ Done
+  <hr>
+  
+  - 새 댓글 작성 폼, 댓글 목록 UI/UX, 댓글 수정, 삭제 폼, 좋아요 버튼 컴포넌트 디자인 및 구현
+    
+  - 댓글 목록 표시 api 연결
+    
+  - 댓글 생성, 수정, 삭제 api 연결(댓글 작성자만 수정 및 삭제 가능)
+
+  - 댓글 등록순, 최신순 정렬 버튼 추가
+
+
+  ### ⚙️ in Progress
+
+  <hr>
+  
+  - 어드민 댓글 삭제 권한
+
+  - 댓글 좋아요 기능 
+
+  ### 🖼️ Preview
+  <hr>
+
+  <div align=center>
+    <img src='https://github.com/user-attachments/assets/cf324f35-6167-4712-925d-82511e8cfffd' width=500 />
+    <img src='https://github.com/user-attachments/assets/d6a649bd-110c-40e9-b39a-14dac9a2336f' width=500 />
+    <img src='https://github.com/user-attachments/assets/4dc2003f-4670-4242-b635-509f836c8f24' width=500 />
+    <img src='https://github.com/user-attachments/assets/ddf52f74-8608-48bb-84c1-8fc71fd10ea6' width=500 />
+  </div>
+  
+</details>
+
+<details>
+<summary><strong>[프로필][글 생성/수정][글 삭제] 주민재</strong></summary>
+  
+  ### ✅ Done
+  <hr>
+  
+  - 프로필
+    - 공개/비공개 상태에 따라 API 호출 구현
+    - toast 문구 오타 수정
+    
+  - 게시물
+    - react-markdown 라이브러리 사용하여 마크다운 렌더링
+    - 글 수정 입력 필드 및 버튼 구성 및 API 연동
+    - 글 삭제 버튼 구현과 API 연동
+    - 글 조회수(viewCount) 추가
+   
+ ### ⚙️ in Progress
+  <hr>
+  
+  - 게시물 추천
+    - 게시물 like API 연동
+    - dislike는 사용하지 않기로 결정
+   
+  - 파일 업로드
+     - account, post 파일 업로드 API 연동하여 이미지 정보 가져오기
+
+ ### 📚 Next
+  <hr>
+  
+  - 게시물
+    - admin 권한이면 모든 게시물 삭제 가능
+
+  
+### 🖼️ Preview
+
+  <hr>
+
+  <div align=center>
+    <img src='https://github.com/user-attachments/assets/62cd1cf2-8218-41b0-877a-14d9b3c8bf01' width=500/>
+  </div>
+
+</details>
+
+</details>
+
+<details>
 <summary><strong>3주차(11/06 - 11/12)</strong></summary>
 <br>
 
@@ -128,8 +274,8 @@
   <hr>
 
   <div align=center>
-    <img src='https://github.com/user-attachments/assets/0d25fc0b-8051-489c-9759-b6208ccf293e' width=400/>
-    <img src='https://github.com/user-attachments/assets/c509df72-f25d-4ea2-89cb-0d27eba0c2b7' width=400/>
+    <img src='https://github.com/user-attachments/assets/0d25fc0b-8051-489c-9759-b6208ccf293e' width=500 />
+    <img src='https://github.com/user-attachments/assets/c509df72-f25d-4ea2-89cb-0d27eba0c2b7' width=500 />
   </div>
 
 </details>
@@ -167,8 +313,8 @@
 
 
 <div align=center>
-  <img src='https://github.com/user-attachments/assets/7f54078f-7ab4-4cd7-9e76-bfb7d676b81f' width=400/>
-  <img src="https://github.com/user-attachments/assets/8e3ac124-92d8-4e80-a0a4-f1b863b248f6" width="400" /> 
+  <img src='https://github.com/user-attachments/assets/7f54078f-7ab4-4cd7-9e76-bfb7d676b81f' width=500 />
+  <img src="https://github.com/user-attachments/assets/8e3ac124-92d8-4e80-a0a4-f1b863b248f6" width="500" /> 
 </div>
   
 </details>
@@ -217,9 +363,9 @@
 
 <div align=center>
 
-  ![changelog_term3_sohee_01](https://github.com/user-attachments/assets/8b337fdd-c413-4fbc-8c6d-f7ce7d4e8b31)
+  <img src='https://github.com/user-attachments/assets/8b337fdd-c413-4fbc-8c6d-f7ce7d4e8b31' width=500 />
   
-  ![changelog_term3_sohee_02](https://github.com/user-attachments/assets/267119af-8356-43b1-86bb-8559e9e41499)
+  <img src='https://github.com/user-attachments/assets/267119af-8356-43b1-86bb-8559e9e41499' width=500 />
   
 </div>
 
@@ -256,7 +402,7 @@
   <hr>
 
 <div align=center>
-  <img src="https://github.com/user-attachments/assets/25e1eb09-41ff-4153-a22b-9e8f09cebac3" width=400/>
+  <img src="https://github.com/user-attachments/assets/25e1eb09-41ff-4153-a22b-9e8f09cebac3" width=500 />
 </div>
 
   
@@ -290,9 +436,9 @@
   <hr>
 
 <div align=center>
-  <img src='https://github.com/user-attachments/assets/1bfa2f4c-63f1-44d0-8828-4c63d067a88a' width=400/>
-  <img src='https://github.com/user-attachments/assets/7c58aad1-a3f1-4e48-a57f-3df35257043a' width=400/>
-  <img src='https://github.com/user-attachments/assets/fff49704-c363-46a9-aa0f-37ccd6b2c032' width=400/>
+  <img src='https://github.com/user-attachments/assets/1bfa2f4c-63f1-44d0-8828-4c63d067a88a' width=500 />
+  <img src='https://github.com/user-attachments/assets/7c58aad1-a3f1-4e48-a57f-3df35257043a' width=500 />
+  <img src='https://github.com/user-attachments/assets/fff49704-c363-46a9-aa0f-37ccd6b2c032' width=500 />
 </div>
   
 </details>
@@ -325,9 +471,9 @@
   <hr>
 
   <div align=center>
-    <img src='https://github.com/user-attachments/assets/eae525b7-cc5d-42d8-975f-f5fd0c6c7602' width=400/>
-    <img src='https://github.com/user-attachments/assets/c165de1b-018e-4aac-867b-f25ed81ba909' width=400/>
-    <img src='https://github.com/user-attachments/assets/ab2e5209-33b5-4c78-aa48-b6e8240ba3c0' width=400/>
+    <img src='https://github.com/user-attachments/assets/eae525b7-cc5d-42d8-975f-f5fd0c6c7602' width=500 />
+    <img src='https://github.com/user-attachments/assets/c165de1b-018e-4aac-867b-f25ed81ba909' width=500 />
+    <img src='https://github.com/user-attachments/assets/ab2e5209-33b5-4c78-aa48-b6e8240ba3c0' width=500 />
   </div>
 
 </details>
@@ -354,7 +500,7 @@
   <hr>
 
   <div align=center>
-    <img src='https://github.com/user-attachments/assets/92c81496-daf4-4b47-902f-8aa2d3b67414' width=500/>
+    <img src='https://github.com/user-attachments/assets/92c81496-daf4-4b47-902f-8aa2d3b67414' width=500 />
   </div>
 
 </details>
@@ -376,8 +522,8 @@
   <hr>
 
   <div align=center>
-    <img src='https://github.com/user-attachments/assets/9d25bc4a-40f9-454d-8c91-93a7aaaad64c' width=400/>
-    <img src='https://github.com/user-attachments/assets/b8fc6f17-f873-4e82-82ba-e293a1617509' width=400/>
+    <img src='https://github.com/user-attachments/assets/9d25bc4a-40f9-454d-8c91-93a7aaaad64c' width=500 />
+    <img src='https://github.com/user-attachments/assets/b8fc6f17-f873-4e82-82ba-e293a1617509' width=500 />
   </div>
 
 </details>
@@ -397,8 +543,8 @@
   <hr>
 
   <div align=center>
-    <img src='https://github.com/user-attachments/assets/74409d35-f148-460f-ba6b-ed39106d7274' width=400/>
-    <img src='https://github.com/user-attachments/assets/b6321eec-f517-4d8d-bc4d-b3466e117369' width=400/>
+    <img src='https://github.com/user-attachments/assets/74409d35-f148-460f-ba6b-ed39106d7274' width=500 />
+    <img src='https://github.com/user-attachments/assets/b6321eec-f517-4d8d-bc4d-b3466e117369' width=500 />
   </div>
 
 </details>
