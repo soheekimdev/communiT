@@ -115,8 +115,8 @@ export default function PostDetail() {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="prose max-w-none">
-            <ReactMarkdown className="whitespace-pre-wrap">{post.content}</ReactMarkdown>
+          <div className="prose dark:prose-invert max-w-none">
+            <ReactMarkdown>{post.content}</ReactMarkdown>
           </div>
         </CardContent>
         <CardFooter className="flex flex-col sm:flex-row justify-between items-start sm:items-center text-sm text-muted-foreground">
