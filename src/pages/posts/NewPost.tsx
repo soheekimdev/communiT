@@ -18,7 +18,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { Checkbox } from '@/components/ui/checkbox';
+import MarkdownCheckbox from '@/components/post/MarkdownCheckbox';
 
 const NewPost = () => {
   const navigate = useNavigate();
@@ -73,14 +73,7 @@ const NewPost = () => {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="text-2xl font-bold">새 게시물 작성</CardTitle>
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="markdown-checkbox"
-                checked={isMarkdown}
-                onCheckedChange={checked => setIsMarkdown(!!checked)}
-              />
-              <Label htmlFor="markdown-checkbox">Markdown 사용하기</Label>
-            </div>
+            <MarkdownCheckbox isMarkdown={isMarkdown} setIsMarkdown={setIsMarkdown} />
           </div>
         </CardHeader>
         <form onSubmit={handleSubmit}>

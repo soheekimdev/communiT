@@ -9,7 +9,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import usePostForm from '@/hooks/usePostForm';
-import { Checkbox } from '@/components/ui/checkbox';
+import MarkdownCheckbox from '@/components/post/MarkdownCheckbox';
 
 const UpdatePost = () => {
   const { id } = useParams();
@@ -110,14 +110,7 @@ const UpdatePost = () => {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="text-3xl font-bold">게시글 수정</CardTitle>
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="markdown-checkbox"
-                checked={isMarkdown}
-                onCheckedChange={checked => setIsMarkdown(!!checked)}
-              />
-              <Label htmlFor="markdown-checkbox">Markdown 사용하기</Label>
-            </div>
+            <MarkdownCheckbox isMarkdown={isMarkdown} setIsMarkdown={setIsMarkdown} />
           </div>
         </CardHeader>
         <form onSubmit={handleSubmit}>
