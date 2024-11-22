@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import ReactMarkdown from 'react-markdown';
 import usePostDetail from '@/hooks/usePostDetail';
-import ErrorAlert from '@/components/post-alert/ErrorAlert';
+import ErrorAlert from '@/components/post/ErrorAlert';
 import { fetchProfileImageURL } from '@/api/profileURL';
 import ProfileImage from '@/components/profile/ProfileImage';
 import { useEffect, useState } from 'react';
