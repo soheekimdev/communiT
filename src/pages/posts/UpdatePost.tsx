@@ -9,11 +9,13 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import usePostForm from '@/hooks/usePostForm';
+import { Checkbox } from '@/components/ui/checkbox';
 
 const UpdatePost = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [post, setPost] = useState<Post | null>(null);
+  const [isMarkdown, setIsMarkdown] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
@@ -35,6 +37,7 @@ const UpdatePost = () => {
               setPost(data);
               values.title = data.title;
               values.content = data.content;
+              setIsMarkdown(data.contentType === 'markdown');
             } else {
               setAlertMessage('권한이 없습니다.');
               setShowAlert(true);
@@ -68,7 +71,12 @@ const UpdatePost = () => {
 
     if (id && post && token) {
       try {
-        const updatedPost = { ...post, title: values.title, content: values.content };
+        const updatedPost = {
+          ...post,
+          title: values.title,
+          content: values.content,
+          contentType: isMarkdown ? 'markdown' : 'string',
+        };
         const isUpdated = await updatePost(id, updatedPost, token);
         if (isUpdated) {
           navigate(`/posts/detail/${id}`);
@@ -100,7 +108,17 @@ const UpdatePost = () => {
     <div className="container mx-auto p-4 max-w-2xl">
       <Card>
         <CardHeader>
-          <CardTitle className="text-3xl font-bold">게시글 수정</CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-3xl font-bold">게시글 수정</CardTitle>
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="markdown-checkbox"
+                checked={isMarkdown}
+                onCheckedChange={checked => setIsMarkdown(!!checked)}
+              />
+              <Label htmlFor="markdown-checkbox">Markdown 사용하기</Label>
+            </div>
+          </div>
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">

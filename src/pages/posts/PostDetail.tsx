@@ -116,7 +116,11 @@ export default function PostDetail() {
         </CardHeader>
         <CardContent>
           <div className="prose dark:prose-invert max-w-none">
-            <ReactMarkdown>{post.content}</ReactMarkdown>
+            {post.contentType === 'markdown' ? (
+              <ReactMarkdown>{post.content}</ReactMarkdown>
+            ) : (
+              <p>{post.content}</p>
+            )}
           </div>
         </CardContent>
         <CardFooter className="flex flex-col sm:flex-row justify-between items-start sm:items-center text-sm text-muted-foreground">

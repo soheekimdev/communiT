@@ -127,9 +127,13 @@ const Post = () => {
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <ReactMarkdown className="max-h-20 overflow-hidden text-sm text-muted-foreground">
-                      {post.content}
-                    </ReactMarkdown>
+                    {post.contentType === 'markdown' ? (
+                      <ReactMarkdown className="max-h-20 overflow-hidden text-sm text-muted-foreground">
+                        {post.content}
+                      </ReactMarkdown>
+                    ) : (
+                      <p>{post.content}</p>
+                    )}
                   </CardContent>
                   <CardFooter className="flex justify-between items-center text-sm text-muted-foreground">
                     <div className="flex items-center">

@@ -17,6 +17,7 @@ export type Post = {
   id: string;
   title: string;
   content: string;
+  contentType: string;
   createdAt: string;
   accountUsername: string;
   accountId: string;
@@ -54,14 +55,19 @@ export const fetchPostDetail = async (id: string): Promise<Post | null> => {
   }
 };
 
-export const createNewPost = async (title: string, content: string, token: string) => {
+export const createNewPost = async (
+  title: string,
+  content: string,
+  contentType: string,
+  token: string,
+) => {
   try {
     const response = await apiClient.post(
       `/posts`,
       {
         title,
         content,
-        contentType: 'markdown',
+        contentType,
         externalLink: '',
         isDeleted: false,
         type: 'post',
