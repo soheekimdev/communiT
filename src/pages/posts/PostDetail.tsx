@@ -1,7 +1,14 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { CalendarIcon, AlertCircle } from 'lucide-react';
+import {
+  CalendarIcon,
+  AlertCircle,
+  ThumbsUp,
+  MessageCircle,
+  Eye,
+  MoreVertical,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/RTK/store';
@@ -24,8 +31,17 @@ import { fetchProfileImageURL } from '@/api/profileURL';
 import ProfileImage from '@/components/profile/ProfileImage';
 import { useEffect, useState } from 'react';
 import CommentForm from '@/components/comments/CommentForm';
+import BackButton from '@/components/BackButton';
+import { Separator } from '@/components/ui/separator';
+import { Badge } from '@/components/ui/badge';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from '@/components/ui/dropdown-menu';
 
-export default function PostDetail() {
+const PostDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.auth.user);
@@ -82,34 +98,68 @@ export default function PostDetail() {
           </AlertDescription>
         </Alert>
       )}
+      <div className="mb-4">
+        <BackButton />
+      </div>
       <Card>
         <CardHeader>
-          <div className="flex justify-between items-center">
-            <CardTitle className="text-3xl font-bold">{post.title}</CardTitle>
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+              <CardTitle className="text-3xl font-bold mb-2">{post.title}</CardTitle>
+              <div className="flex items-center text-sm text-muted-foreground">
+                <ProfileImage profileImageUrl={author?.profileImageUrl} className="w-6 h-6 mr-2" />
+                <span className="mr-2">{post.accountUsername}</span>
+                <Separator orientation="vertical" className="h-4 mx-2" />
+                <CalendarIcon className="mr-1 h-4 w-4" />
+                <time dateTime={post.createdAt}>
+                  {new Date(post.createdAt).toLocaleString('ko-KR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                </time>
+              </div>
+            </div>
             {userId === post.accountId && (
               <div>
-                <Button className="mr-2" onClick={() => navigate(`/posts/update/${id}`)}>
-                  수정
-                </Button>
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button>삭제</Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>게시글 삭제</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        정말로 게시글을 삭제하시겠습니까? 삭제된 후에는 복구할 수 없습니다.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>취소</AlertDialogCancel>
-                      <AlertDialogAction onClick={() => id && handleDelete(id)}>
-                        삭제
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon">
+                      <MoreVertical className="h-5 w-5" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={() => navigate(`/posts/update/${id}`)}>
+                      수정
+                    </DropdownMenuItem>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <DropdownMenuItem
+                          onSelect={e => e.preventDefault()}
+                          className="text-red-600 focus:text-red-600"
+                        >
+                          삭제
+                        </DropdownMenuItem>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>게시글 삭제</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            정말로 게시글을 삭제하시겠습니까? 삭제된 후에는 복구할 수 없습니다.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>취소</AlertDialogCancel>
+                          <AlertDialogAction onClick={() => id && handleDelete(id)}>
+                            삭제
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             )}
           </div>
@@ -124,25 +174,25 @@ export default function PostDetail() {
           </div>
         </CardContent>
         <CardFooter className="flex flex-col sm:flex-row justify-between items-start sm:items-center text-sm text-muted-foreground">
-          <div className="flex items-center mb-2 sm:mb-0">
-            {author && <ProfileImage profileImageUrl={author.profileImageUrl} />}
-            <span>{post.accountUsername}</span>
-          </div>
-          <div className="flex items-center">
-            <CalendarIcon className="mr-2 h-4 w-4" />
-            <time dateTime={post.createdAt}>
-              {new Date(post.createdAt).toLocaleString('ko-KR', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-              })}
-            </time>
+          <div className="flex items-center gap-4">
+            <Badge variant="outline" className="flex items-center gap-1">
+              <Eye className="h-4 w-4" />
+              <span>{post.viewCount}</span>
+            </Badge>
+            <Badge variant="outline" className="flex items-center gap-1">
+              <ThumbsUp className="h-4 w-4" />
+              <span>{post.pureLikeCount}</span>
+            </Badge>
+            <Badge variant="outline" className="flex items-center gap-1">
+              <MessageCircle className="h-4 w-4" />
+              <span>{post.commentCount}</span>
+            </Badge>
           </div>
         </CardFooter>
       </Card>
       <CommentForm />
     </div>
   );
-}
+};
+
+export default PostDetail;
