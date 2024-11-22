@@ -18,6 +18,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import MarkdownCheckbox from '@/components/post/MarkdownCheckbox';
 
 const NewPost = () => {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ const NewPost = () => {
   const [alertMessage, setAlertMessage] = useState('');
   const [showDialog, setShowDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState('');
+  const [isMarkdown, setIsMarkdown] = useState(false);
   const token = localStorage.getItem('accessToken');
 
   const { values, handleChange, validate } = useForm({
@@ -43,14 +45,14 @@ const NewPost = () => {
       setShowDialog(true);
       return;
     }
-
+    const contentType = isMarkdown ? 'markdown' : 'string';
     setIsSubmitting(true);
     try {
-      const isCreated = await createNewPost(values.title, values.content, token);
+      const isCreated = await createNewPost(values.title, values.content, contentType, token);
       if (isCreated) {
         setDialogMessage('게시물이 성공적으로 작성되었습니다.');
         setShowDialog(true);
-        values.title = ''; // 폼 초기화
+        values.title = '';
         values.content = '';
       } else {
         setAlertMessage('게시물 생성에 실패했습니다. 잠시 후 다시 시도해주세요.');
@@ -69,7 +71,10 @@ const NewPost = () => {
     <div className="container mx-auto p-4 max-w-2xl">
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl font-bold">새 게시물 작성</CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-2xl font-bold">새 게시물 작성</CardTitle>
+            <MarkdownCheckbox isMarkdown={isMarkdown} setIsMarkdown={setIsMarkdown} />
+          </div>
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">

@@ -14,6 +14,7 @@ const usePostDetail = (id: string | undefined, token: string | null) => {
       fetchPostDetail(id)
         .then(data => {
           setPost(data);
+          console.log(post);
           setLoading(false);
         })
         .catch(err => {
