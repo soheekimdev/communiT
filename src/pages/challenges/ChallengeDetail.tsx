@@ -1,21 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { getChallenge } from '@/api/challenges';
 import { Button } from '@/components/ui/button';
 import ProfileImage from '@/components/profile/ProfileImage';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { format, differenceInDays } from 'date-fns';
-import { ko } from 'date-fns/locale';
-import { Heart, ArrowLeft, Calendar, Clock, MoreHorizontal } from 'lucide-react';
+import PostActionMenu from '@/components/PostActionMenu';
+import BackButton from '@/components/BackButton';
 import type { Challenge } from '@/types/challenge';
 import type { RootState } from '@/RTK/store';
+import { getChallenge } from '@/api/challenges';
 import { fetchProfileImageURL } from '@/api/profileURL';
+import { Heart, ArrowLeft, Calendar, Clock } from 'lucide-react';
+import { format, differenceInDays } from 'date-fns';
+import { ko } from 'date-fns/locale';
 
 const ChallengeDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -92,34 +88,12 @@ const ChallengeDetail = () => {
 
   return (
     <div className="container mx-auto p-4 max-w-4xl">
-      <Button variant="ghost" onClick={() => navigate(-1)} className="mb-6">
-        <ArrowLeft className="mr-2 h-4 w-4" />
-        목록으로
-      </Button>
+      <BackButton className="mb-6" />
 
       <div className="space-y-6">
         <div className="flex flex-col items-start justify-between">
           <div className="flex flex-row-reverse items-start flex-wrap gap-2 w-full mb-4">
-            {isMine && (
-              <div>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon">
-                      <MoreHorizontal className="h-5 w-5" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={handleEdit}>수정</DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={handleDelete}
-                      className="text-red-600 focus:text-red-600"
-                    >
-                      삭제
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            )}
+            {isMine && <PostActionMenu onEdit={handleEdit} onDelete={handleDelete} />}
             <h1 className="flex-1 min-w-40 text-3xl font-bold">{challenge.title}</h1>
           </div>
 
