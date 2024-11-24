@@ -80,8 +80,10 @@ const CommentList = ({ comments, setComments, onDelete }: CommentListProps) => {
       <div className="flex justify-end mb-4 mr-4">
         <Button
           variant="ghost"
-          className={`text-sm px-2 py-2 rounded hover:bg-white  ${
-            sort === 'oldest' ? 'text-black ' : ' text-gray-400'
+          className={`text-sm px-2 py-2 rounded hover:bg-white dark:hover:bg-black ${
+            sort === 'oldest'
+              ? 'text-black dark:text-white'
+              : 'text-gray-400 dark:text-gray-500 dark:hover:text-gray-300'
           }`}
           onClick={() => handleSortChange('oldest')}
         >
@@ -89,8 +91,10 @@ const CommentList = ({ comments, setComments, onDelete }: CommentListProps) => {
         </Button>
         <Button
           variant="ghost"
-          className={`text-sm px-2 py-2 rounded hover:bg-white ${
-            sort === 'latest' ? 'text-black ' : ' text-gray-400'
+          className={`text-sm px-2 py-2 rounded hover:bg-white dark:hover:bg-black ${
+            sort === 'latest'
+              ? 'text-black dark:text-white'
+              : 'text-gray-400 dark:text-gray-500 dark:hover:text-gray-300'
           }`}
           onClick={() => handleSortChange('latest')}
         >
