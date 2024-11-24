@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const formSchema = z.object({
+export const commentSchema = z.object({
   content: z
     .string()
     .min(1, { message: '댓글 내용을 입력해주세요.' })
