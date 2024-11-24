@@ -106,7 +106,7 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, onDelete }) => {
         {isEditing ? (
           <CommentEdit comment={comment} onCancel={handleCancelEdit} onUpdate={handleUpdate} />
         ) : (
-          <p>{comment.content}</p>
+          <p className="break-words whitespace-pre-wrap">{comment.content}</p>
         )}
       </CardContent>
     </Card>
