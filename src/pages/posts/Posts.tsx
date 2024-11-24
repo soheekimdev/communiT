@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
-import PostPagination from '@/components/PostPagination';
+import PostPagination from '@/components/shared/PostPagination';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
@@ -11,7 +11,7 @@ import { RootState } from '@/RTK/store';
 import ProfileImage from '@/components/profile/ProfileImage';
 import { fetchProfileImageURL } from '@/api/profileURL';
 import { Eye, MessageCircle } from 'lucide-react';
-import Time from '@/components/Time';
+import Time from '@/components/shared/Time';
 
 const POST_PER_PAGE = 6;
 

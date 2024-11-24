@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { MoreVertical } from 'lucide-react';
-import LikeButton from '../LikeButton';
+import LikeButton from '../shared/LikeButton';
 import CommentEdit from './CommentEdit';
 import { deleteComment, UserComment } from '@/api/comment';
 import { useAppSelector } from '@/RTK/hooks';

@@ -31,7 +31,7 @@ import { fetchProfileImageURL } from '@/api/profileURL';
 import ProfileImage from '@/components/profile/ProfileImage';
 import { useEffect, useState } from 'react';
 import CommentForm from '@/components/comments/CommentForm';
-import BackButton from '@/components/BackButton';
+import BackButton from '@/components/shared/BackButton';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -40,7 +40,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
-import Time from '@/components/Time';
+import Time from '@/components/shared/Time';
 
 const PostDetail = () => {
   const { id } = useParams();
