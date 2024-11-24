@@ -18,6 +18,7 @@ export type Post = {
   title: string;
   content: string;
   contentType: string;
+  externalLink: string;
   createdAt: string;
   accountUsername: string;
   accountId: string;
@@ -59,6 +60,7 @@ export const createNewPost = async (
   title: string,
   content: string,
   contentType: string,
+  externalLink: string,
   token: string,
 ) => {
   try {
@@ -68,7 +70,7 @@ export const createNewPost = async (
         title,
         content,
         contentType,
-        externalLink: '',
+        externalLink,
         isDeleted: false,
         type: 'post',
         isCommentAllowed: true,

@@ -1,7 +1,14 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { CalendarIcon, AlertCircle, ThumbsUp, MessageCircle, Eye } from 'lucide-react';
+import {
+  CalendarIcon,
+  AlertCircle,
+  ThumbsUp,
+  MessageCircle,
+  Eye,
+  ExternalLink,
+} from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/RTK/store';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
@@ -109,6 +116,23 @@ const PostDetail = () => {
               <p>{post.content}</p>
             )}
           </div>
+          {post.externalLink && (
+            <div className="mt-6">
+              <a
+                href={
+                  post.externalLink.startsWith('http')
+                    ? post.externalLink
+                    : `https://${post.externalLink}`
+                }
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+              >
+                <ExternalLink className="h-4 w-4" />
+                <span className="truncate max-w-[200px]">{post.externalLink}</span>
+              </a>
+            </div>
+          )}
         </CardContent>
         <CardFooter className="flex flex-col sm:flex-row justify-between items-start sm:items-center text-sm text-muted-foreground">
           <div className="flex items-center gap-4">
