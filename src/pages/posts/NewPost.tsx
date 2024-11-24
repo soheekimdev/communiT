@@ -48,7 +48,13 @@ const NewPost = () => {
     const contentType = isMarkdown ? 'markdown' : 'string';
     setIsSubmitting(true);
     try {
-      const isCreated = await createNewPost(values.title, values.content, contentType, token);
+      const isCreated = await createNewPost(
+        values.title,
+        values.content,
+        contentType,
+        values.externalLink,
+        token,
+      );
       if (isCreated) {
         setDialogMessage('게시물이 성공적으로 작성되었습니다.');
         setShowDialog(true);
@@ -106,6 +112,16 @@ const NewPost = () => {
                 placeholder="게시물 내용을 입력하세요"
                 required
                 className="min-h-[200px]"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="externalLink">추가 URL</Label>
+              <Input
+                id="externalLink"
+                name="externalLink"
+                value={values.externalLink}
+                onChange={handleChange}
+                placeholder="www.google.com"
               />
             </div>
           </CardContent>

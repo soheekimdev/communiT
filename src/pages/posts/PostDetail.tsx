@@ -7,23 +7,11 @@ import {
   ThumbsUp,
   MessageCircle,
   Eye,
-  MoreVertical,
+  ExternalLink,
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/RTK/store';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
-import {
-  AlertDialog,
-  AlertDialogTrigger,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogFooter,
-  AlertDialogTitle,
-  AlertDialogDescription,
-  AlertDialogAction,
-  AlertDialogCancel,
-} from '@/components/ui/alert-dialog';
 import ReactMarkdown from 'react-markdown';
 import usePostDetail from '@/hooks/usePostDetail';
 import ErrorAlert from '@/components/post/ErrorAlert';
@@ -34,13 +22,8 @@ import CommentForm from '@/components/comments/CommentForm';
 import BackButton from '@/components/shared/BackButton';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from '@/components/ui/dropdown-menu';
 import Time from '@/components/shared/Time';
+import PostActionMenu from '@/components/shared/PostActionMenu';
 
 const PostDetail = () => {
   const { id } = useParams();
@@ -115,45 +98,13 @@ const PostDetail = () => {
                 <Time time={post.createdAt} showTime />
               </div>
             </div>
-            {userId === post.accountId && (
-              <div>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon">
-                      <MoreVertical className="h-5 w-5" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => navigate(`/posts/update/${id}`)}>
-                      수정
-                    </DropdownMenuItem>
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <DropdownMenuItem
-                          onSelect={e => e.preventDefault()}
-                          className="text-red-600 focus:text-red-600"
-                        >
-                          삭제
-                        </DropdownMenuItem>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>게시글 삭제</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            정말로 게시글을 삭제하시겠습니까? 삭제된 후에는 복구할 수 없습니다.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>취소</AlertDialogCancel>
-                          <AlertDialogAction onClick={() => id && handleDelete(id)}>
-                            삭제
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
+            {(userId === post.accountId || user?.role === 'admin') && (
+              <PostActionMenu
+                onEdit={() => navigate(`/posts/update/${id}`)}
+                onDelete={() => id && handleDelete(id)}
+                alertTitle="게시글 삭제"
+                alertDescription="정말로 게시글을 삭제하시겠습니까? 삭제된 후에는 복구할 수 없습니다."
+              />
             )}
           </div>
         </CardHeader>
@@ -165,6 +116,23 @@ const PostDetail = () => {
               <p>{post.content}</p>
             )}
           </div>
+          {post.externalLink && (
+            <div className="mt-6">
+              <a
+                href={
+                  post.externalLink.startsWith('http')
+                    ? post.externalLink
+                    : `https://${post.externalLink}`
+                }
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+              >
+                <ExternalLink className="h-4 w-4" />
+                <span className="truncate max-w-[200px]">{post.externalLink}</span>
+              </a>
+            </div>
+          )}
         </CardContent>
         <CardFooter className="flex flex-col sm:flex-row justify-between items-start sm:items-center text-sm text-muted-foreground">
           <div className="flex items-center gap-4">

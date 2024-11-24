@@ -25,6 +25,7 @@ const UpdatePost = () => {
   const { values, error, handleChange, validate } = usePostForm({
     title: '',
     content: '',
+    externalLink: '',
   });
 
   useEffect(() => {
@@ -37,6 +38,7 @@ const UpdatePost = () => {
               setPost(data);
               values.title = data.title;
               values.content = data.content;
+              values.externalLink = data.externalLink;
               setIsMarkdown(data.contentType === 'markdown');
             } else {
               setAlertMessage('권한이 없습니다.');
@@ -76,6 +78,7 @@ const UpdatePost = () => {
           title: values.title,
           content: values.content,
           contentType: isMarkdown ? 'markdown' : 'string',
+          externalLink: values.externalLink,
         };
         const isUpdated = await updatePost(id, updatedPost, token);
         if (isUpdated) {
@@ -101,6 +104,7 @@ const UpdatePost = () => {
   const handleCancel = () => {
     values.title = '';
     values.content = '';
+    values.externalLink = '';
     navigate(-1);
   };
 
@@ -138,6 +142,16 @@ const UpdatePost = () => {
                 placeholder="게시물 내용을 입력하세요"
                 required
                 className="min-h-[200px]"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="externalLink">추가 URL</Label>
+              <Input
+                id="externalLink"
+                name="externalLink"
+                value={values.externalLink}
+                onChange={handleChange}
+                placeholder="www.google.com"
               />
             </div>
           </CardContent>
