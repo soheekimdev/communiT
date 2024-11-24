@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
-import PostPagination from '@/components/PostPagination';
+import PostPagination from '@/components/shared/PostPagination';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
@@ -11,6 +11,7 @@ import { RootState } from '@/RTK/store';
 import ProfileImage from '@/components/profile/ProfileImage';
 import { fetchProfileImageURL } from '@/api/profileURL';
 import { Eye, MessageCircle } from 'lucide-react';
+import Time from '@/components/shared/Time';
 
 const POST_PER_PAGE = 6;
 
@@ -140,13 +141,7 @@ const Post = () => {
                       <ProfileImage profileImageUrl={userProfiles[post.accountId] || undefined} />
                       <span>{post.accountUsername || '익명의 사용자'}</span>
                     </div>
-                    <time dateTime={post.createdAt}>
-                      {new Date(post.createdAt).toLocaleString('ko-KR', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                      })}
-                    </time>
+                    <Time time={post.createdAt} relative />
                   </CardFooter>
                 </Link>
               </Card>

@@ -31,7 +31,7 @@ import { fetchProfileImageURL } from '@/api/profileURL';
 import ProfileImage from '@/components/profile/ProfileImage';
 import { useEffect, useState } from 'react';
 import CommentForm from '@/components/comments/CommentForm';
-import BackButton from '@/components/BackButton';
+import BackButton from '@/components/shared/BackButton';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -40,6 +40,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
+import Time from '@/components/shared/Time';
 
 const PostDetail = () => {
   const { id } = useParams();
@@ -111,15 +112,7 @@ const PostDetail = () => {
                 <span className="mr-2">{post.accountUsername}</span>
                 <Separator orientation="vertical" className="h-4 mx-2" />
                 <CalendarIcon className="mr-1 h-4 w-4" />
-                <time dateTime={post.createdAt}>
-                  {new Date(post.createdAt).toLocaleString('ko-KR', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}
-                </time>
+                <Time time={post.createdAt} showTime />
               </div>
             </div>
             {userId === post.accountId && (
