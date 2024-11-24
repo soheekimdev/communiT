@@ -7,7 +7,7 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from '@/component
 import { Textarea } from '@/components/ui/textarea';
 import { useAppSelector } from '@/RTK/hooks';
 import { RootState } from '@/RTK/store';
-import { formSchema } from '@/schemas/commentSchema';
+import { commentSchema } from '@/schemas/commentSchema';
 import { Link, useParams } from 'react-router-dom';
 import { createNewComment, UserComment } from '@/api/comment';
 
@@ -23,14 +23,14 @@ const CommentInput = ({ addComment }: CommentInputProps) => {
   const user = useAppSelector((state: RootState) => state.auth.user);
   const token = localStorage.getItem('accessToken');
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof commentSchema>>({
+    resolver: zodResolver(commentSchema),
     defaultValues: {
       content: '',
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof commentSchema>) => {
     if (!token) {
       setError('로그인이 필요합니다.');
       return;

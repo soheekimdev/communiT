@@ -6,13 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
 import { updateComment } from '@/api/comment';
-
-const formSchema = z.object({
-  content: z
-    .string()
-    .min(1, { message: '댓글 내용을 입력해주세요.' })
-    .max(500, { message: '댓글은 500자를 초과할 수 없습니다.' }),
-});
+import { commentSchema } from '@/schemas/commentSchema';
 
 interface CommentEditProps {
   comment: {
@@ -27,14 +21,14 @@ interface CommentEditProps {
 const CommentEdit: React.FC<CommentEditProps> = ({ comment, onCancel, onUpdate }) => {
   const [charCount, setCharCount] = useState(comment.content.length);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof commentSchema>>({
+    resolver: zodResolver(commentSchema),
     defaultValues: {
       content: comment.content,
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof commentSchema>) {
     const token = localStorage.getItem('accessToken');
     if (!token) {
       console.error('사용자 인증이 필요합니다.');
