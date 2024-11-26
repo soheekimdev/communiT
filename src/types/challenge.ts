@@ -1,3 +1,5 @@
+import type { DateRange } from 'react-day-picker';
+
 type ChallengeType = 'self-check';
 
 type Challenge = {
@@ -50,4 +52,45 @@ type CreateChallengeRequest = {
   isFinished: boolean;
 };
 
-export type { Challenge, ChallengeResponse, ChallengeCardProps, CreateChallengeRequest };
+type ChallengeDetailState = {
+  challenge: Challenge | null;
+  author: {
+    username: string;
+    profileImageUrl?: string;
+  } | null;
+  isLoading: boolean;
+  error: string | null;
+};
+
+type ChallengeFormData = {
+  title: string;
+  description: string;
+  type: 'self-check';
+  startDate: string;
+  endDate: string;
+  isDeleted: boolean;
+  isPublished: boolean;
+  isFinished: boolean;
+};
+
+type ChallengeFormState = {
+  date: DateRange | undefined;
+  isLoading: boolean;
+  error: string | null;
+};
+
+type ChallengeFormProps = {
+  isEditing?: boolean;
+  initialData?: ChallengeFormData;
+};
+
+export type {
+  Challenge,
+  ChallengeResponse,
+  ChallengeCardProps,
+  CreateChallengeRequest,
+  ChallengeDetailState,
+  ChallengeFormData,
+  ChallengeFormState,
+  ChallengeFormProps,
+};

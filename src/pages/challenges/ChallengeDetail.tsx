@@ -1,76 +1,66 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { Button } from '@/components/ui/button';
-import ProfileImage from '@/components/profile/ProfileImage';
-import PostActionMenu from '@/components/shared/PostActionMenu';
+import { differenceInDays } from 'date-fns';
 import BackButton from '@/components/shared/BackButton';
-import type { Challenge } from '@/types/challenge';
-import type { RootState } from '@/RTK/store';
+import LoadingState from '@/components/shared/LoadingState';
+import ErrorState from '@/components/shared/ErrorState';
+import ChallengeHeader from '@/components/challenges/ChallengeHeader';
+import ChallengeFooter from '@/components/challenges/ChallengeFooter';
 import { getChallenge } from '@/api/challenges';
 import { fetchProfileImageURL } from '@/api/profileURL';
-import { Heart, ArrowLeft, Calendar, Clock } from 'lucide-react';
-import { format, differenceInDays } from 'date-fns';
-import { ko } from 'date-fns/locale';
+import type { ChallengeDetailState } from '@/types/challenge';
+import type { RootState } from '@/RTK/store';
 
 const ChallengeDetail = () => {
-  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [challenge, setChallenge] = useState<Challenge | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [author, setAuthor] = useState<{ username: string; profileImageUrl?: string } | null>(null);
-
-  useEffect(() => {
-    if (challenge?.accountId) {
-      fetchProfileImageURL(challenge.accountId)
-        .then(data => {
-          setAuthor(data);
-        })
-        .catch(err => {
-          console.error('Failed to fetch profile', err);
-        });
-    }
-  }, [challenge]);
-
-  // 임시 데이터: 내가 참여한 챌린지 여부
-  const isParticipating = false;
-
+  const { id } = useParams<{ id: string }>();
   const { user } = useSelector((state: RootState) => state.auth);
 
+  const [detailState, setDetailState] = useState<ChallengeDetailState>({
+    challenge: null,
+    author: null,
+    isLoading: true,
+    error: null,
+  });
+
+  // 임시 데이터: 추후 API 연동 필요
+  const isParticipating = false;
+
   useEffect(() => {
-    const fetchChallenge = async () => {
+    const fetchChallengeDetails = async () => {
       if (!id) return;
 
       try {
-        const data = await getChallenge(id);
-        setChallenge(data);
+        const challengeData = await getChallenge(id);
+        setDetailState(prev => ({
+          ...prev,
+          challenge: challengeData,
+        }));
+
+        if (challengeData.accountId) {
+          const authorData = await fetchProfileImageURL(challengeData.accountId);
+          setDetailState(prev => ({
+            ...prev,
+            author: authorData,
+          }));
+        }
       } catch (err) {
+        setDetailState(prev => ({
+          ...prev,
+          error: '챌린지 정보를 불러오는데 실패했습니다.',
+        }));
         console.error('챌린지 조회 실패:', err);
-        setError('챌린지를 불러오는데 실패했습니다.');
       } finally {
-        setIsLoading(false);
+        setDetailState(prev => ({
+          ...prev,
+          isLoading: false,
+        }));
       }
     };
 
-    fetchChallenge();
+    fetchChallengeDetails();
   }, [id]);
-
-  if (isLoading) {
-    return <div className="container mx-auto p-4">Loading...</div>;
-  }
-
-  if (error || !challenge) {
-    return (
-      <div className="container mx-auto p-4">
-        <div className="text-red-500">{error || '챌린지를 찾을 수 없습니다.'}</div>
-        <Button variant="outline" onClick={() => navigate(-1)} className="mt-4">
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          돌아가기
-        </Button>
-      </div>
-    );
-  }
 
   const handleDelete = () => {
     // TODO: 삭제 확인 모달 표시
@@ -78,9 +68,20 @@ const ChallengeDetail = () => {
   };
 
   const handleEdit = () => {
-    navigate(`/challenges/${challenge.id}/edit`);
+    if (detailState.challenge?.id) {
+      navigate(`/challenges/${detailState.challenge.id}/edit`);
+    }
   };
 
+  if (detailState.isLoading) {
+    return <LoadingState />;
+  }
+
+  if (detailState.error || !detailState.challenge) {
+    return <ErrorState error={detailState.error} onBack={() => navigate(-1)} />;
+  }
+
+  const { challenge, author } = detailState;
   const isMine = user?.id === challenge.accountId;
   const startDate = new Date(challenge.startDate);
   const endDate = new Date(challenge.endDate);
@@ -91,50 +92,21 @@ const ChallengeDetail = () => {
       <BackButton className="mb-6" />
 
       <div className="space-y-6">
-        <div className="flex flex-col items-start justify-between">
-          <div className="flex flex-row-reverse items-start flex-wrap gap-2 w-full mb-4">
-            {isMine && <PostActionMenu onEdit={handleEdit} onDelete={handleDelete} />}
-            <h1 className="flex-1 min-w-40 text-3xl font-bold">{challenge.title}</h1>
-          </div>
-
-          <div className="flex items-center gap-4 flex-wrap text-sm text-muted-foreground">
-            <span className="flex items-center gap-1">
-              <Calendar className="h-4 w-4" />
-              {format(startDate, 'PPP', { locale: ko })} ~ {format(endDate, 'PPP', { locale: ko })}
-            </span>
-            <span className="flex items-center gap-1">
-              <Clock className="h-4 w-4" />
-              {totalDays}일간의 도전
-            </span>
-          </div>
-        </div>
+        <ChallengeHeader
+          title={challenge.title}
+          isMine={isMine}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          startDate={startDate}
+          endDate={endDate}
+          totalDays={totalDays}
+        />
 
         <div className="prose dark:prose-invert max-w-none py-4">
           <p>{challenge.description}</p>
         </div>
 
-        <div className="flex flex-col sm:flex-row justify-between gap-4 w-full text-sm text-muted-foreground">
-          <div className="self-start flex items-center gap-1 flex-wrap">
-            <div className="flex items-center mr-4">
-              {author && <ProfileImage profileImageUrl={author.profileImageUrl} />}
-              <span>{challenge.accountUsername}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Calendar className="h-4 w-4" />
-              <span>{format(new Date(challenge.createdAt), 'PPP', { locale: ko })}</span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Button size="lg" variant="outline" className="gap-2 px-4">
-              <Heart />
-              <span>{challenge.likeCount}</span>
-            </Button>
-            <Button size="lg" className="w-full sm:w-auto">
-              {isParticipating ? '챌린지 인증하기' : '참여하기'}
-            </Button>
-          </div>
-        </div>
+        <ChallengeFooter author={author} challenge={challenge} isParticipating={isParticipating} />
       </div>
     </div>
   );
