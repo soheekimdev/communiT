@@ -7,6 +7,7 @@ import LoadingState from '@/components/shared/LoadingState';
 import ErrorState from '@/components/shared/ErrorState';
 import ChallengeHeader from '@/components/challenges/ChallengeHeader';
 import ChallengeFooter from '@/components/challenges/ChallengeFooter';
+import ActionFeedback from '@/components/shared/ActionFeedback';
 import { differenceInDays } from 'date-fns';
 import { deleteChallenge, getChallenge } from '@/api/challenges';
 import { fetchProfileImageURL } from '@/api/profileURL';
@@ -21,6 +22,7 @@ const ChallengeDetail = () => {
   const [author, setAuthor] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     const fetchChallengeDetails = async () => {
@@ -52,9 +54,19 @@ const ChallengeDetail = () => {
     }
   };
 
-  const handleDelete = () => {
-    if (challenge?.id) {
-      deleteChallenge(challenge.id);
+  const handleDelete = async () => {
+    if (!challenge?.id) return;
+
+    try {
+      await deleteChallenge(challenge.id);
+      setSuccess(true);
+
+      setTimeout(() => {
+        navigate('/challenges');
+      }, 2000);
+    } catch (error) {
+      setError('챌린지 삭제 중 오류가 발생했습니다.');
+      console.error('챌린지 삭제 실패:', error);
     }
   };
 
@@ -76,6 +88,13 @@ const ChallengeDetail = () => {
 
   return (
     <div className="container mx-auto p-4 max-w-4xl">
+      <ActionFeedback
+        error={error}
+        success={success}
+        successTitle='성공'
+        successMessage='챌린지가 성공적으로 삭제되었습니다. 곧 목록 페이지로 이동합니다.'
+      />
+
       <BackButton className="mb-6" />
 
       <div className="space-y-6">
