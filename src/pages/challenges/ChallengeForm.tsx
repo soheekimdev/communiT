@@ -1,31 +1,27 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { convertToAPIDate, createChallenge, getChallenge, updateChallenge } from '@/api/challenges';
+import { createChallenge, getChallenge, updateChallenge } from '@/api/challenges';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { DatePickerWithRange } from '@/components/ui/date-picker-with-range';
-import {
-  ChallengeFormData,
-  ChallengeFormProps,
-  ChallengeFormState,
-  UpdateChallengeRequest,
-} from '@/types/challenge';
+import { ChallengeFormProps, ChallengeFormState } from '@/types/challenge';
 import { startOfToday } from 'date-fns';
 import axios from 'axios';
+import { challengeFormSchema, ChallengeFormValues } from '@/schemas/challenges';
+import { getChangedFields } from '@/lib/form-utils';
 
 const ChallengeForm = ({ isEditing = false }: ChallengeFormProps) => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
 
-  const [initialValues, setInitialValues] = useState<ChallengeFormData | null>(null);
+  const [initialValues, setInitialValues] = useState<ChallengeFormValues | null>(null);
   const [formState, setFormState] = useState<ChallengeFormState>({
     date: undefined,
     isLoading: false,
     error: null,
   });
 
-  // 수정 시 데이터 로드
   useEffect(() => {
     const fetchChallenge = async () => {
       if (!isEditing || !id) return;
@@ -34,16 +30,8 @@ const ChallengeForm = ({ isEditing = false }: ChallengeFormProps) => {
         setFormState(prev => ({ ...prev, isLoading: true }));
         const challenge = await getChallenge(id);
 
-        setInitialValues({
-          title: challenge.title,
-          description: challenge.description,
-          type: challenge.type,
-          startDate: challenge.startDate,
-          endDate: challenge.endDate,
-          isDeleted: challenge.isDeleted,
-          isPublished: challenge.isPublished,
-          isFinished: challenge.isFinished,
-        });
+        const validatedChallenge = challengeFormSchema.parse(challenge);
+        setInitialValues(validatedChallenge);
 
         setFormState(prev => ({
           ...prev,
@@ -91,34 +79,35 @@ const ChallengeForm = ({ isEditing = false }: ChallengeFormProps) => {
 
     try {
       const formData = new FormData(e.currentTarget);
-      const formValues = {
-        title: formData.get('title') as string,
-        description: formData.get('description') as string,
+      const rawFormValues = {
+        title: formData.get('title'),
+        description: formData.get('description'),
         type: 'self-check' as const,
-        startDate: convertToAPIDate(formState.date.from),
-        endDate: convertToAPIDate(formState.date.to),
+        startDate: formState.date.from.toISOString(),
+        endDate: formState.date.to.toISOString(),
         isDeleted: false,
         isPublished: false,
         isFinished: false,
       };
 
-      if (isEditing && id) {
-        // 수정 시에는 변경된 필드만 전송
-        const changedFields = {} as UpdateChallengeRequest;
+      const parseResult = challengeFormSchema.safeParse(rawFormValues);
 
-        if (initialValues) {
-          Object.entries(formValues).forEach(([key, value]) => {
-            const k = key as keyof ChallengeFormData;
-            if (initialValues[k] !== value) {
-              changedFields[k] = value;
-            }
-          });
+      if (!parseResult.success) {
+        const errorMessages = parseResult.error.errors.map(err => err.message).join(', ');
+        setFormState(prev => ({ ...prev, error: errorMessages }));
+        return;
+      }
+
+      const validatedValues = parseResult.data;
+
+      if (isEditing && id && initialValues) {
+        const changedFields = getChangedFields(initialValues, validatedValues);
+
+        if (Object.keys(changedFields).length > 0) {
+          await updateChallenge(id, changedFields);
         }
-
-        await updateChallenge(id, changedFields);
       } else {
-        // 생성 시에는 전체 데이터 전송
-        await createChallenge(formValues);
+        await createChallenge(validatedValues);
       }
 
       navigate('/challenges');

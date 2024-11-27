@@ -17,7 +17,17 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { MoreVertical } from 'lucide-react';
-import { previousDay } from 'date-fns';
+
+type AdditionalItem = {
+  label: string;
+  onClick: () => void;
+  isWithAlert?: boolean;
+  alertTitle?: string;
+  alertDescription?: string;
+  alertConfirmText?: string;
+  alertCancelText?: string;
+  className?: string;
+};
 
 type PostActionMenuWithAlertProps = {
   onEdit?: () => void;
@@ -26,16 +36,7 @@ type PostActionMenuWithAlertProps = {
   disableDelete?: boolean;
   alertTitle?: string;
   alertDescription?: string;
-  additionalItems?: {
-    label: string;
-    onClick: () => void;
-    isWithAlert?: boolean;
-    alertTitle?: string;
-    alertDescription?: string;
-    alertConfirmText?: string;
-    alertCancelText?: string;
-    className?: string;
-  }[];
+  additionalItems?: AdditionalItem[];
   align?: 'start' | 'end' | 'center';
 };
 
@@ -58,13 +59,10 @@ const PostActionMenuWithAlert = ({
   };
 
   const handleAlertClose = (index: number) => {
-    setOpenAlerts(prev => ({ ...previousDay, [index]: false }));
+    setOpenAlerts(prev => ({ ...prev, [index]: false }));
   };
 
-  const handleAction = async (
-    item: PostActionMenuWithAlertProps['additionalItems'][0],
-    index: number,
-  ) => {
+  const handleAction = async (item: AdditionalItem, index: number) => {
     await item.onClick();
     handleAlertClose(index);
   };

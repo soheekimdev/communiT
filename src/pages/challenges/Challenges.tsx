@@ -9,7 +9,7 @@ import type { AuthState } from '@/types/auth';
 
 const Challenges = () => {
   const [allChallenges, setAllChallenges] = useState<Challenge[]>([]);
-  const [myChallenges, setMyChallenge] = useState<Challenge[]>([]);
+  const [myChallenges /* setMyChallenge */] = useState<Challenge[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { user, isLoggedIn } = useSelector<RootState, AuthState>(state => state.auth);
