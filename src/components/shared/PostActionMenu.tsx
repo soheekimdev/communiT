@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -6,7 +7,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import {
   AlertDialog,
-  AlertDialogTrigger,
   AlertDialogContent,
   AlertDialogHeader,
   AlertDialogFooter,
@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { MoreVertical } from 'lucide-react';
+import { previousDay } from 'date-fns';
 
 type PostActionMenuWithAlertProps = {
   onEdit?: () => void;
@@ -25,7 +26,16 @@ type PostActionMenuWithAlertProps = {
   disableDelete?: boolean;
   alertTitle?: string;
   alertDescription?: string;
-  additionalItems?: { label: string; onClick: () => void; className?: string }[];
+  additionalItems?: {
+    label: string;
+    onClick: () => void;
+    isWithAlert?: boolean;
+    alertTitle?: string;
+    alertDescription?: string;
+    alertConfirmText?: string;
+    alertCancelText?: string;
+    className?: string;
+  }[];
   align?: 'start' | 'end' | 'center';
 };
 
@@ -39,48 +49,117 @@ const PostActionMenuWithAlert = ({
   additionalItems = [],
   align = 'end',
 }: PostActionMenuWithAlertProps) => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [openAlerts, setOpenAlerts] = useState<{ [key: string]: boolean }>({});
+
+  const handleAlertOpen = (index: number) => {
+    setOpenAlerts(prev => ({ ...prev, [index]: true }));
+    setIsDropdownOpen(false);
+  };
+
+  const handleAlertClose = (index: number) => {
+    setOpenAlerts(prev => ({ ...previousDay, [index]: false }));
+  };
+
+  const handleAction = async (
+    item: PostActionMenuWithAlertProps['additionalItems'][0],
+    index: number,
+  ) => {
+    await item.onClick();
+    handleAlertClose(index);
+  };
+
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon">
-          <MoreVertical className="h-5 w-5" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align={align}>
-        {!disableEdit && onEdit && <DropdownMenuItem onClick={onEdit}>수정</DropdownMenuItem>}
-        {additionalItems.map((item, index) => (
-          <DropdownMenuItem
-            key={`${item.label}-${index}`}
-            onClick={item.onClick}
-            className={item.className}
-          >
-            {item.label}
-          </DropdownMenuItem>
-        ))}
-        {!disableDelete && onDelete && (
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
+    <>
+      <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="icon">
+            <MoreVertical className="h-5 w-5" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align={align}>
+          {!disableEdit && onEdit && <DropdownMenuItem onClick={onEdit}>수정</DropdownMenuItem>}
+
+          {additionalItems.map((item, index) =>
+            item.isWithAlert ? (
               <DropdownMenuItem
-                onSelect={e => e.preventDefault()}
-                className="text-red-600 focus:text-red-600"
+                key={`${item.label}-${index}`}
+                onSelect={() => handleAlertOpen(index)}
+                className={item.className}
               >
-                삭제
+                {item.label}
               </DropdownMenuItem>
-            </AlertDialogTrigger>
+            ) : (
+              <DropdownMenuItem
+                key={`${item.label}-${index}`}
+                onClick={item.onClick}
+                className={item.className}
+              >
+                {item.label}
+              </DropdownMenuItem>
+            ),
+          )}
+
+          {!disableDelete && onDelete && (
+            <DropdownMenuItem
+              className="text-red-600 focus:text-red-600"
+              onSelect={() => handleAlertOpen(-1)} // 삭제 알림용 특별 인덱스
+            >
+              삭제
+            </DropdownMenuItem>
+          )}
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      {/* 추가 항목들의 AlertDialog */}
+      {additionalItems.map((item, index) =>
+        item.isWithAlert ? (
+          <AlertDialog
+            key={`alert-${index}`}
+            open={openAlerts[index]}
+            onOpenChange={open => !open && handleAlertClose(index)}
+          >
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>{alertTitle}</AlertDialogTitle>
-                <AlertDialogDescription>{alertDescription}</AlertDialogDescription>
+                <AlertDialogTitle>{item.alertTitle}</AlertDialogTitle>
+                <AlertDialogDescription>{item.alertDescription}</AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>취소</AlertDialogCancel>
-                <AlertDialogAction onClick={onDelete}>삭제</AlertDialogAction>
+                <AlertDialogCancel onClick={() => handleAlertClose(index)}>
+                  {item.alertCancelText || '취소'}
+                </AlertDialogCancel>
+                <AlertDialogAction onClick={() => handleAction(item, index)}>
+                  {item.alertConfirmText || '확인'}
+                </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
-        )}
-      </DropdownMenuContent>
-    </DropdownMenu>
+        ) : null,
+      )}
+
+      {/* 삭제용 AlertDialog */}
+      {!disableDelete && onDelete && (
+        <AlertDialog open={openAlerts[-1]} onOpenChange={open => !open && handleAlertClose(-1)}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>{alertTitle}</AlertDialogTitle>
+              <AlertDialogDescription>{alertDescription}</AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={() => handleAlertClose(-1)}>취소</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => {
+                  onDelete();
+                  handleAlertClose(-1);
+                }}
+              >
+                삭제
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      )}
+    </>
   );
 };
 

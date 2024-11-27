@@ -1,5 +1,10 @@
 import instance from '@/api/axios';
-import type { Challenge, ChallengeResponse, CreateChallengeRequest } from '@/types/challenge';
+import type {
+  Challenge,
+  ChallengeResponse,
+  CreateChallengeRequest,
+  UpdateChallengeRequest,
+} from '@/types/challenge';
 
 const MAX_RETRIES = 3;
 const RETRY_DELAY = 2000;
@@ -33,6 +38,10 @@ export const getChallenges = async (page: number = 1, limit: number = 20) => {
       limit,
     },
   });
+
+  // API 응답에서 삭제되지 않은 챌린지만 필터링 (삭제 예정)
+  response.data.data = response.data.data.filter(challenge => !challenge.isDeleted);
+
   return response.data;
 };
 
@@ -41,7 +50,7 @@ export const getChallenge = async (id: string) => {
   return response.data;
 };
 
-export const updateChallenge = async (id: string, data: CreateChallengeRequest) => {
+export const updateChallenge = async (id: string, data: UpdateChallengeRequest) => {
   const response = await instance.patch<Challenge>(`api/challenges/${id}`, data);
   return response.data;
 };

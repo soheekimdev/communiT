@@ -6,6 +6,7 @@ type Challenge = {
   id: string;
   title: string;
   description: string;
+  challengeImageUrl: string;
   type: ChallengeType;
   startDate: string;
   endDate: string;
@@ -15,11 +16,14 @@ type Challenge = {
   isFinished: boolean;
   createdAt: string;
   updatedAt: string;
-  accountUsername: string | null;
+  accountUsername: string;
   likeCount: number;
   dislikeCount: number;
   pureLikeCount: number;
+  controversialCount: number;
   challengeEventCount: number;
+  challengeParticipantCount: number;
+  challengeEventCheckedParticipantsFraction: number;
 };
 
 type ChallengeResponse = {
@@ -33,15 +37,32 @@ type ChallengeResponse = {
 };
 
 type ChallengeCardProps = {
+  id: string;
   isMine: boolean;
   likeCount: number;
   title: string;
   startDate: string;
   endDate: string;
   description: string;
+  isDeleted: boolean;
+  isPublished: boolean;
+  isFinished: boolean;
 };
 
 type CreateChallengeRequest = {
+  title: string;
+  description: string;
+  type: ChallengeType;
+  startDate: string;
+  endDate: string;
+  isDeleted: boolean;
+  isPublished: boolean;
+  isFinished: boolean;
+};
+
+type UpdateChallengeRequest = Partial<CreateChallengeRequest>;
+
+type ChallengeFormData = {
   title: string;
   description: string;
   type: ChallengeType;
@@ -62,17 +83,6 @@ type ChallengeDetailState = {
   error: string | null;
 };
 
-type ChallengeFormData = {
-  title: string;
-  description: string;
-  type: 'self-check';
-  startDate: string;
-  endDate: string;
-  isDeleted: boolean;
-  isPublished: boolean;
-  isFinished: boolean;
-};
-
 type ChallengeFormState = {
   date: DateRange | undefined;
   isLoading: boolean;
@@ -81,7 +91,6 @@ type ChallengeFormState = {
 
 type ChallengeFormProps = {
   isEditing?: boolean;
-  initialData?: ChallengeFormData;
 };
 
 export type {
@@ -89,6 +98,7 @@ export type {
   ChallengeResponse,
   ChallengeCardProps,
   CreateChallengeRequest,
+  UpdateChallengeRequest,
   ChallengeDetailState,
   ChallengeFormData,
   ChallengeFormState,

@@ -9,9 +9,15 @@ type ChallengeFooterProps = {
   author: { username: string; profileImageUrl?: string } | null;
   challenge: Challenge;
   isParticipating: boolean;
+  isFinished: boolean;
 };
 
-const ChallengeFooter = ({ author, challenge, isParticipating }: ChallengeFooterProps) => (
+const ChallengeFooter = ({
+  author,
+  challenge,
+  isParticipating,
+  isFinished,
+}: ChallengeFooterProps) => (
   <div className="flex flex-col sm:flex-row justify-between gap-4 w-full text-sm text-muted-foreground">
     <div className="self-start flex items-center gap-1 flex-wrap">
       <div className="flex items-center mr-4">
@@ -29,8 +35,8 @@ const ChallengeFooter = ({ author, challenge, isParticipating }: ChallengeFooter
         <Heart />
         <span>{challenge.likeCount}</span>
       </Button>
-      <Button size="lg" className="w-full sm:w-auto">
-        {isParticipating ? '챌린지 인증하기' : '참여하기'}
+      <Button size="lg" className="w-full sm:w-auto" disabled={isFinished}>
+        {isFinished ? '종료된 챌린지' : isParticipating ? '챌린지 인증하기' : '참여하기'}
       </Button>
     </div>
   </div>

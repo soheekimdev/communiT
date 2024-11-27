@@ -5,7 +5,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { DatePickerWithRange } from '@/components/ui/date-picker-with-range';
-import { ChallengeFormData, ChallengeFormProps, ChallengeFormState } from '@/types/challenge';
+import {
+  ChallengeFormData,
+  ChallengeFormProps,
+  ChallengeFormState,
+  UpdateChallengeRequest,
+} from '@/types/challenge';
 import { startOfToday } from 'date-fns';
 import axios from 'axios';
 
@@ -86,10 +91,10 @@ const ChallengeForm = ({ isEditing = false }: ChallengeFormProps) => {
 
     try {
       const formData = new FormData(e.currentTarget);
-      const data: ChallengeFormData = {
+      const formValues = {
         title: formData.get('title') as string,
         description: formData.get('description') as string,
-        type: 'self-check',
+        type: 'self-check' as const,
         startDate: formState.date.from.toISOString(),
         endDate: formState.date.to.toISOString(),
         isDeleted: false,
@@ -98,10 +103,24 @@ const ChallengeForm = ({ isEditing = false }: ChallengeFormProps) => {
       };
 
       if (isEditing && id) {
-        await updateChallenge(id, data);
+        // 수정 시에는 변경된 필드만 전송
+        const changedFields = {} as UpdateChallengeRequest;
+
+        if (initialValues) {
+          Object.entries(formValues).forEach(([key, value]) => {
+            const k = key as keyof ChallengeFormData;
+            if (initialValues[k] !== value) {
+              changedFields[k] = value;
+            }
+          });
+        }
+
+        await updateChallenge(id, changedFields);
       } else {
-        await createChallenge(data);
+        // 생성 시에는 전체 데이터 전송
+        await createChallenge(formValues);
       }
+
       navigate('/challenges');
     } catch (err) {
       handleError(err);
@@ -109,6 +128,7 @@ const ChallengeForm = ({ isEditing = false }: ChallengeFormProps) => {
       setFormState(prev => ({ ...prev, isLoading: false }));
     }
   };
+
   return (
     <div className="container mx-auto p-4 max-w-2xl">
       <h1 className="text-2xl font-bold mb-6">
