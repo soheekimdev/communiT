@@ -2,16 +2,8 @@ import { useNavigate } from 'react-router-dom';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Crown, Heart } from 'lucide-react';
-
-interface ChallengeCardProps {
-  id: string;
-  isMine: boolean;
-  likeCount: number;
-  title: string;
-  startDate: string;
-  endDate: string;
-  description: string;
-}
+import { ChallengeCardProps } from '@/types/challenge';
+import { Badge } from '@/components/ui/badge';
 
 export const ChallengeCard = ({
   id,
@@ -21,6 +13,8 @@ export const ChallengeCard = ({
   startDate,
   endDate,
   description,
+  isDeleted,
+  isFinished,
 }: ChallengeCardProps) => {
   const navigate = useNavigate();
 
@@ -56,7 +50,7 @@ export const ChallengeCard = ({
             size="min"
             className="flex gap-2"
             onClick={e => {
-              e.stopPropagation(); // 좋아요 클릭 시 카드 클릭 이벤트 전파 방지
+              e.stopPropagation();
               // TODO: 좋아요 기능 구현
             }}
           >
@@ -65,10 +59,25 @@ export const ChallengeCard = ({
           </Button>
         </div>
       </div>
-      <p className="text-xl font-semibold">{title}</p>
+
+      <div className="items-start text-xl font-semibold">
+        {isDeleted && (
+          <Badge variant="options" className="mr-2 align-bottom">
+            삭제됨
+          </Badge>
+        )}
+        {isFinished && (
+          <Badge variant="options" className="mr-2 align-bottom">
+            종료
+          </Badge>
+        )}
+        <span>{title}</span>
+      </div>
+
       <p className="text-sm">
         {formatDate(startDate)} ~ {formatDate(endDate)}
       </p>
+
       <p className="text-sm text-muted-foreground line-clamp-3">{description}</p>
     </div>
   );

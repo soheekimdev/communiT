@@ -1,17 +1,9 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import {
-  CalendarIcon,
-  AlertCircle,
-  ThumbsUp,
-  MessageCircle,
-  Eye,
-  ExternalLink,
-} from 'lucide-react';
+import { CalendarIcon, ThumbsUp, MessageCircle, Eye, ExternalLink } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/RTK/store';
-import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import ReactMarkdown from 'react-markdown';
 import usePostDetail from '@/hooks/usePostDetail';
 import ErrorAlert from '@/components/post/ErrorAlert';
@@ -24,6 +16,7 @@ import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import Time from '@/components/shared/Time';
 import PostActionMenu from '@/components/shared/PostActionMenu';
+import ActionFeedback from '@/components/shared/ActionFeedback';
 
 const PostDetail = () => {
   const { id } = useParams();
@@ -66,22 +59,13 @@ const PostDetail = () => {
 
   return (
     <div className="container mx-auto p-4 max-w-2xl">
-      {error && (
-        <Alert variant="destructive" className="mb-4">
-          <AlertCircle className="h-4 w-4" />
-          <AlertTitle>오류</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
-      {success && (
-        <Alert variant="default" className="mb-4">
-          <AlertCircle className="h-4 w-4" />
-          <AlertTitle>성공</AlertTitle>
-          <AlertDescription>
-            게시글이 성공적으로 삭제되었습니다. 곧 목록 페이지로 이동합니다.
-          </AlertDescription>
-        </Alert>
-      )}
+      <ActionFeedback
+        error={error}
+        success={success}
+        successTitle="성공"
+        successMessage="게시글이 성공적으로 삭제되었습니다. 곧 목록 페이지로 이동합니다."
+      />
+
       <div className="mb-4">
         <BackButton />
       </div>

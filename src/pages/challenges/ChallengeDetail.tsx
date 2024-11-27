@@ -1,140 +1,125 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { Button } from '@/components/ui/button';
-import ProfileImage from '@/components/profile/ProfileImage';
-import PostActionMenu from '@/components/shared/PostActionMenu';
+import { useAppSelector, useAppDispatch } from '@/RTK/hooks';
+import { setCurrentChallenge, selectCurrentChallenge } from '@/RTK/challengeSlice';
 import BackButton from '@/components/shared/BackButton';
-import type { Challenge } from '@/types/challenge';
-import type { RootState } from '@/RTK/store';
-import { getChallenge } from '@/api/challenges';
+import LoadingState from '@/components/shared/LoadingState';
+import ErrorState from '@/components/shared/ErrorState';
+import ChallengeHeader from '@/components/challenges/ChallengeHeader';
+import ChallengeFooter from '@/components/challenges/ChallengeFooter';
+import ActionFeedback from '@/components/shared/ActionFeedback';
+import { differenceInDays } from 'date-fns';
+import { deleteChallenge, getChallenge } from '@/api/challenges';
 import { fetchProfileImageURL } from '@/api/profileURL';
-import { Heart, ArrowLeft, Calendar, Clock } from 'lucide-react';
-import { format, differenceInDays } from 'date-fns';
-import { ko } from 'date-fns/locale';
 
 const ChallengeDetail = () => {
-  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [challenge, setChallenge] = useState<Challenge | null>(null);
+  const { id } = useParams<{ id: string }>();
+  const dispatch = useAppDispatch();
+
+  const challenge = useAppSelector(selectCurrentChallenge);
+  const { user } = useAppSelector(state => state.auth);
+  const [author, setAuthor] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [author, setAuthor] = useState<{ username: string; profileImageUrl?: string } | null>(null);
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
-    if (challenge?.accountId) {
-      fetchProfileImageURL(challenge.accountId)
-        .then(data => {
-          setAuthor(data);
-        })
-        .catch(err => {
-          console.error('Failed to fetch profile', err);
-        });
-    }
-  }, [challenge]);
-
-  // 임시 데이터: 내가 참여한 챌린지 여부
-  const isParticipating = false;
-
-  const { user } = useSelector((state: RootState) => state.auth);
-
-  useEffect(() => {
-    const fetchChallenge = async () => {
+    const fetchChallengeDetails = async () => {
       if (!id) return;
 
       try {
-        const data = await getChallenge(id);
-        setChallenge(data);
+        setIsLoading(true);
+        const challengeData = await getChallenge(id);
+        dispatch(setCurrentChallenge(challengeData));
+
+        if (challengeData.accountId) {
+          const authorData = await fetchProfileImageURL(challengeData.accountId);
+          setAuthor(authorData);
+        }
       } catch (err) {
+        setError('챌린지 정보를 불러오는데 실패했습니다.');
         console.error('챌린지 조회 실패:', err);
-        setError('챌린지를 불러오는데 실패했습니다.');
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchChallenge();
-  }, [id]);
+    fetchChallengeDetails();
+  }, [id, dispatch]);
+
+  const handleEdit = () => {
+    if (challenge?.id) {
+      navigate(`/challenges/${challenge.id}/edit`);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!challenge?.id) return;
+
+    try {
+      await deleteChallenge(challenge.id);
+      setSuccess(true);
+
+      setTimeout(() => {
+        navigate('/challenges');
+      }, 2000);
+    } catch (error) {
+      setError('챌린지 삭제 중 오류가 발생했습니다.');
+      console.error('챌린지 삭제 실패:', error);
+    }
+  };
 
   if (isLoading) {
-    return <div className="container mx-auto p-4">Loading...</div>;
+    return <LoadingState />;
   }
 
   if (error || !challenge) {
-    return (
-      <div className="container mx-auto p-4">
-        <div className="text-red-500">{error || '챌린지를 찾을 수 없습니다.'}</div>
-        <Button variant="outline" onClick={() => navigate(-1)} className="mt-4">
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          돌아가기
-        </Button>
-      </div>
-    );
+    return <ErrorState error={error} onBack={() => navigate(-1)} />;
   }
-
-  const handleDelete = () => {
-    // TODO: 삭제 확인 모달 표시
-    console.log('삭제 클릭');
-  };
-
-  const handleEdit = () => {
-    navigate(`/challenges/${challenge.id}/edit`);
-  };
 
   const isMine = user?.id === challenge.accountId;
   const startDate = new Date(challenge.startDate);
   const endDate = new Date(challenge.endDate);
+  const today = new Date();
   const totalDays = differenceInDays(endDate, startDate) + 1;
+  const isFinished = challenge.isFinished || endDate < today;
+  const isParticipating = isMine || true; // 임시 데이터
 
   return (
     <div className="container mx-auto p-4 max-w-4xl">
+      <ActionFeedback
+        error={error}
+        success={success}
+        successTitle='성공'
+        successMessage='챌린지가 성공적으로 삭제되었습니다. 곧 목록 페이지로 이동합니다.'
+      />
+
       <BackButton className="mb-6" />
 
       <div className="space-y-6">
-        <div className="flex flex-col items-start justify-between">
-          <div className="flex flex-row-reverse items-start flex-wrap gap-2 w-full mb-4">
-            {isMine && <PostActionMenu onEdit={handleEdit} onDelete={handleDelete} />}
-            <h1 className="flex-1 min-w-40 text-3xl font-bold">{challenge.title}</h1>
-          </div>
-
-          <div className="flex items-center gap-4 flex-wrap text-sm text-muted-foreground">
-            <span className="flex items-center gap-1">
-              <Calendar className="h-4 w-4" />
-              {format(startDate, 'PPP', { locale: ko })} ~ {format(endDate, 'PPP', { locale: ko })}
-            </span>
-            <span className="flex items-center gap-1">
-              <Clock className="h-4 w-4" />
-              {totalDays}일간의 도전
-            </span>
-          </div>
-        </div>
+        <ChallengeHeader
+          challengeId={challenge.id}
+          title={challenge.title}
+          isMine={isMine}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          startDate={startDate}
+          endDate={endDate}
+          totalDays={totalDays}
+          isFinished={isFinished}
+        />
 
         <div className="prose dark:prose-invert max-w-none py-4">
           <p>{challenge.description}</p>
         </div>
 
-        <div className="flex flex-col sm:flex-row justify-between gap-4 w-full text-sm text-muted-foreground">
-          <div className="self-start flex items-center gap-1 flex-wrap">
-            <div className="flex items-center mr-4">
-              {author && <ProfileImage profileImageUrl={author.profileImageUrl} />}
-              <span>{challenge.accountUsername}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Calendar className="h-4 w-4" />
-              <span>{format(new Date(challenge.createdAt), 'PPP', { locale: ko })}</span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Button size="lg" variant="outline" className="gap-2 px-4">
-              <Heart />
-              <span>{challenge.likeCount}</span>
-            </Button>
-            <Button size="lg" className="w-full sm:w-auto">
-              {isParticipating ? '챌린지 인증하기' : '참여하기'}
-            </Button>
-          </div>
-        </div>
+        <ChallengeFooter
+          author={author}
+          challenge={challenge}
+          isParticipating={isParticipating}
+          isFinished={isFinished}
+        />
       </div>
     </div>
   );
