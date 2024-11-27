@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getChallenges } from '@/api/challenges';
+import { getChallenges, isChallengePassed } from '@/api/challenges';
 import { ChallengeCard } from '@/components/challenges/ChallengeCard';
 import { CreateChallengeButton } from '@/components/challenges/CreateChallengeButton';
 import type { Challenge } from '@/types/challenge';
@@ -61,7 +61,7 @@ const Challenges = () => {
               <ChallengeCard
                 key={challenge.id}
                 {...challenge}
-                isFinished={new Date(challenge.endDate) < new Date()}
+                isFinished={isChallengePassed(challenge.endDate)}
                 isMine={user?.id === challenge.accountId}
               />
             ))}

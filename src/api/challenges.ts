@@ -5,30 +5,25 @@ import type {
   CreateChallengeRequest,
   UpdateChallengeRequest,
 } from '@/types/challenge';
+import { parseISO, startOfDay } from 'date-fns';
+import { toZonedTime } from 'date-fns-tz';
 
-const MAX_RETRIES = 3;
-const RETRY_DELAY = 2000;
+const TIMEZONE = 'Asia/Seoul';
 
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+export const convertToAPIDate = (date: Date) => {
+  const d = new Date(date);
+  d.setHours(0, 0, 0, 0);
+  return d.toISOString();
+};
+
+export const convertToLocalDate = (dateString: string) => {
+  const date = parseISO(dateString);
+  return toZonedTime(date, TIMEZONE);
+};
 
 export const createChallenge = async (data: CreateChallengeRequest) => {
-  let lastError;
-
-  for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
-    try {
-      const response = await instance.post<Challenge>('api/challenges', data);
-      return response.data;
-    } catch (error) {
-      console.log(`시도 ${attempt + 1}/${MAX_RETRIES} 실패:`, error);
-      lastError = error;
-
-      if (attempt < MAX_RETRIES - 1) {
-        await sleep(RETRY_DELAY);
-      }
-    }
-  }
-
-  throw lastError;
+  const response = await instance.post<Challenge>('api/challenges', data);
+  return response.data;
 };
 
 export const getChallenges = async (page: number = 1, limit: number = 20) => {
@@ -57,4 +52,10 @@ export const updateChallenge = async (id: string, data: UpdateChallengeRequest) 
 
 export const deleteChallenge = async (id: string) => {
   await instance.delete(`api/challenges/${id}`);
+};
+
+export const isChallengePassed = (endDate: string) => {
+  const today = startOfDay(new Date());
+  const challengeEndDate = startOfDay(new Date(endDate));
+  return challengeEndDate < today;
 };
