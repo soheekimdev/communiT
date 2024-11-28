@@ -95,6 +95,140 @@
 ## ChangeLog
 
 <details>
+  <summary><strong>5주차(11/20 - 11/27)</strong></summary>
+  <br>
+
+  <details>
+<summary><strong>[글 생성/수정][글 삭제] 주민재</strong></summary>
+  
+  ### :white_check_mark: Done
+  <hr>
+  
+  - 기능 및 UI 개선
+    - Markdown 렌더링 기능 구현
+      - Markdown Checkbox 컴포넌트를 추가하여 사용자의 체크리스트 렌더링 가능
+      - `contentType`에 따라 Markdown 형식의 데이터 렌더링 방식 결정
+    
+  - PostDetail UI 변경
+    - 뒤로가기 BackButton 컴포넌트 생성
+   
+  - 시간 데이터 관리
+    - Time 컴포넌트 생성
+
+ - 외부 URL 관리
+   - 게시물 작성 및 수정 시 외부 링크(externalLink)를 입력할 수 있도록 Input 필드 추가
+   - URL 클릭 시 새 탭에서 열리도록 구현
+  
+  ### 🖼️ Preview
+  <hr>
+  <img width="400" alt="image" src="https://github.com/user-attachments/assets/21063625-7366-4b70-ba09-cde69977db80">
+
+    
+</details>
+
+<details>  
+<summary><strong>[댓글] 권여진</strong></summary>
+  
+### ✅ Done
+
+<hr>
+
+- 권한 관리
+  - 어드민 권한 사용자의 모든 사용자의 댓글을 삭제할 수 있는 권한 구현
+
+- 유효성 검사
+  - Zod를 사용한 댓글 길이 제한 재설정
+
+- 텍스트 처리
+  - 긴 댓글 줄바꿈 스타일 개선 (wrapping 처리)
+ 
+- UI/UX 개선
+  - 다크 모드 UI 최적화
+    - 댓글 최신순/등록순 메뉴 스타일 다크 모드에 최적화  
+  
+
+### ⚙️ in Progress
+
+<hr>
+
+- 댓글 좋아요 api 연동
+  - 좋아요 상태 api 연결
+  - 좋아요 api 연결
+  - 좋아요 취소 api 연결
+
+- 중복 코드 리펙토링
+ 
+### 🖼️ Preview
+
+<hr>
+
+  <div align=center>
+    <img src='https://github.com/user-attachments/assets/09c61aba-18c2-4856-847d-e4db3e9f916f' width=400 />
+    <img src='https://github.com/user-attachments/assets/90d35df0-f7f4-423b-a6b3-af1e09f84d9c' width=400 />
+    <img src='https://github.com/user-attachments/assets/12e7fa6f-36cc-4bff-8cc1-4b0ea0ff6744' width=400 />
+  </div>
+
+</details>
+
+<details>  
+<summary><strong>[챌린지] 김소희</strong></summary>
+  
+### ✅ Done
+
+<hr>
+
+- 챌린지 폼 컴포넌트 개선
+  - 챌린지 생성/수정 로직 통합
+    - 중복 코드 제거 및 재사용성 향상
+    - 폼 상태 관리 로직 개선
+
+- 챌린지 기능 확장
+  - 챌린지 종료 기능 구현
+    - 종료 확인 다이얼로그 추가
+    - Redux를 활용한 상태 관리 구현
+  - Badge 컴포넌트 사용성 개선
+    - 인라인 텍스트 내 사용 가능하도록 수정
+
+- 공통 컴포넌트 개선
+  - PostActionMenu 컴포넌트 리팩토링
+    - 드롭다운 로직 분리
+    - 재사용성 향상
+  - BackButton 컴포넌트 유연성 강화
+    - className props 추가로 스타일 커스터마이징 지원
+  - ActionFeedback 컴포넌트 신규 작성
+    - PostDetail에 작성되어 있던 코드를 컴포넌트화
+
+### ⚙️ in Progress
+
+<hr>
+
+- 챌린지 기능 개선
+  - 타임존 관련 버그 수정 (백엔드 이슈 해결 후 진행 예정)
+    - 한국 시간대 고려한 날짜 처리
+    - API 요청/응답 시간 포맷 통일
+  - 챌린지 참여 기능 구현
+  - 참여자 관리 기능 개발
+  - 챌린지 목록 필터링 기능 구현
+  - 진행 상태 표시 개선
+ 
+### 🖼️ Preview
+
+<hr>
+
+<div align=center>
+
+  <img src='https://github.com/user-attachments/assets/69d05b22-56f2-4013-be97-91c4a9529c42' width=500 />
+  <img src='https://github.com/user-attachments/assets/583c5063-ba96-4094-959f-bdee734840c3' width=500 />
+  <img src='https://github.com/user-attachments/assets/4a2b153e-0d32-4fa8-ad4a-1c0bab7b6be7' width=500 />
+  <img src='https://github.com/user-attachments/assets/1b3925ca-e44d-4fe2-ba56-38781b844650' width=500 />
+  
+</div>
+
+</details>
+
+</details>
+
+<details>
 <summary><strong>4주차(11/13 - 11/19)</strong></summary>
 <br>
 
