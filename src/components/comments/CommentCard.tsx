@@ -24,6 +24,7 @@ type CommentCardProps = {
 const CommentCard: React.FC<CommentCardProps> = ({ comment, onDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
   const user = useAppSelector(state => state.auth.user);
+  const isAdmin = useAppSelector(state => state.auth.user?.role === 'admin');
   const [author, setAuthor] = useState<{ username: string; profileImageUrl?: string } | null>(null);
   const { toast } = useToast();
 
@@ -86,7 +87,7 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, onDelete }) => {
           </p>
           <LikeButton initialLikes={comment.likeCount} />
         </div>
-        {isOwnComment && (
+        {(isOwnComment || isAdmin) && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="h-8 w-8 p-0">
@@ -94,7 +95,7 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, onDelete }) => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={handleEditClick}>수정</DropdownMenuItem>
+              {isOwnComment && <DropdownMenuItem onClick={handleEditClick}>수정</DropdownMenuItem>}
               <DropdownMenuItem onClick={handleDeleteClick} className="text-red-600">
                 삭제
               </DropdownMenuItem>
