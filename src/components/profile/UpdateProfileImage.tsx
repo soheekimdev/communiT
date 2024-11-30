@@ -1,4 +1,4 @@
-import { updateProfileImg } from '@/api/profile';
+import { updateProfileImg, uploadFile } from '@/api/profile';
 import { useRef, useState } from 'react';
 import { toast } from '@/hooks/useToast';
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
@@ -39,7 +39,10 @@ const UpdateProfileImage = ({
   };
 
   const handleImageSubmit = async () => {
-    if (!profileImage || !userId || !token) {
+    const fileInput = imageFileRef.current;
+    const file = fileInput?.files?.[0];
+
+    if (!file || !userId || !token) {
       toast({
         title: '업데이트 실패',
         description: '이미지 파일이나 인증 토큰이 없습니다.',
@@ -49,7 +52,10 @@ const UpdateProfileImage = ({
 
     setLoading(true);
     try {
-      await updateProfileImg(userId, profileImage, token);
+      const uploadResponse = await uploadFile(file, 'account', userId, token);
+
+      await updateProfileImg(userId, uploadResponse.url, token);
+
       toast({
         title: '프로필 이미지 업데이트',
         description: '프로필 이미지가 성공적으로 업데이트되었습니다.',
