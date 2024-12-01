@@ -9,7 +9,11 @@ const apiClient = axios.create({
 });
 
 const handleApiError = (error: unknown, errorMessage: string) => {
-  console.error(`${errorMessage}: `, error);
+  if (axios.isAxiosError(error)) {
+    console.error(`${errorMessage}:`, error.response?.data || error.message);
+  } else {
+    console.error(`${errorMessage}:`, error);
+  }
   throw error;
 };
 
@@ -24,6 +28,7 @@ export type Post = {
   accountId: string;
   viewCount: number;
   commentCount: number;
+  pureLikeCount?: number;
 };
 
 export type Meta = {
@@ -51,7 +56,7 @@ export const fetchPostDetail = async (id: string): Promise<Post | null> => {
     const response = await apiClient.get(`/posts/${id}`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching post:', error);
+    handleApiError(error, 'Error fetching post detail');
     return null;
   }
 };
@@ -110,6 +115,34 @@ export const deletePost = async (id: string, token: string): Promise<boolean> =>
     return true;
   } catch (error) {
     console.error('Error deleting post:', error);
+    return false;
+  }
+};
+
+export const likePost = async (postId: string, token: string) => {
+  try {
+    const response = await apiClient.post(
+      `/posts/${postId}/like`,
+      {},
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    handleApiError(error, 'Error liking post');
+    return false;
+  }
+};
+
+export const unlikePost = async (postId: string, token: string) => {
+  try {
+    const response = await apiClient.delete(`/posts/${postId}/like`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    handleApiError(error, 'Error unliking post');
     return false;
   }
 };

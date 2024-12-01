@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -17,6 +18,7 @@ import { Badge } from '@/components/ui/badge';
 import Time from '@/components/shared/Time';
 import PostActionMenu from '@/components/shared/PostActionMenu';
 import ActionFeedback from '@/components/shared/ActionFeedback';
+import { likePost, unlikePost } from '@/api/post';
 
 const PostDetail = () => {
   const { id } = useParams();
@@ -24,8 +26,10 @@ const PostDetail = () => {
   const user = useSelector((state: RootState) => state.auth.user);
   const userId = user?.id;
   const token = localStorage.getItem('accessToken');
-  const { post, loading, error, success, handleDelete } = usePostDetail(id, token);
+  const { post, loading, likeCount, setLikeCount, error, setError, success, handleDelete } =
+    usePostDetail(id, token);
   const [author, setAuthor] = useState<{ username: string; profileImageUrl?: string } | null>(null);
+  const [isLiked, setIsLiked] = useState(false);
 
   useEffect(() => {
     if (post?.accountId) {
@@ -33,7 +37,41 @@ const PostDetail = () => {
         .then(data => setAuthor(data))
         .catch(err => console.error(err));
     }
+    if (post) {
+      setIsLiked(post.isLikedByUser);
+      setLikeCount(post.pureLikeCount || 0);
+    }
   }, [post]);
+
+  const handleLikeToggle = async () => {
+    if (!post || !token) {
+      setError('로그인이 필요합니다.');
+      return;
+    }
+
+    try {
+      if (isLiked) {
+        await unlikePost(post.id, token);
+        setIsLiked(false);
+        setLikeCount(prev => Math.max(0, prev - 1));
+      } else {
+        try {
+          await likePost(post.id, token);
+          setIsLiked(true);
+          setLikeCount(prev => prev + 1);
+        } catch (error) {
+          if (axios.isAxiosError(error) && error.response?.status === 409) {
+            await unlikePost(post.id, token);
+            setIsLiked(false);
+            setLikeCount(prev => Math.max(0, prev - 1));
+          }
+        }
+      }
+    } catch (error) {
+      console.error('좋아요 토글 중 오류 발생:', error);
+      setError('좋아요/취소 중 오류가 발생했습니다.');
+    }
+  };
 
   if (loading) {
     return (
@@ -124,9 +162,13 @@ const PostDetail = () => {
               <Eye className="h-4 w-4" />
               <span>{post.viewCount}</span>
             </Badge>
-            <Badge variant="outline" className="flex items-center gap-1">
+            <Badge
+              variant="outline"
+              className="flex items-center gap-1 cursor-pointer"
+              onClick={handleLikeToggle}
+            >
               <ThumbsUp className="h-4 w-4" />
-              <span>{post.pureLikeCount}</span>
+              <span>{likeCount}</span>
             </Badge>
             <Badge variant="outline" className="flex items-center gap-1">
               <MessageCircle className="h-4 w-4" />

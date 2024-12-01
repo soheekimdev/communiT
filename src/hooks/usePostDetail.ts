@@ -2,19 +2,34 @@ import { useState, useEffect } from 'react';
 import { fetchPostDetail, deletePost } from '@/api/post';
 import { useNavigate } from 'react-router-dom';
 
+type Post = {
+  id: string;
+  title: string;
+  content: string;
+  accountId: string;
+  pureLikeCount?: number;
+  createdAt: string;
+  [key: string]: any;
+};
+
 const usePostDetail = (id: string | undefined, token: string | null) => {
-  const [post, setPost] = useState<any>(null);
+  const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (id) {
       fetchPostDetail(id)
-        .then(data => {
-          setPost(data);
-          console.log(post);
+        .then((data: Post | null) => {
+          if (data) {
+            setPost(data);
+            setLikeCount(data.pureLikeCount || 0);
+          } else {
+            setError('게시글 데이터를 불러오지 못했습니다.');
+          }
           setLoading(false);
         })
         .catch(err => {
@@ -46,7 +61,7 @@ const usePostDetail = (id: string | undefined, token: string | null) => {
     }
   };
 
-  return { post, loading, error, success, handleDelete };
+  return { post, loading, error, setError, success, likeCount, setLikeCount, handleDelete };
 };
 
 export default usePostDetail;
