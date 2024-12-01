@@ -1,23 +1,23 @@
 import axios from 'axios';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
-import { CalendarIcon, ThumbsUp, MessageCircle, Eye, ExternalLink } from 'lucide-react';
+import usePostDetail from '@/hooks/usePostDetail';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/RTK/store';
-import ReactMarkdown from 'react-markdown';
-import usePostDetail from '@/hooks/usePostDetail';
-import ErrorAlert from '@/components/post/ErrorAlert';
 import { fetchProfileImageURL } from '@/api/profileURL';
-import ProfileImage from '@/components/profile/ProfileImage';
-import { useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 import CommentForm from '@/components/comments/CommentForm';
 import BackButton from '@/components/shared/BackButton';
-import { Separator } from '@/components/ui/separator';
-import { Badge } from '@/components/ui/badge';
 import Time from '@/components/shared/Time';
 import PostActionMenu from '@/components/shared/PostActionMenu';
 import ActionFeedback from '@/components/shared/ActionFeedback';
+import ErrorAlert from '@/components/post/ErrorAlert';
+import PostSkeleton from '@/components/post/PostSkeleton';
+import ProfileImage from '@/components/profile/ProfileImage';
+import { Separator } from '@/components/ui/separator';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { CalendarIcon, ThumbsUp, MessageCircle, Eye, ExternalLink } from 'lucide-react';
 import { likePost, unlikePost } from '@/api/post';
 
 const PostDetail = () => {
@@ -74,23 +74,7 @@ const PostDetail = () => {
   };
 
   if (loading) {
-    return (
-      <div className="container mx-auto p-4 max-w-2xl">
-        <Card>
-          <CardHeader>
-            <Skeleton className="h-8 w-3/4" />
-          </CardHeader>
-          <CardContent>
-            <Skeleton className="h-4 w-full mb-2" />
-            <Skeleton className="h-4 w-full mb-2" />
-            <Skeleton className="h-4 w-2/3" />
-          </CardContent>
-          <CardFooter>
-            <Skeleton className="h-4 w-1/3" />
-          </CardFooter>
-        </Card>
-      </div>
-    );
+    return <PostSkeleton />;
   }
 
   if (!post) return <ErrorAlert message="게시글을 찾을 수 없습니다." />;
@@ -103,7 +87,6 @@ const PostDetail = () => {
         successTitle="성공"
         successMessage="게시글이 성공적으로 삭제되었습니다. 곧 목록 페이지로 이동합니다."
       />
-
       <div className="mb-4">
         <BackButton />
       </div>

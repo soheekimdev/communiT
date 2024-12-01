@@ -1,34 +1,20 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import usePostForm from '@/hooks/usePosts';
 import ReactMarkdown from 'react-markdown';
 import PostPagination from '@/components/shared/PostPagination';
+import Time from '@/components/shared/Time';
+import PostSkeleton from '@/components/post/PostSkeleton';
+import ProfileImage from '@/components/profile/ProfileImage';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
-import usePostForm from '@/hooks/usePosts';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/RTK/store';
-import ProfileImage from '@/components/profile/ProfileImage';
-import { fetchProfileImageURL } from '@/api/profileURL';
 import { Eye, MessageCircle } from 'lucide-react';
-import Time from '@/components/shared/Time';
+import { fetchProfileImageURL } from '@/api/profileURL';
 
 const POST_PER_PAGE = 6;
 
-const PostSkeleton = () => (
-  <Card className="overflow-hidden">
-    <CardHeader>
-      <Skeleton className="h-6 w-3/4" />
-    </CardHeader>
-    <CardContent>
-      <Skeleton className="h-4 w-full mb-2" />
-      <Skeleton className="h-4 w-2/3" />
-    </CardContent>
-    <CardFooter>
-      <Skeleton className="h-4 w-1/2" />
-    </CardFooter>
-  </Card>
-);
 const Post = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const { posts, meta, isLoading } = usePostForm(currentPage);
