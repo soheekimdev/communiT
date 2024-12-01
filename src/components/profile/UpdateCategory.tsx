@@ -1,14 +1,43 @@
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/useToast';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { fetchTag } from '@/api/tag';
 import CategorySelector from './CategorySelector';
 
-const categoryOptions = ['축구', '농구', '야구', '테니스', '스쿠버 다이빙', '수상스키', '런닝'];
+interface Tag {
+  id: string;
+  name: string;
+  hslColor: string;
+}
 
 const UpdateCategory = () => {
   const [categories, setCategories] = useState<string[]>([]);
+  const [availableCategories, setAvailableCategories] = useState<Tag[]>([]);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        setLoading(true);
+        const response = await fetchTag();
+        const fetchedCategories = response.data.map((tag: Tag) => ({
+          id: tag.id,
+          name: tag.name,
+          hslColor: tag.hslColor,
+        }));
+        setAvailableCategories(fetchedCategories);
+      } catch (error) {
+        toast({
+          title: '카테고리 불러오기 실패',
+          description: '카테고리 데이터를 불러오는 중 오류가 발생했습니다.',
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadCategories();
+  }, []);
 
   const toggleCategory = (category: string) => {
     setCategories(prevCategories =>
@@ -51,11 +80,15 @@ const UpdateCategory = () => {
         <CardTitle>카테고리 변경</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <CategorySelector
-          categories={categoryOptions}
-          selectedCategories={categories}
-          toggleCategory={toggleCategory}
-        />
+        {loading ? (
+          <p>카테고리를 불러오는 중...</p>
+        ) : (
+          <CategorySelector
+            categories={availableCategories.map(tag => tag.name)}
+            selectedCategories={categories}
+            toggleCategory={toggleCategory}
+          />
+        )}
         <div className="flex justify-center">
           <Button onClick={handleCategorySubmit} disabled={loading}>
             {loading ? '업데이트 중...' : '카테고리 업데이트'}
