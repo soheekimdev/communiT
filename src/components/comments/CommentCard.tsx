@@ -86,7 +86,13 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, onDelete }) => {
               minute: '2-digit',
             })}
           </p>
-          <LikeButton initialLikes={comment.likeCount} />
+          <LikeButton
+            initialLikes={comment.likeCount}
+            isInitiallyLiked={false}
+            postId={comment.postId}
+            commentId={comment.id}
+            token={token!}
+          />
         </div>
         {(isOwnComment || isAdmin) && (
           <DropdownMenu>
