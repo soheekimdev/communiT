@@ -21,14 +21,15 @@ export type Post = {
   id: string;
   title: string;
   content: string;
-  contentType: string;
-  externalLink: string;
-  createdAt: string;
-  accountUsername: string;
   accountId: string;
-  viewCount: number;
-  commentCount: number;
+  accountUsername: string;
+  isLikedByUser: boolean;
   pureLikeCount?: number;
+  createdAt: string;
+  contentType?: 'markdown' | 'string';
+  externalLink?: string;
+  viewCount?: number;
+  commentCount?: number;
 };
 
 export type Meta = {

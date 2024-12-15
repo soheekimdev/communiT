@@ -7,8 +7,14 @@ type Post = {
   title: string;
   content: string;
   accountId: string;
+  accountUsername: string;
+  isLikedByUser: boolean;
   pureLikeCount?: number;
   createdAt: string;
+  contentType?: 'markdown' | 'string';
+  externalLink?: string;
+  viewCount?: number;
+  commentCount?: number;
 };
 
 const usePostDetail = (id: string | undefined, token: string | null) => {
