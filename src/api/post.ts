@@ -63,7 +63,7 @@ export const fetchPostDetail = async (id: string): Promise<Post | null> => {
       content: data.content,
       accountId: data.accountId,
       accountUsername: data.accountUsername || 'Unknown',
-      isLikedByUser: data.isLikedByUser || false,
+      isLikedByUser: data.isLikedByUser ?? false,
       pureLikeCount: data.pureLikeCount || 0,
       createdAt: data.createdAt,
       contentType: data.contentType || 'string',
