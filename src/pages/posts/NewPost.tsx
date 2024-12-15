@@ -1,3 +1,5 @@
+import { useSelector } from 'react-redux';
+import { RootState } from '@/RTK/store';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -28,7 +30,7 @@ const NewPost = () => {
   const [showDialog, setShowDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState('');
   const [isMarkdown, setIsMarkdown] = useState(false);
-  const token = localStorage.getItem('accessToken');
+  const { token } = useSelector((state: RootState) => state.auth);
 
   const { values, handleChange, validate } = useForm({
     title: '',
@@ -64,7 +66,7 @@ const NewPost = () => {
         setAlertMessage('게시물 생성에 실패했습니다. 잠시 후 다시 시도해주세요.');
         setShowAlert(true);
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error('Failed to create post:', error);
       setAlertMessage('게시물 생성에 실패했습니다. 잠시 후 다시 시도해주세요.');
       setShowAlert(true);

@@ -19,8 +19,7 @@ const UpdatePost = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
-  const user = useSelector((state: RootState) => state.auth.user);
-  const token = localStorage.getItem('accessToken');
+  const { user, token } = useSelector((state: RootState) => state.auth);
 
   const { values, error, handleChange, validate } = usePostForm({
     title: '',
@@ -38,7 +37,7 @@ const UpdatePost = () => {
               setPost(data);
               values.title = data.title;
               values.content = data.content;
-              values.externalLink = data.externalLink;
+              values.externalLink = data.externalLink || '';
               setIsMarkdown(data.contentType === 'markdown');
             } else {
               setAlertMessage('권한이 없습니다.');
@@ -73,12 +72,12 @@ const UpdatePost = () => {
 
     if (id && post && token) {
       try {
-        const updatedPost = {
+        const updatedPost: Post = {
           ...post,
-          title: values.title,
-          content: values.content,
+          title: values.title as string,
+          content: values.content as string,
           contentType: isMarkdown ? 'markdown' : 'string',
-          externalLink: values.externalLink,
+          externalLink: values.externalLink as string,
         };
         const isUpdated = await updatePost(id, updatedPost, token);
         if (isUpdated) {
@@ -126,7 +125,7 @@ const UpdatePost = () => {
               <Input
                 id="title"
                 name="title"
-                value={values.title}
+                value={values.title as string}
                 onChange={handleChange}
                 placeholder="게시물 제목을 입력하세요 (4자 이상)"
                 required
@@ -137,7 +136,7 @@ const UpdatePost = () => {
               <Textarea
                 id="content"
                 name="content"
-                value={values.content}
+                value={values.content as string}
                 onChange={handleChange}
                 placeholder="게시물 내용을 입력하세요"
                 required
@@ -149,7 +148,7 @@ const UpdatePost = () => {
               <Input
                 id="externalLink"
                 name="externalLink"
-                value={values.externalLink}
+                value={values.externalLink || ''}
                 onChange={handleChange}
                 placeholder="www.google.com"
               />

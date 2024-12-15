@@ -15,6 +15,8 @@ import { useAppSelector } from '@/RTK/hooks';
 import ProfileImage from '../profile/ProfileImage';
 import { fetchProfileImageURL } from '@/api/profileURL';
 import { useToast } from '@/hooks/useToast';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/RTK/store';
 
 type CommentCardProps = {
   comment: UserComment;
@@ -23,7 +25,7 @@ type CommentCardProps = {
 
 const CommentCard: React.FC<CommentCardProps> = ({ comment, onDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const user = useAppSelector(state => state.auth.user);
+  const { user, token } = useSelector((state: RootState) => state.auth);
   const isAdmin = useAppSelector(state => state.auth.user?.role === 'admin');
   const [author, setAuthor] = useState<{ username: string; profileImageUrl?: string } | null>(null);
   const { toast } = useToast();
@@ -50,7 +52,6 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, onDelete }) => {
   };
 
   const handleDeleteClick = async () => {
-    const token = localStorage.getItem('accessToken');
     if (!token) return;
 
     const success = await deleteComment(comment.postId, comment.id, token);
