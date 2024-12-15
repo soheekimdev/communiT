@@ -24,13 +24,11 @@ const MyProfile = () => {
   const { toast } = useToast();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const user = useSelector((state: RootState) => state.auth.user);
+  const { user, token } = useSelector((state: RootState) => state.auth);
   const [isSwitchOn, setIsSwitchOn] = useState<boolean>(user?.isPrivate ?? false);
 
   useEffect(() => {
     const checkUser = async () => {
-      const token = localStorage.getItem('accessToken');
-
       if (token) {
         try {
           const result = await dispatch(fetchCurrentUser()).unwrap();
@@ -47,7 +45,6 @@ const MyProfile = () => {
   }, [dispatch, navigate]);
 
   const handleSwitchChange = async () => {
-    const token = localStorage.getItem('accessToken');
     if (!token) {
       toast({
         title: '오류',

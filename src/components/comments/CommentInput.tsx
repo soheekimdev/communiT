@@ -5,11 +5,11 @@ import * as z from 'zod';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
-import { useAppSelector } from '@/RTK/hooks';
 import { RootState } from '@/RTK/store';
 import { commentSchema } from '@/schemas/commentSchema';
 import { Link, useParams } from 'react-router-dom';
 import { createNewComment, UserComment } from '@/api/comment';
+import { useSelector } from 'react-redux';
 
 type CommentInputProps = {
   addComment: (newComment: UserComment) => void;
@@ -20,8 +20,7 @@ const CommentInput = ({ addComment }: CommentInputProps) => {
   const [charCount, setCharCount] = useState(0);
   const [, setLoading] = useState(false);
   const [, setError] = useState<string | null>(null);
-  const user = useAppSelector((state: RootState) => state.auth.user);
-  const token = localStorage.getItem('accessToken');
+  const { user, token } = useSelector((state: RootState) => state.auth);
 
   const form = useForm<z.infer<typeof commentSchema>>({
     resolver: zodResolver(commentSchema),

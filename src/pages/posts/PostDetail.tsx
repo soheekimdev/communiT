@@ -23,9 +23,8 @@ import { likePost, unlikePost } from '@/api/post';
 const PostDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const user = useSelector((state: RootState) => state.auth.user);
+  const { user, token } = useSelector((state: RootState) => state.auth);
   const userId = user?.id;
-  const token = localStorage.getItem('accessToken');
   const { post, loading, likeCount, setLikeCount, error, setError, success, handleDelete } =
     usePostDetail(id, token);
   const [author, setAuthor] = useState<{ username: string; profileImageUrl?: string } | null>(null);

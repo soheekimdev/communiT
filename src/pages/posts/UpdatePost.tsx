@@ -19,8 +19,7 @@ const UpdatePost = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
-  const user = useSelector((state: RootState) => state.auth.user);
-  const token = localStorage.getItem('accessToken');
+  const { user, token } = useSelector((state: RootState) => state.auth);
 
   const { values, error, handleChange, validate } = usePostForm({
     title: '',

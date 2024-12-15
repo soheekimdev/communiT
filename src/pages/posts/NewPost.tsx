@@ -1,3 +1,5 @@
+import { useSelector } from 'react-redux';
+import { RootState } from '@/RTK/store';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -28,7 +30,7 @@ const NewPost = () => {
   const [showDialog, setShowDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState('');
   const [isMarkdown, setIsMarkdown] = useState(false);
-  const token = localStorage.getItem('accessToken');
+  const { token } = useSelector((state: RootState) => state.auth);
 
   const { values, handleChange, validate } = useForm({
     title: '',

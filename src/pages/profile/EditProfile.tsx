@@ -7,9 +7,8 @@ import UpdatePassword from '@/components/profile/UpdatePassword';
 import UpdateCategory from '@/components/profile/UpdateCategory';
 
 const EditProfile = () => {
-  const user = useSelector((state: RootState) => state.auth.user);
+  const { user, token } = useSelector((state: RootState) => state.auth);
   const userId = user?.id;
-  const token = localStorage.getItem('accessToken');
   const currentNickname = user?.username || '';
   const currentBio = user?.bio || '';
 

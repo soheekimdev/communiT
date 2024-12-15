@@ -6,6 +6,7 @@ interface AuthState {
   isLoading: boolean;
   isLoggedIn: boolean;
   user: User | null;
+  token: string | null;
   error: string | null;
 }
 
@@ -13,6 +14,7 @@ const initialState: AuthState = {
   isLoading: false,
   isLoggedIn: !!localStorage.getItem('accessToken'),
   user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')!) : null,
+  token: localStorage.getItem('accessToken') || null,
   error: null,
 };
 
@@ -70,11 +72,15 @@ const authSlice = createSlice({
     logout(state) {
       state.isLoggedIn = false;
       state.user = null;
+      state.token = null;
       state.error = null;
       authAPI.logout();
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
       localStorage.removeItem('user');
+    },
+    setAccessToken(state, action) {
+      state.token = action.payload;
     },
     setError: (state, action) => {
       state.error = action.payload;
@@ -93,6 +99,7 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.isLoggedIn = true;
         state.user = action.payload;
+        state.token = localStorage.getItem('accessToken') || '';
       })
       .addCase(signIn.rejected, (state, action) => {
         state.isLoading = false;
@@ -127,5 +134,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout, setError, clearError } = authSlice.actions;
+export const { logout, setAccessToken, setError, clearError } = authSlice.actions;
 export default authSlice.reducer;
