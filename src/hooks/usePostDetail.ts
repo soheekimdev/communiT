@@ -9,7 +9,6 @@ type Post = {
   accountId: string;
   pureLikeCount?: number;
   createdAt: string;
-  [key: string]: any;
 };
 
 const usePostDetail = (id: string | undefined, token: string | null) => {

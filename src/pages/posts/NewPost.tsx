@@ -64,7 +64,7 @@ const NewPost = () => {
         setAlertMessage('게시물 생성에 실패했습니다. 잠시 후 다시 시도해주세요.');
         setShowAlert(true);
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error('Failed to create post:', error);
       setAlertMessage('게시물 생성에 실패했습니다. 잠시 후 다시 시도해주세요.');
       setShowAlert(true);
