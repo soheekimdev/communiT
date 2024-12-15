@@ -37,7 +37,7 @@ const PostDetail = () => {
         .catch(err => console.error(err));
     }
     if (post) {
-      setIsLiked(post.isLikedByUser);
+      setIsLiked(post.isLikedByUser || false);
       setLikeCount(post.pureLikeCount || 0);
     }
   }, [post]);

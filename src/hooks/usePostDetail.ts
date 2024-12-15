@@ -6,15 +6,15 @@ type Post = {
   id: string;
   title: string;
   content: string;
-  accountId: string;
-  accountUsername: string;
-  isLikedByUser: boolean;
-  pureLikeCount?: number;
-  createdAt: string;
   contentType?: 'markdown' | 'string';
   externalLink?: string;
   viewCount?: number;
+  accountId: string;
+  isLikedByUser?: boolean;
+  createdAt: string;
+  accountUsername: string;
   commentCount?: number;
+  pureLikeCount?: number;
 };
 
 const usePostDetail = (id: string | undefined, token: string | null) => {

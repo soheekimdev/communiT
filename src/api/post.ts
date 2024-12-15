@@ -55,7 +55,22 @@ export const fetchPosts = async (
 export const fetchPostDetail = async (id: string): Promise<Post | null> => {
   try {
     const response = await apiClient.get(`/posts/${id}`);
-    return response.data;
+    const data = response.data;
+
+    return {
+      id: data.id,
+      title: data.title,
+      content: data.content,
+      accountId: data.accountId,
+      accountUsername: data.accountUsername || 'Unknown',
+      isLikedByUser: data.isLikedByUser || false,
+      pureLikeCount: data.pureLikeCount || 0,
+      createdAt: data.createdAt,
+      contentType: data.contentType || 'string',
+      externalLink: data.externalLink || '',
+      viewCount: data.viewCount || 0,
+      commentCount: data.commentCount || 0,
+    };
   } catch (error) {
     handleApiError(error, 'Error fetching post detail');
     return null;
