@@ -73,3 +73,31 @@ export const updateComment = async (postId: string, id: string, token: string, c
     return false;
   }
 };
+
+export const likeComment = async (postId: string, commentId: string, token: string) => {
+  try {
+    const response = await apiClient.post(
+      `/${postId}/comments/${commentId}/like`,
+      {},
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error liking comment:', error);
+    throw error;
+  }
+};
+
+export const unlikeComment = async (postId: string, commentId: string, token: string) => {
+  try {
+    const response = await apiClient.delete(`/${postId}/comments/${commentId}/like`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error unliking comment:', error);
+    throw error;
+  }
+};
