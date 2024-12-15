@@ -11,6 +11,7 @@ import ActionFeedback from '@/components/shared/ActionFeedback';
 import { differenceInDays } from 'date-fns';
 import { deleteChallenge, getChallenge } from '@/api/challenges';
 import { fetchProfileImageURL } from '@/api/profileURL';
+import ChallengeEvent from '@/components/challenges/ChallengeEvent';
 
 const ChallengeDetail = () => {
   const navigate = useNavigate();
@@ -91,8 +92,8 @@ const ChallengeDetail = () => {
       <ActionFeedback
         error={error}
         success={success}
-        successTitle='성공'
-        successMessage='챌린지가 성공적으로 삭제되었습니다. 곧 목록 페이지로 이동합니다.'
+        successTitle="성공"
+        successMessage="챌린지가 성공적으로 삭제되었습니다. 곧 목록 페이지로 이동합니다."
       />
 
       <BackButton className="mb-6" />
@@ -121,6 +122,7 @@ const ChallengeDetail = () => {
           isFinished={isFinished}
         />
       </div>
+      <ChallengeEvent />
     </div>
   );
 };
