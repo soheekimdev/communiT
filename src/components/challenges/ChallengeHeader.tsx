@@ -4,7 +4,7 @@ import { Clock, Calendar } from 'lucide-react';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { useSelector } from 'react-redux';
-import { useAppDispatch } from '@/RTK/hooks';
+import { useAppDispatch, useAppSelector } from '@/RTK/hooks';
 import { finishChallenge, selectChallengeLoading } from '@/RTK/challengeSlice';
 
 type ChallengeHeaderProps = {
@@ -31,6 +31,7 @@ const ChallengeHeader = ({
   isFinished,
 }: ChallengeHeaderProps) => {
   const dispatch = useAppDispatch();
+  const { user } = useAppSelector(state => state.auth);
   const isLoading = useSelector(selectChallengeLoading);
 
   const handleFinish = async () => {
@@ -56,7 +57,7 @@ const ChallengeHeader = ({
   return (
     <div className="flex flex-col items-start justify-between">
       <div className="flex flex-row-reverse items-start flex-wrap gap-2 w-full mb-4">
-        {isMine && (
+        {(isMine || user?.role === 'admin') && (
           <PostActionMenu
             onEdit={isFinished ? undefined : onEdit}
             onDelete={onDelete}
