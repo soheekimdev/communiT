@@ -8,20 +8,26 @@ import type {
   CreateChallengeRequest,
   UpdateChallengeRequest,
 } from '@/types/challenge';
-import { parseISO, startOfDay } from 'date-fns';
+import { parseISO, format, startOfDay } from 'date-fns';
 import { toZonedTime } from 'date-fns-tz';
 
 const TIMEZONE = 'Asia/Seoul';
 
 export const convertToAPIDate = (date: Date) => {
-  const d = new Date(date);
-  d.setHours(0, 0, 0, 0);
-  return d.toISOString();
+  const localMidnight = new Date(date);
+  localMidnight.setHours(0, 0, 0, 0);
+
+  const utcDate = new Date(localMidnight.getTime() - 9 * 60 * 60 * 1000);
+  return utcDate.toISOString();
 };
 
 export const convertToLocalDate = (dateString: string) => {
-  const date = parseISO(dateString);
-  return toZonedTime(date, TIMEZONE);
+  const utcDate = parseISO(dateString);
+  return toZonedTime(utcDate, TIMEZONE);
+};
+
+export const formatDisplayDate = (date: Date) => {
+  return format(date, 'yyyy.MM.dd');
 };
 
 export const createChallenge = async (data: CreateChallengeRequest) => {

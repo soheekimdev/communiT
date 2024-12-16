@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { createChallenge, getChallenge, updateChallenge } from '@/api/challenges';
+import { convertToAPIDate, createChallenge, getChallenge, updateChallenge } from '@/api/challenges';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -83,8 +83,8 @@ const ChallengeForm = ({ isEditing = false }: ChallengeFormProps) => {
         title: formData.get('title'),
         description: formData.get('description'),
         type: 'self-check' as const,
-        startDate: formState.date.from.toISOString(),
-        endDate: formState.date.to.toISOString(),
+        startDate: convertToAPIDate(formState.date.from),
+        endDate: convertToAPIDate(formState.date.to),
         isDeleted: false,
         isPublished: false,
         isFinished: false,

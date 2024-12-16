@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Crown, Heart } from 'lucide-react';
 import { ChallengeCardProps } from '@/types/challenge';
 import { Badge } from '@/components/ui/badge';
+import { convertToLocalDate, formatDisplayDate } from '@/api/challenges';
 
 export const ChallengeCard = ({
   id,
@@ -19,7 +20,8 @@ export const ChallengeCard = ({
   const navigate = useNavigate();
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString();
+    const localDate = convertToLocalDate(dateString);
+    return formatDisplayDate(localDate);
   };
 
   const handleClick = () => {

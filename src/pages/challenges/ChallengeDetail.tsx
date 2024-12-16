@@ -15,6 +15,7 @@ import {
   joinChallenge,
   getChallengeMembers,
   isUserParticipating,
+  convertToLocalDate,
 } from '@/api/challenges';
 import { fetchProfileImageURL } from '@/api/profileURL';
 import ChallengeEvent from '@/components/challenges/ChallengeEvent';
@@ -42,13 +43,11 @@ const ChallengeDetail = () => {
         const challengeData = await getChallenge(id);
         dispatch(setCurrentChallenge(challengeData));
 
-        // 작성자 정보 조회
         if (challengeData.accountId) {
           const authorData = await fetchProfileImageURL(challengeData.accountId);
           setAuthor(authorData);
         }
 
-        // 참여 여부 확인
         if (user?.id) {
           const members = await getChallengeMembers(id);
           setIsParticipating(isUserParticipating(members, user.id));
@@ -97,7 +96,6 @@ const ChallengeDetail = () => {
       await joinChallenge(challenge.id);
       setIsParticipating(true);
 
-      // 성공 알림 표시
       toast({
         title: '챌린지 참여 완료',
         description: '챌린지에 성공적으로 참여했습니다.',
@@ -106,7 +104,6 @@ const ChallengeDetail = () => {
     } catch (error) {
       setError(error instanceof Error ? error.message : '챌린지 참여에 실패했습니다.');
 
-      // 에러 알림 표시
       toast({
         title: '참여 실패',
         description: error instanceof Error ? error.message : '챌린지 참여에 실패했습니다.',
@@ -126,8 +123,8 @@ const ChallengeDetail = () => {
   }
 
   const isMine = user?.id === challenge.accountId;
-  const startDate = new Date(challenge.startDate);
-  const endDate = new Date(challenge.endDate);
+  const startDate = convertToLocalDate(challenge.startDate);
+  const endDate = convertToLocalDate(challenge.endDate);
   const today = new Date();
   const totalDays = differenceInDays(endDate, startDate) + 1;
   const isFinished = challenge.isFinished || endDate < today;
