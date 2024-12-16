@@ -1,11 +1,11 @@
-import PostActionMenu from '@/components/shared/PostActionMenu';
+import PostActionMenuWithAlert from '@/components/shared/PostActionMenu';
 import { Badge } from '@/components/ui/badge';
 import { Clock, Calendar } from 'lucide-react';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { useSelector } from 'react-redux';
 import { useAppDispatch, useAppSelector } from '@/RTK/hooks';
-import { finishChallenge, selectChallengeLoading } from '@/RTK/challengeSlice';
+import { finishChallenge, reopenChallenge, selectChallengeLoading } from '@/RTK/challengeSlice';
 
 type ChallengeHeaderProps = {
   challengeId: string;
@@ -42,26 +42,47 @@ const ChallengeHeader = ({
     }
   };
 
-  const additionalItems = [
-    {
-      label: isLoading ? '종료 중...' : '종료',
-      onClick: handleFinish,
-      isWithAlert: true,
-      alertTitle: '챌린지 종료',
-      alertDescription: '챌린지를 종료하시겠습니까?',
-      alertConfirmText: '종료',
-      disabled: isLoading,
-    },
-  ];
+  const handleReopen = async () => {
+    try {
+      await dispatch(reopenChallenge(challengeId)).unwrap();
+    } catch (error) {
+      console.error('챌린지 재개 중 오류 발생:', error);
+    }
+  };
 
   return (
     <div className="flex flex-col items-start justify-between">
       <div className="flex flex-row-reverse items-start flex-wrap gap-2 w-full mb-4">
         {(isMine || user?.role === 'admin') && (
-          <PostActionMenu
+          <PostActionMenuWithAlert
             onEdit={isFinished ? undefined : onEdit}
             onDelete={onDelete}
-            additionalItems={isFinished ? undefined : additionalItems}
+            disableEdit={isFinished}
+            alertTitle="삭제 확인"
+            alertDescription="정말로 삭제하시겠습니까? 삭제된 내용은 복구할 수 없습니다."
+            additionalItems={
+              isFinished
+                ? [
+                    {
+                      label: isLoading ? '재개 중...' : '다시 열기',
+                      onClick: handleReopen,
+                      isWithAlert: true,
+                      alertTitle: '챌린지 재개',
+                      alertDescription: '종료된 챌린지를 다시 여시겠습니까?',
+                      alertConfirmText: '재개',
+                    },
+                  ]
+                : [
+                    {
+                      label: isLoading ? '종료 중...' : '종료',
+                      onClick: handleFinish,
+                      isWithAlert: true,
+                      alertTitle: '챌린지 종료',
+                      alertDescription: '챌린지를 종료하시겠습니까?',
+                      alertConfirmText: '종료',
+                    },
+                  ]
+            }
           />
         )}
         <h1 className="flex-1 min-w-40 text-3xl font-bold">

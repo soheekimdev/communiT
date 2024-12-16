@@ -18,9 +18,17 @@ const initialState: ChallengeState = {
 };
 
 export const finishChallenge = createAsyncThunk(
-  'challenge/finishCallenge',
+  'challenge/finishChallenge',
   async (challengeId: string) => {
     const response = await updateChallenge(challengeId, { isFinished: true });
+    return response;
+  },
+);
+
+export const reopenChallenge = createAsyncThunk(
+  'challenge/reopenChallenge',
+  async (challengeId: string) => {
+    const response = await updateChallenge(challengeId, { isFinished: false });
     return response;
   },
 );
@@ -52,6 +60,24 @@ const challengeSlice = createSlice({
       .addCase(finishChallenge.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || '챌린지 종료 중 오류가 발생했습니다.';
+      })
+      .addCase(reopenChallenge.pending, state => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(reopenChallenge.fulfilled, (state, action) => {
+        state.loading = false;
+        if (state.currentChallenge && state.currentChallenge.id === action.payload.id) {
+          state.currentChallenge = action.payload;
+        }
+        const index = state.challenges.findIndex(c => c.id === action.payload.id);
+        if (index !== -1) {
+          state.challenges[index] = action.payload;
+        }
+      })
+      .addCase(reopenChallenge.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || '챌린지 재개 중 오류가 발생했습니다.';
       });
   },
 });
