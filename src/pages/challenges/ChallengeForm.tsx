@@ -8,7 +8,7 @@ import { DatePickerWithRange } from '@/components/ui/date-picker-with-range';
 import { ChallengeFormProps, ChallengeFormState } from '@/types/challenge';
 import { startOfToday } from 'date-fns';
 import axios from 'axios';
-import { challengeFormSchema, ChallengeFormValues } from '@/schemas/challenges';
+import { challengeFormSchema, ChallengeFormValues } from '@/schemas/challengeSchema';
 import { getChangedFields } from '@/lib/form-utils';
 
 const ChallengeForm = ({ isEditing = false }: ChallengeFormProps) => {

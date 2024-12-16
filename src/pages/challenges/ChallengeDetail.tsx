@@ -9,7 +9,13 @@ import ChallengeHeader from '@/components/challenges/ChallengeHeader';
 import ChallengeFooter from '@/components/challenges/ChallengeFooter';
 import ActionFeedback from '@/components/shared/ActionFeedback';
 import { differenceInDays } from 'date-fns';
-import { deleteChallenge, getChallenge } from '@/api/challenges';
+import {
+  deleteChallenge,
+  getChallenge,
+  joinChallenge,
+  getChallengeMembers,
+  isUserParticipating,
+} from '@/api/challenges';
 import { fetchProfileImageURL } from '@/api/profileURL';
 import ChallengeEvent from '@/components/challenges/ChallengeEvent';
 
@@ -24,6 +30,7 @@ const ChallengeDetail = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [isParticipating, setIsParticipating] = useState(false);
 
   useEffect(() => {
     const fetchChallengeDetails = async () => {
@@ -34,9 +41,16 @@ const ChallengeDetail = () => {
         const challengeData = await getChallenge(id);
         dispatch(setCurrentChallenge(challengeData));
 
+        // 작성자 정보 조회
         if (challengeData.accountId) {
           const authorData = await fetchProfileImageURL(challengeData.accountId);
           setAuthor(authorData);
+        }
+
+        // 참여 여부 확인
+        if (user?.id) {
+          const members = await getChallengeMembers(id);
+          setIsParticipating(isUserParticipating(members, user.id));
         }
       } catch (err) {
         setError('챌린지 정보를 불러오는데 실패했습니다.');
@@ -47,7 +61,7 @@ const ChallengeDetail = () => {
     };
 
     fetchChallengeDetails();
-  }, [id, dispatch]);
+  }, [id, dispatch, user?.id]);
 
   const handleEdit = () => {
     if (challenge?.id) {
@@ -71,6 +85,21 @@ const ChallengeDetail = () => {
     }
   };
 
+  const onJoin = async () => {
+    if (!challenge?.id || !user?.id) return;
+
+    try {
+      setIsLoading(true);
+      await joinChallenge(challenge.id);
+      setIsParticipating(true);
+    } catch (error) {
+      setError('챌린지 참여에 실패했습니다.');
+      console.error('챌린지 참여 실패:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   if (isLoading) {
     return <LoadingState />;
   }
@@ -85,7 +114,6 @@ const ChallengeDetail = () => {
   const today = new Date();
   const totalDays = differenceInDays(endDate, startDate) + 1;
   const isFinished = challenge.isFinished || endDate < today;
-  const isParticipating = isMine || true; // 임시 데이터
 
   return (
     <div className="container mx-auto p-4 max-w-4xl">
@@ -120,6 +148,7 @@ const ChallengeDetail = () => {
           challenge={challenge}
           isParticipating={isParticipating}
           isFinished={isFinished}
+          onJoin={onJoin}
         />
       </div>
       <ChallengeEvent />

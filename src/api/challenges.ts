@@ -1,6 +1,7 @@
 import instance from '@/api/axios';
 import type {
   Challenge,
+  ChallengeMember,
   ChallengeResponse,
   CreateChallengeRequest,
   UpdateChallengeRequest,
@@ -58,4 +59,30 @@ export const isChallengePassed = (endDate: string) => {
   const today = startOfDay(new Date());
   const challengeEndDate = startOfDay(new Date(endDate));
   return challengeEndDate < today;
+};
+
+// TODO: API 테스트....
+export const joinChallenge = async (id: string) => {
+  const response = await instance.post(`api/challenges/${id}/member`);
+  return response.data;
+};
+
+export const getChallengeMembers = async (challengeId: string): Promise<ChallengeMember[]> => {
+  try {
+    const response = await instance.get<ChallengeMember[]>(`api/challenges/${challengeId}/member`);
+    return response.data || [];
+  } catch (error) {
+    console.error(`Failed to fetch members for challenge ${challengeId}:`, error);
+    return [];
+  }
+};
+
+export const isUserParticipating = (
+  members: ChallengeMember[] | undefined,
+  userId: string | undefined,
+): boolean => {
+  if (!members || !userId) {
+    return false;
+  }
+  return members.some(member => member.id === userId);
 };
