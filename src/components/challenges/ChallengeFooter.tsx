@@ -1,15 +1,19 @@
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import ProfileImage from '@/components/profile/ProfileImage';
+import { Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Challenge } from '@/types/challenge';
-import { Heart, Calendar } from 'lucide-react';
+import ProfileImage from '@/components/profile/ProfileImage';
+import LikeButton from '@/components/challenges/ChallengeLikeButton';
+import type { Challenge } from '@/types/challenge';
 
 type ChallengeFooterProps = {
   author: { username: string; profileImageUrl?: string } | null;
   challenge: Challenge;
   isParticipating: boolean;
   isFinished: boolean;
+  isLoggedIn: boolean;
+  isMine: boolean;
+  initialIsLiked: boolean;
   onJoin: () => void;
 };
 
@@ -18,6 +22,9 @@ const ChallengeFooter = ({
   challenge,
   isParticipating,
   isFinished,
+  isLoggedIn,
+  isMine,
+  initialIsLiked,
   onJoin,
 }: ChallengeFooterProps) => {
   const getButtonText = () => {
@@ -40,10 +47,13 @@ const ChallengeFooter = ({
       </div>
 
       <div className="flex items-center gap-2">
-        <Button size="lg" variant="outline" className="gap-2 px-4">
-          <Heart />
-          <span>{challenge.likeCount}</span>
-        </Button>
+        <LikeButton
+          challengeId={challenge.id}
+          initialLikeCount={challenge.likeCount}
+          initialIsLiked={initialIsLiked}
+          isLoggedIn={isLoggedIn}
+          isMine={isMine}
+        />
         <Button size="lg" className="w-full sm:w-auto" disabled={isFinished} onClick={onJoin}>
           {getButtonText()}
         </Button>
