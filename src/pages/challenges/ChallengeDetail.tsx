@@ -16,6 +16,7 @@ import {
   getChallengeMembers,
   isUserParticipating,
   convertToLocalDate,
+  getChallengeIsLiked,
 } from '@/api/challenges';
 import { fetchProfileImageURL } from '@/api/profileURL';
 import ChallengeEvent from '@/components/challenges/ChallengeEvent';
@@ -25,14 +26,16 @@ const ChallengeDetail = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
-
   const challenge = useAppSelector(selectCurrentChallenge);
   const { user } = useAppSelector(state => state.auth);
+  const isLoggedIn = !!user;
+
   const [author, setAuthor] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [isParticipating, setIsParticipating] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
 
   useEffect(() => {
     const fetchChallengeDetails = async () => {
@@ -40,8 +43,15 @@ const ChallengeDetail = () => {
 
       try {
         setIsLoading(true);
-        const challengeData = await getChallenge(id);
+        setError(null);
+
+        const [challengeData, likeStatus] = await Promise.all([
+          getChallenge(id),
+          isLoggedIn ? getChallengeIsLiked(id) : Promise.resolve(false),
+        ]);
+
         dispatch(setCurrentChallenge(challengeData));
+        setIsLiked(likeStatus);
 
         if (challengeData.accountId) {
           const authorData = await fetchProfileImageURL(challengeData.accountId);
@@ -53,15 +63,15 @@ const ChallengeDetail = () => {
           setIsParticipating(isUserParticipating(members, user.id));
         }
       } catch (err) {
-        setError('챌린지 정보를 불러오는데 실패했습니다.');
         console.error('챌린지 조회 실패:', err);
+        setError('챌린지 정보를 불러오는데 실패했습니다.');
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchChallengeDetails();
-  }, [id, dispatch, user?.id]);
+  }, [id, dispatch, user, isLoggedIn]);
 
   const handleEdit = () => {
     if (challenge?.id) {
@@ -162,6 +172,9 @@ const ChallengeDetail = () => {
           challenge={challenge}
           isParticipating={isParticipating}
           isFinished={isFinished}
+          isLoggedIn={isLoggedIn}
+          isMine={isMine}
+          initialIsLiked={isLiked}
           onJoin={onJoin}
         />
       </div>

@@ -104,3 +104,59 @@ export const isUserParticipating = (
   }
   return members.some(member => member.id === userId);
 };
+
+export const getChallengeIsLiked = async (challengeId: string): Promise<boolean> => {
+  try {
+    const response = await instance.get(`api/challenges/${challengeId}/like-status`);
+    return response.data.type === 'like';
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.log('Error response:', error.response?.data);
+      if (error.response?.status === 404) {
+        return false;
+      }
+    }
+    console.error('좋아요 상태 확인 실패:', error);
+    return false;
+  }
+};
+
+export const likeChallenge = async (challengeId: string): Promise<Challenge> => {
+  try {
+    const response = await instance.post<Challenge>(`api/challenges/${challengeId}/like`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response?.status === 403) {
+        throw new Error('자신의 챌린지에는 좋아요를 할 수 없습니다.');
+      }
+      if (error.response?.status === 404) {
+        throw new Error('존재하지 않는 챌린지입니다.');
+      }
+      if (error.response?.status === 409) {
+        throw new Error('이미 좋아요가 처리된 챌린지입니다.');
+      }
+    }
+    throw new Error('좋아요 처리에 실패했습니다.');
+  }
+};
+
+export const unlikeChallenge = async (challengeId: string): Promise<Challenge> => {
+  try {
+    const response = await instance.delete<Challenge>(`api/challenges/${challengeId}/like`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response?.status === 403) {
+        throw new Error('자신의 챌린지에는 좋아요를 할 수 없습니다.');
+      }
+      if (error.response?.status === 404) {
+        throw new Error('존재하지 않는 챌린지입니다.');
+      }
+      if (error.response?.status === 409) {
+        throw new Error('아직 좋아요가 처리되지 않은 챌린지입니다.');
+      }
+    }
+    throw new Error('좋아요 취소에 실패했습니다.');
+  }
+};
