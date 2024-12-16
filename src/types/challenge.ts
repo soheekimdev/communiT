@@ -103,6 +103,17 @@ type ChallengeMember = {
   role: string;
 };
 
+type ChallengeParticipant = {
+  id: string;
+  accountId: string;
+  challengeId: string;
+  isDeleted: boolean;
+  isFinished: boolean;
+  isWinner: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type {
   Challenge,
   ChallengeResponse,
@@ -114,4 +125,5 @@ export type {
   ChallengeFormState,
   ChallengeFormProps,
   ChallengeMember,
+  ChallengeParticipant,
 };

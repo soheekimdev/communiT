@@ -1,7 +1,9 @@
+import axios from 'axios';
 import instance from '@/api/axios';
 import type {
   Challenge,
   ChallengeMember,
+  ChallengeParticipant,
   ChallengeResponse,
   CreateChallengeRequest,
   UpdateChallengeRequest,
@@ -61,10 +63,20 @@ export const isChallengePassed = (endDate: string) => {
   return challengeEndDate < today;
 };
 
-// TODO: API 테스트....
-export const joinChallenge = async (id: string) => {
-  const response = await instance.post(`api/challenges/${id}/member`);
-  return response.data;
+export const joinChallenge = async (challengeId: string): Promise<ChallengeParticipant> => {
+  try {
+    const response = await instance.post<ChallengeParticipant>(
+      `api/challenges/${challengeId}/member`,
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response?.status === 409) {
+        throw new Error('이미 참여 중인 챌린지입니다.');
+      }
+    }
+    throw new Error('챌린지 참여에 실패했습니다.');
+  }
 };
 
 export const getChallengeMembers = async (challengeId: string): Promise<ChallengeMember[]> => {

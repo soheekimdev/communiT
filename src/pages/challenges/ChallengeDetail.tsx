@@ -18,6 +18,7 @@ import {
 } from '@/api/challenges';
 import { fetchProfileImageURL } from '@/api/profileURL';
 import ChallengeEvent from '@/components/challenges/ChallengeEvent';
+import { toast } from '@/hooks/useToast';
 
 const ChallengeDetail = () => {
   const navigate = useNavigate();
@@ -86,15 +87,31 @@ const ChallengeDetail = () => {
   };
 
   const onJoin = async () => {
-    if (!challenge?.id || !user?.id) return;
+    if (!challenge?.id || !user?.id) {
+      setError('로그인이 필요한 기능입니다.');
+      return;
+    }
 
     try {
       setIsLoading(true);
       await joinChallenge(challenge.id);
       setIsParticipating(true);
+
+      // 성공 알림 표시
+      toast({
+        title: '챌린지 참여 완료',
+        description: '챌린지에 성공적으로 참여했습니다.',
+        variant: 'default',
+      });
     } catch (error) {
-      setError('챌린지 참여에 실패했습니다.');
-      console.error('챌린지 참여 실패:', error);
+      setError(error instanceof Error ? error.message : '챌린지 참여에 실패했습니다.');
+
+      // 에러 알림 표시
+      toast({
+        title: '참여 실패',
+        description: error instanceof Error ? error.message : '챌린지 참여에 실패했습니다.',
+        variant: 'destructive',
+      });
     } finally {
       setIsLoading(false);
     }
