@@ -21,20 +21,30 @@ const Challenges = () => {
   const [error, setError] = useState<string | null>(null);
   const { user, isLoggedIn } = useSelector<RootState, AuthState>(state => state.auth);
 
-  // 전체 챌린지 조회
+  const sortWithFinishedAtEnd = (challenges: Challenge[]) => {
+    return [...challenges].sort((a, b) => {
+      const isAFinished = isChallengePassed(a.endDate) || a.isFinished;
+      const isBFinished = isChallengePassed(b.endDate) || b.isFinished;
+
+      if (isAFinished && !isBFinished) return 1;
+      if (!isAFinished && isBFinished) return -1;
+      return 0;
+    });
+  };
+
   useEffect(() => {
     const fetchChallenges = async () => {
       try {
         setIsAllChallengesLoading(true);
         const response = await getChallenges();
-        setAllChallenges(response.data);
+        const sortedChallenges = sortWithFinishedAtEnd(response.data);
+        setAllChallenges(sortedChallenges);
 
-        // 로그인한 경우에만 참여 중인 챌린지 필터링
         if (isLoggedIn && user?.id) {
           setIsParticipatingChallengesLoading(true);
 
           const challengesWithParticipation = await Promise.all(
-            response.data.map(async challenge => {
+            sortedChallenges.map(async challenge => {
               try {
                 const members = await getChallengeMembers(challenge.id);
                 const isParticipating = isUserParticipating(members, user.id);
@@ -50,7 +60,7 @@ const Challenges = () => {
             .filter(result => result.isParticipating)
             .map(result => result.challenge);
 
-          setParticipatingChallenges(participating);
+          setParticipatingChallenges(sortWithFinishedAtEnd(participating));
         } else {
           setParticipatingChallenges([]);
         }
@@ -64,7 +74,6 @@ const Challenges = () => {
 
     fetchChallenges();
   }, [isLoggedIn, user?.id]);
-
   if (isAllChallengesLoading) {
     return (
       <div className="container mx-auto p-4">
