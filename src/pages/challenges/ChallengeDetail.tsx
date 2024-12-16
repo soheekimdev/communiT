@@ -9,9 +9,17 @@ import ChallengeHeader from '@/components/challenges/ChallengeHeader';
 import ChallengeFooter from '@/components/challenges/ChallengeFooter';
 import ActionFeedback from '@/components/shared/ActionFeedback';
 import { differenceInDays } from 'date-fns';
-import { deleteChallenge, getChallenge } from '@/api/challenges';
+import {
+  deleteChallenge,
+  getChallenge,
+  joinChallenge,
+  getChallengeMembers,
+  isUserParticipating,
+  convertToLocalDate,
+} from '@/api/challenges';
 import { fetchProfileImageURL } from '@/api/profileURL';
 import ChallengeEvent from '@/components/challenges/ChallengeEvent';
+import { toast } from '@/hooks/useToast';
 
 const ChallengeDetail = () => {
   const navigate = useNavigate();
@@ -24,6 +32,7 @@ const ChallengeDetail = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [isParticipating, setIsParticipating] = useState(false);
 
   useEffect(() => {
     const fetchChallengeDetails = async () => {
@@ -38,6 +47,11 @@ const ChallengeDetail = () => {
           const authorData = await fetchProfileImageURL(challengeData.accountId);
           setAuthor(authorData);
         }
+
+        if (user?.id) {
+          const members = await getChallengeMembers(id);
+          setIsParticipating(isUserParticipating(members, user.id));
+        }
       } catch (err) {
         setError('챌린지 정보를 불러오는데 실패했습니다.');
         console.error('챌린지 조회 실패:', err);
@@ -47,7 +61,7 @@ const ChallengeDetail = () => {
     };
 
     fetchChallengeDetails();
-  }, [id, dispatch]);
+  }, [id, dispatch, user?.id]);
 
   const handleEdit = () => {
     if (challenge?.id) {
@@ -71,6 +85,35 @@ const ChallengeDetail = () => {
     }
   };
 
+  const onJoin = async () => {
+    if (!challenge?.id || !user?.id) {
+      setError('로그인이 필요한 기능입니다.');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      await joinChallenge(challenge.id);
+      setIsParticipating(true);
+
+      toast({
+        title: '챌린지 참여 완료',
+        description: '챌린지에 성공적으로 참여했습니다.',
+        variant: 'default',
+      });
+    } catch (error) {
+      setError(error instanceof Error ? error.message : '챌린지 참여에 실패했습니다.');
+
+      toast({
+        title: '참여 실패',
+        description: error instanceof Error ? error.message : '챌린지 참여에 실패했습니다.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   if (isLoading) {
     return <LoadingState />;
   }
@@ -80,12 +123,11 @@ const ChallengeDetail = () => {
   }
 
   const isMine = user?.id === challenge.accountId;
-  const startDate = new Date(challenge.startDate);
-  const endDate = new Date(challenge.endDate);
+  const startDate = convertToLocalDate(challenge.startDate);
+  const endDate = convertToLocalDate(challenge.endDate);
   const today = new Date();
   const totalDays = differenceInDays(endDate, startDate) + 1;
   const isFinished = challenge.isFinished || endDate < today;
-  const isParticipating = isMine || true; // 임시 데이터
 
   return (
     <div className="container mx-auto p-4 max-w-4xl">
@@ -120,6 +162,7 @@ const ChallengeDetail = () => {
           challenge={challenge}
           isParticipating={isParticipating}
           isFinished={isFinished}
+          onJoin={onJoin}
         />
       </div>
       <ChallengeEvent />

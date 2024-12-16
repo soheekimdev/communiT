@@ -93,6 +93,27 @@ type ChallengeFormProps = {
   isEditing?: boolean;
 };
 
+type ChallengeMember = {
+  id: string;
+  email: string;
+  username: string;
+  profileImageUrl: string | null;
+  isEmailVerified: boolean;
+  isPrivate: boolean;
+  role: string;
+};
+
+type ChallengeParticipant = {
+  id: string;
+  accountId: string;
+  challengeId: string;
+  isDeleted: boolean;
+  isFinished: boolean;
+  isWinner: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type {
   Challenge,
   ChallengeResponse,
@@ -103,4 +124,6 @@ export type {
   ChallengeFormData,
   ChallengeFormState,
   ChallengeFormProps,
+  ChallengeMember,
+  ChallengeParticipant,
 };
