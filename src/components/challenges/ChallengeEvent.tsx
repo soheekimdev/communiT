@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { MapPin, Calendar } from 'lucide-react';
 import { fetchChallengeEvent } from '@/api/challengeEvent';
 
@@ -53,11 +52,6 @@ const ChallengeEvent = () => {
                   </span>
                 </div>
               </CardContent>
-              <CardFooter>
-                <Badge variant={event.checkType === 'LOCATION' ? 'default' : 'secondary'}>
-                  {event.checkType === 'LOCATION' ? '위치 체크' : '시간 체크'}
-                </Badge>
-              </CardFooter>
             </Card>
           ))}
         </div>
