@@ -14,6 +14,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/RTK/store';
 import { logout } from '@/RTK/authSlice';
 import { useAppDispatch } from '@/RTK/hooks';
+import { Link } from 'react-router-dom';
 
 interface BaseMenuItem {
   title: string;
@@ -50,7 +51,9 @@ const AppSidebar = () => {
 
   return (
     <Sidebar>
-      <SidebarHeader>운동커뮤니T</SidebarHeader>
+      <SidebarHeader>
+        <Link to="/">운동커뮤니T</Link>
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
