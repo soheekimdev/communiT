@@ -4,25 +4,23 @@
 
 - 프로젝트 명: 커뮤니'**T**'
 - 팀원: [김소희](https://github.com/soheekimdev), [권여진](https://github.com/Kwonyeojiny), [주민재](https://github.com/Ju-MINJAE)
-- 프로젝트 개요: (추후 작성)
-- 기술 스택: (추후 작성)
+- 프로젝트 개요: 커뮤니'T'는 사용자들이 다양한 챌린지에 참여하고 경험을 공유할 수 있는 커뮤니티 플랫폼입니다. 챌린지 생성 및 참여, 게시물 작성, 댓글 기능 등을 제공하며, 직관적인 UI/UX와 다크 모드를 지원합니다.
 
 ## 프로젝트 기술 스택
 
-- Framework/Library: React
-- Dev Runtime: Node.js
-- Bundler: Vite
-- Language: TypeScript
-- Routing: React Router
-- State Management: Redux
-- Styling: tailwindcss, shadcn
-- HTTP Client: Axios
-- Unit Test: (추후 작성)
+- Framework/Library: <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=white">
+- Dev Runtime: <img src="https://img.shields.io/badge/Node-5FA04E?style=for-the-badge&logo=Node&logoColor=white">
+- Bundler: <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=Vite&logoColor=white">
+- Language: <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=TypeScript&logoColor=white">
+- Routing: <img src="https://img.shields.io/badge/ReactRouter-CA4245?style=for-the-badge&logo=ReactRouter&logoColor=white">
+- State Management: <img src="https://img.shields.io/badge/Redux-764ABC?style=for-the-badge&logo=Redux&logoColor=white">
+- Styling: <img src="https://img.shields.io/badge/TailwindCSS-06B6D4?style=for-the-badge&logo=TailwindCSS&logoColor=white"> <img src="https://img.shields.io/badge/shadcn-000000?style=for-the-badge&logo=shadcn/ui&logoColor=white">
+- HTTP Client: <img src="https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=Axios&logoColor=white">
+
 
 ## 메뉴 구조
 
 - 챌린지 페이지
-
   - 챌린지 목록
   - 챌린지 상세
   - 챌린지 생성, 수정
@@ -35,25 +33,18 @@
     - 댓글 작성, 수정, 삭제
     - 댓글 추천
   - 게시물 작성, 수정
-- 메세지 페이지 (확정 X)
-
-  - 메세지 리스트 목록
-  - 메세지 채널 참가자
 
 - 사용자 페이지
-
   - 프로필
   - 프로필 수정
   - 차단한 유저 관리
-  - 내 챌린지 목록
-  - 내가 쓴 글 목록
   - 로그아웃
 
 - 로그인/회원가입 페이지
   - 이메일 찾기
   - 비밀번호 찾기
   - 비밀번호 재설정
-- 알림 목록
+
 - 설정 페이지
   - 알림 설정
   - 테마 설정
@@ -71,10 +62,6 @@
 ## 개발 방법
 
 - 사용 가능한 Editor / IDE : VSCode
-- 개발 환경 설정 방법: (추후 작성)
-- 로컬 개발 방법: (추후 작성)
-- PR 방법: (추후 작성)
-- Issue 관리 방법: (추후 작성)
 - 커밋 메시지 규칙:
   커밋 유형 | 의미
   -- | --
