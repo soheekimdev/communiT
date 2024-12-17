@@ -26,7 +26,7 @@
           </a>
         </td>
         <td align="center">
-          <a href="https://github.com/Sungwoo00">
+          <a href="https://github.com/Ju-MINJAE">
             <img src="https://avatars.githubusercontent.com/u/145652237?v=4" height="100" width="100" alt="Ju-MINJAE"/><br/>
             @Ju-MINJAE
           </a>
