@@ -1,10 +1,46 @@
 # 오즈코딩스쿨 심화반 프로젝트 템플릿
 
+## 팀원 소개
+
+<div align="center">
+  <table>
+    <thead>
+      <tr>
+        <th><strong>권여진</strong></th>
+        <th><strong>김소희</strong></th>
+        <th><strong>주민재</strong></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td align="center">
+          <a href="https://github.com/Kwonyeojiny">
+            <img src="https://avatars.githubusercontent.com/u/78148876?v=4" height="100" width="100" alt="Kwonyeojiny"/><br/>
+            @Kwonyeojiny
+          </a>
+        </td>
+        <td align="center">
+          <a href="https://github.com/soheekimdev">
+            <img src="https://avatars.githubusercontent.com/u/65839795?v=4" height="100" width="100" alt="soheekimdev"/><br/>
+            @soheekimdev
+          </a>
+        </td>
+        <td align="center">
+          <a href="https://github.com/Sungwoo00">
+            <img src="https://avatars.githubusercontent.com/u/145652237?v=4" height="100" width="100" alt="Ju-MINJAE"/><br/>
+            @Ju-MINJAE
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
 ## 프로젝트 소개
 
-- 프로젝트 명: 커뮤니'**T**'
-- 팀원: [김소희](https://github.com/soheekimdev), [권여진](https://github.com/Kwonyeojiny), [주민재](https://github.com/Ju-MINJAE)
-- 프로젝트 개요: 커뮤니'T'는 사용자들이 다양한 챌린지에 참여하고 경험을 공유할 수 있는 커뮤니티 플랫폼입니다. 챌린지 생성 및 참여, 게시물 작성, 댓글 기능 등을 제공하며, 직관적인 UI/UX와 다크 모드를 지원합니다.
+- 프로젝트 명: 커뮤니**T**
+- 프로젝트 개요: 커뮤니T는 사용자들이 다양한 챌린지에 참여하고 경험을 공유할 수 있는 커뮤니티 플랫폼입니다. 챌린지 생성 및 참여, 게시물 작성, 댓글 기능 등을 제공하며, 직관적인 UI/UX와 다크 모드를 지원합니다.
+
 
 ## 프로젝트 기술 스택
 
