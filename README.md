@@ -51,7 +51,7 @@
 </p>
 <p align="center">
   <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=Vite&logoColor=white">
-  <img src="https://img.shields.io/badge/Node-5FA04E?style=for-the-badge&logo=Node&logoColor=white">
+  <img src="https://img.shields.io/badge/Node-5FA04E?style=for-the-badge&logo=Node.js&logoColor=white">
   <img src="https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=Axios&logoColor=white">
   <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=Vercel&logoColor=white">
 </p>
