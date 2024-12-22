@@ -125,6 +125,95 @@
 ## ChangeLog
 
 <details>
+  <summary><strong>6,7,8주차(11/28 - 12/18)</strong></summary>
+  <br>
+<details>  
+<summary><strong>[댓글] 권여진</strong></summary>
+  
+  ### ✅ Done
+  <hr>
+  
+  - 댓글 좋아요 api 연동
+    - 좋아요 상태 api 연결
+    - 좋아요 api 연결
+    - 좋아요 취소 api 연결
+   
+  ### 🖼️ Preview
+  <hr>
+
+  <div align=center>
+
+<img src='https://github.com/user-attachments/assets/09437d60-ccd4-4acd-8c73-7f7b29358ec4' width=500 />
+
+</div>
+</details>
+
+  <details>  
+<summary><strong>[챌린지] 김소희</strong></summary>
+  
+### ✅ Done
+
+<hr>
+
+- 챌린지 참여 기능 구현
+  - 내가 참여한 챌린지 목록 표시
+  - 챌린지 상세 화면에서 참여 상태에 따른 버튼 동적 표시
+  - 참여 API 연동 및 상태 관리 구현
+
+- 챌린지 관리 기능 개선
+  - 종료된 챌린지 재개(다시 열기) 기능 추가
+  - 종료된 챌린지를 목록 뒤쪽으로 정렬하는 로직 구현
+  - 챌린지 생성/조회 시 시간대 처리 로직 개선
+
+- 한국 시간대 고려한 날짜 변환
+  - API 요청/응답 시간 포맷 통일
+
+- 챌린지 인터랙션 기능 구현
+  - 좋아요 버튼 기능 추가
+  - 좋아요 상태 관리 및 API 연동
+  - 토스트 메시지를 통한 사용자 피드백 제공
+
+<hr>
+
+<div align=center>
+
+<img src='https://github.com/user-attachments/assets/d1820e90-1b31-4bde-8262-84a0ae6378d9' width=500 />
+<img src='https://github.com/user-attachments/assets/df2f9747-53d3-43c7-b76e-933d79dbd61c' width=500 />
+<img src='https://github.com/user-attachments/assets/de75a95e-1b04-4188-b8ce-4ed77dfd857b' width=500 />
+
+</div>
+
+</details>
+<details>  
+<summary><strong>[챌린지][게시물] 주민재</strong></summary>
+  
+### :white_check_mark: Done
+
+<hr>
+
+- 챌린지 이벤트 목록 페이지 디자인
+  - 챌린지 이벤트 목록 API 연동
+
+- 홈 화면에 인기 게시물과 인기 챌린지 표시
+
+
+
+### 🖼️ Preview
+<hr>
+
+<div align=center>
+
+<img src='https://github.com/user-attachments/assets/6eec9250-f6da-4a27-9fbc-b7999f968bad' width=500 />
+<img src='https://github.com/user-attachments/assets/10dd5e67-dc40-4b4c-b2e5-09aed706e2d6' width=500 />
+
+</div>
+
+</details>
+
+</details>
+
+
+<details>
   <summary><strong>5주차(11/20 - 11/27)</strong></summary>
   <br>
 
